@@ -28,7 +28,7 @@ async function main(projectId, location) {
     parent: `projects/${projectId}/locations/${location}`,
     realmId: 'my-realm',
     realm: {
-      // Must use a valid support time zone.
+      // Must use a supported time zone name.
       // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
       timeZone: 'US/Pacific',
       description: 'My Game Server realm',
