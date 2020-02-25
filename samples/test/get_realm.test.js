@@ -25,7 +25,7 @@ const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const LOCATION = 'us-central1';
 
-describe('Game Servers List Realms Test', () => {
+describe('Game Servers Get Realms Test', () => {
   const client = new RealmsServiceClient();
   let realmId;
 
@@ -43,13 +43,13 @@ describe('Game Servers List Realms Test', () => {
     });
   });
 
-  it('should list realms', async () => {
+  it('should get a realm', async () => {
     const projectId = await client.getProjectId();
 
-    const list_output = execSync(
-      `node list_realms.js ${projectId} ${LOCATION}`
+    const get_output = execSync(
+      `node get_realm.js ${projectId} ${LOCATION} ${realmId}`
     );
-    assert.match(list_output, /Realm name:/);
+    assert.match(get_output, /Realm description:/);
   });
 
   after(async () => {
