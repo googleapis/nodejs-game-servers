@@ -25,7 +25,7 @@ const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const LOCATION = 'us-central1';
 
-describe('Game Servers Create Realm Test', () => {
+describe('Game Servers Quickstart Test', () => {
   const client = new RealmsServiceClient();
   let realmId;
 
@@ -33,10 +33,10 @@ describe('Game Servers Create Realm Test', () => {
     const projectId = await client.getProjectId();
     realmId = `test-${uuid.v4()}`;
 
-    const create_output = execSync(
-      `node create_realm.js ${projectId} ${LOCATION} ${realmId}`
+    const quickstart_output = execSync(
+      `node quickstart.js ${projectId} ${LOCATION} ${realmId}`
     );
-    assert.match(create_output, /Realm time zone:/);
+    assert.match(quickstart_output, /Realm time zone:/);
   });
 
   after(async () => {
