@@ -17,14 +17,7 @@
 // ** All changes to this file may be overwritten. **
 
 import * as gax from 'google-gax';
-import {
-  APICallback,
-  Callback,
-  CallOptions,
-  Descriptors,
-  ClientOptions,
-  LROperation,
-} from 'google-gax';
+import {APICallback, Callback, CallOptions, Descriptors, ClientOptions, LROperation} from 'google-gax';
 import * as path from 'path';
 
 import * as protosTypes from '../../protos/protos';
@@ -76,14 +69,11 @@ export class GameServerConfigsServiceClient {
 
   constructor(opts?: ClientOptions) {
     // Ensure that options include the service address and port.
-    const staticMembers = this
-      .constructor as typeof GameServerConfigsServiceClient;
-    const servicePath =
-      opts && opts.servicePath
-        ? opts.servicePath
-        : opts && opts.apiEndpoint
-        ? opts.apiEndpoint
-        : staticMembers.servicePath;
+    const staticMembers = this.constructor as typeof GameServerConfigsServiceClient;
+    const servicePath = opts && opts.servicePath ?
+        opts.servicePath :
+        ((opts && opts.apiEndpoint) ? opts.apiEndpoint :
+                                      staticMembers.servicePath);
     const port = opts && opts.port ? opts.port : staticMembers.port;
 
     if (!opts) {
@@ -93,8 +83,8 @@ export class GameServerConfigsServiceClient {
     opts.port = opts.port || port;
     opts.clientConfig = opts.clientConfig || {};
 
-    const isBrowser = typeof window !== 'undefined';
-    if (isBrowser) {
+    const isBrowser = (typeof window !== 'undefined');
+    if (isBrowser){
       opts.fallback = true;
     }
     // If we are in browser, we are already using fallback because of the
@@ -104,15 +94,17 @@ export class GameServerConfigsServiceClient {
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
-    opts.scopes = (this
-      .constructor as typeof GameServerConfigsServiceClient).scopes;
+    opts.scopes = (this.constructor as typeof GameServerConfigsServiceClient).scopes;
     const gaxGrpc = new gaxModule.GrpcClient(opts);
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = gaxGrpc.auth as gax.GoogleAuth;
+    this.auth = (gaxGrpc.auth as gax.GoogleAuth);
 
     // Determine the client header string.
-    const clientHeader = [`gax/${gaxModule.version}`, `gapic/${version}`];
+    const clientHeader = [
+      `gax/${gaxModule.version}`,
+      `gapic/${version}`,
+    ];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
@@ -128,15 +120,11 @@ export class GameServerConfigsServiceClient {
     // For Node.js, pass the path to JSON proto file.
     // For browsers, pass the JSON content.
 
-    const nodejsProtoPath = path.join(
-      __dirname,
-      '..',
-      '..',
-      'protos',
-      'protos.json'
-    );
+    const nodejsProtoPath = path.join(__dirname, '..', '..', 'protos', 'protos.json');
     const protos = gaxGrpc.loadProto(
-      opts.fallback ? require('../../protos/protos.json') : nodejsProtoPath
+      opts.fallback ?
+        require("../../protos/protos.json") :
+        nodejsProtoPath
     );
 
     // This API contains "path templates"; forward-slash-separated
@@ -163,57 +151,38 @@ export class GameServerConfigsServiceClient {
     // This API contains "long-running operations", which return a
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
-    const protoFilesRoot = opts.fallback
-      ? gaxModule.protobuf.Root.fromJSON(require('../../protos/protos.json'))
-      : gaxModule.protobuf.loadSync(nodejsProtoPath);
+    const protoFilesRoot = opts.fallback?
+      gaxModule.protobuf.Root.fromJSON(require("../../protos/protos.json")) :
+      gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = gaxModule
-      .lro({
-        auth: this.auth,
-        grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined,
-      })
-      .operationsClient(opts);
+    this.operationsClient = gaxModule.lro({
+      auth: this.auth,
+      grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined
+    }).operationsClient(opts);
     const createGameServerConfigResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerConfig'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerConfig') as gax.protobuf.Type;
     const createGameServerConfigMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
     const deleteGameServerConfigResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerConfig'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerConfig') as gax.protobuf.Type;
     const deleteGameServerConfigMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
 
     this._descriptors.longrunning = {
       createGameServerConfig: new gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        createGameServerConfigResponse.decode.bind(
-          createGameServerConfigResponse
-        ),
-        createGameServerConfigMetadata.decode.bind(
-          createGameServerConfigMetadata
-        )
-      ),
+        createGameServerConfigResponse.decode.bind(createGameServerConfigResponse),
+        createGameServerConfigMetadata.decode.bind(createGameServerConfigMetadata)),
       deleteGameServerConfig: new gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        deleteGameServerConfigResponse.decode.bind(
-          deleteGameServerConfigResponse
-        ),
-        deleteGameServerConfigMetadata.decode.bind(
-          deleteGameServerConfigMetadata
-        )
-      ),
+        deleteGameServerConfigResponse.decode.bind(deleteGameServerConfigResponse),
+        deleteGameServerConfigMetadata.decode.bind(deleteGameServerConfigMetadata))
     };
 
     // Put together the default options sent with requests.
     const defaults = gaxGrpc.constructSettings(
-      'google.cloud.gaming.v1beta.GameServerConfigsService',
-      gapicConfig as gax.ClientConfig,
-      opts.clientConfig || {},
-      {'x-goog-api-client': clientHeader.join(' ')}
-    );
+        'google.cloud.gaming.v1beta.GameServerConfigsService', gapicConfig as gax.ClientConfig,
+        opts.clientConfig || {}, {'x-goog-api-client': clientHeader.join(' ')});
 
     // Set up a dictionary of "inner API calls"; the core implementation
     // of calling the API is handled in `google-gax`, with this code
@@ -223,23 +192,16 @@ export class GameServerConfigsServiceClient {
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.GameServerConfigsService.
     this.gameServerConfigsServiceStub = gaxGrpc.createStub(
-      opts.fallback
-        ? (protos as protobuf.Root).lookupService(
-            'google.cloud.gaming.v1beta.GameServerConfigsService'
-          )
-        : // tslint:disable-next-line no-any
+        opts.fallback ?
+          (protos as protobuf.Root).lookupService('google.cloud.gaming.v1beta.GameServerConfigsService') :
+          // tslint:disable-next-line no-any
           (protos as any).google.cloud.gaming.v1beta.GameServerConfigsService,
-      opts
-    ) as Promise<{[method: string]: Function}>;
+        opts) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
     // and create an API call method for each.
-    const gameServerConfigsServiceStubMethods = [
-      'listGameServerConfigs',
-      'getGameServerConfig',
-      'createGameServerConfig',
-      'deleteGameServerConfig',
-    ];
+    const gameServerConfigsServiceStubMethods =
+        ['listGameServerConfigs', 'getGameServerConfig', 'createGameServerConfig', 'deleteGameServerConfig'];
 
     for (const methodName of gameServerConfigsServiceStubMethods) {
       const innerCallPromise = this.gameServerConfigsServiceStub.then(
@@ -249,17 +211,16 @@ export class GameServerConfigsServiceClient {
           }
           return stub[methodName].apply(stub, args);
         },
-        (err: Error | null | undefined) => () => {
+        (err: Error|null|undefined) => () => {
           throw err;
-        }
-      );
+        });
 
       const apiCall = gaxModule.createApiCall(
         innerCallPromise,
         defaults[methodName],
         this._descriptors.page[methodName] ||
-          this._descriptors.stream[methodName] ||
-          this._descriptors.longrunning[methodName]
+            this._descriptors.stream[methodName] ||
+            this._descriptors.longrunning[methodName]
       );
 
       this._innerApiCalls[methodName] = (
@@ -299,7 +260,9 @@ export class GameServerConfigsServiceClient {
    * in this service.
    */
   static get scopes() {
-    return ['https://www.googleapis.com/auth/cloud-platform'];
+    return [
+      'https://www.googleapis.com/auth/cloud-platform'
+    ];
   }
 
   getProjectId(): Promise<string>;
@@ -309,9 +272,8 @@ export class GameServerConfigsServiceClient {
    * @param {function(Error, string)} callback - the callback to
    *   be called with the current project Id.
    */
-  getProjectId(
-    callback?: Callback<string, undefined, undefined>
-  ): Promise<string> | void {
+  getProjectId(callback?: Callback<string, undefined, undefined>):
+      Promise<string>|void {
     if (callback) {
       this.auth.getProjectId(callback);
       return;
@@ -323,72 +285,51 @@ export class GameServerConfigsServiceClient {
   // -- Service calls --
   // -------------------
   listGameServerConfigs(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|undefined, {}|undefined
+      ]>;
   listGameServerConfigs(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Lists Game Server Configs in a given project, Location, and Game Server
-   * Deployment.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [ListGameServerConfigsResponse]{@link google.cloud.gaming.v1beta.ListGameServerConfigsResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  listGameServerConfigs(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Lists Game Server Configs in a given project, Location, and Game Server
+ * Deployment.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [ListGameServerConfigsResponse]{@link google.cloud.gaming.v1beta.ListGameServerConfigsResponse}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  listGameServerConfigs(
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsResponse,
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -397,80 +338,55 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
+      'parent': request.parent || '',
     });
-    return this._innerApiCalls.listGameServerConfigs(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.listGameServerConfigs(request, options, callback);
   }
   getGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
+        protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined, {}|undefined
+      ]>;
   getGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Gets details of a single Game Server Config.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  getGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-          | protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Gets details of a single Game Server Config.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  getGameServerConfig(
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
+        protosTypes.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -479,85 +395,58 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      name: request.name || '',
+      'name': request.name || '',
     });
     return this._innerApiCalls.getGameServerConfig(request, options, callback);
   }
 
   createGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>;
   createGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Creates a new Game Server Config in a given project, Location, and Game
-   * Server Deployment. Game Server Configs are immutable, and are not applied
-   * until referenced in the Game Server Deployment Rollout resource.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+      options: gax.CallOptions,
+      callback: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>): void;
+/**
+ * Creates a new Game Server Config in a given project, Location, and Game
+ * Server Deployment. Game Server Configs are immutable, and are not applied
+ * until referenced in the Game Server Deployment Rollout resource.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
   createGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-          >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  > | void {
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined, {}|undefined>,
+      callback?: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -566,87 +455,56 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
+      'parent': request.parent || '',
     });
-    return this._innerApiCalls.createGameServerConfig(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.createGameServerConfig(request, options, callback);
   }
   deleteGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>;
   deleteGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Deletes a single Game Server Config. The deletion will fail if the Game
-   * Server Config is referenced in a Game Server Deployment Rollout.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+      options: gax.CallOptions,
+      callback: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>): void;
+/**
+ * Deletes a single Game Server Config. The deletion will fail if the Game
+ * Server Config is referenced in a Game Server Deployment Rollout.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
   deleteGameServerConfig(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-          >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerConfig,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  > | void {
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined, {}|undefined>,
+      callback?: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerConfig, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -655,13 +513,9 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      name: request.name || '',
+      'name': request.name || '',
     });
-    return this._innerApiCalls.deleteGameServerConfig(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.deleteGameServerConfig(request, options, callback);
   }
   // --------------------
   // -- Path templates --
@@ -676,17 +530,12 @@ export class GameServerConfigsServiceClient {
    * @param {string} cluster
    * @returns {string} Resource name string.
    */
-  gameServerClusterPath(
-    project: string,
-    location: string,
-    realm: string,
-    cluster: string
-  ) {
+  gameServerClusterPath(project:string,location:string,realm:string,cluster:string) {
     return this._pathTemplates.gameServerClusterPathTemplate.render({
-      project,
-      location,
-      realm,
-      cluster,
+      project: project,
+      location: location,
+      realm: realm,
+      cluster: cluster,
     });
   }
 
@@ -698,9 +547,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).project;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).project;
   }
 
   /**
@@ -711,9 +558,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).location;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).location;
   }
 
   /**
@@ -724,9 +569,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).realm;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).realm;
   }
 
   /**
@@ -737,9 +580,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the cluster.
    */
   matchClusterFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).cluster;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).cluster;
   }
 
   /**
@@ -751,17 +592,12 @@ export class GameServerConfigsServiceClient {
    * @param {string} config
    * @returns {string} Resource name string.
    */
-  gameServerConfigPath(
-    project: string,
-    location: string,
-    deployment: string,
-    config: string
-  ) {
+  gameServerConfigPath(project:string,location:string,deployment:string,config:string) {
     return this._pathTemplates.gameServerConfigPathTemplate.render({
-      project,
-      location,
-      deployment,
-      config,
+      project: project,
+      location: location,
+      deployment: deployment,
+      config: config,
     });
   }
 
@@ -773,9 +609,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).project;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).project;
   }
 
   /**
@@ -786,9 +620,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).location;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).location;
   }
 
   /**
@@ -799,9 +631,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the deployment.
    */
   matchDeploymentFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).deployment;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).deployment;
   }
 
   /**
@@ -812,9 +642,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the config.
    */
   matchConfigFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).config;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).config;
   }
 
   /**
@@ -825,15 +653,11 @@ export class GameServerConfigsServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentPath(
-    project: string,
-    location: string,
-    deployment: string
-  ) {
+  gameServerDeploymentPath(project:string,location:string,deployment:string) {
     return this._pathTemplates.gameServerDeploymentPathTemplate.render({
-      project,
-      location,
-      deployment,
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -845,9 +669,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).project;
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).project;
   }
 
   /**
@@ -858,9 +680,7 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).location;
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).location;
   }
 
   /**
@@ -870,12 +690,8 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeployment resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentName(
-    gameServerDeploymentName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).deployment;
+  matchDeploymentFromGameServerDeploymentName(gameServerDeploymentName: string) {
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).deployment;
   }
 
   /**
@@ -886,15 +702,11 @@ export class GameServerConfigsServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentRolloutPath(
-    project: string,
-    location: string,
-    deployment: string
-  ) {
+  gameServerDeploymentRolloutPath(project:string,location:string,deployment:string) {
     return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
-      project,
-      location,
-      deployment,
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -905,12 +717,8 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the project.
    */
-  matchProjectFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).project;
+  matchProjectFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).project;
   }
 
   /**
@@ -920,12 +728,8 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the location.
    */
-  matchLocationFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).location;
+  matchLocationFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).location;
   }
 
   /**
@@ -935,12 +739,8 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).deployment;
+  matchDeploymentFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).deployment;
   }
 
   /**
@@ -951,11 +751,11 @@ export class GameServerConfigsServiceClient {
    * @param {string} realm
    * @returns {string} Resource name string.
    */
-  realmPath(project: string, location: string, realm: string) {
+  realmPath(project:string,location:string,realm:string) {
     return this._pathTemplates.realmPathTemplate.render({
-      project,
-      location,
-      realm,
+      project: project,
+      location: location,
+      realm: realm,
     });
   }
 
