@@ -17,14 +17,7 @@
 // ** All changes to this file may be overwritten. **
 
 import * as gax from 'google-gax';
-import {
-  APICallback,
-  Callback,
-  CallOptions,
-  Descriptors,
-  ClientOptions,
-  LROperation,
-} from 'google-gax';
+import {APICallback, Callback, CallOptions, Descriptors, ClientOptions, LROperation} from 'google-gax';
 import * as path from 'path';
 
 import * as protosTypes from '../../protos/protos';
@@ -77,14 +70,11 @@ export class GameServerClustersServiceClient {
 
   constructor(opts?: ClientOptions) {
     // Ensure that options include the service address and port.
-    const staticMembers = this
-      .constructor as typeof GameServerClustersServiceClient;
-    const servicePath =
-      opts && opts.servicePath
-        ? opts.servicePath
-        : opts && opts.apiEndpoint
-        ? opts.apiEndpoint
-        : staticMembers.servicePath;
+    const staticMembers = this.constructor as typeof GameServerClustersServiceClient;
+    const servicePath = opts && opts.servicePath ?
+        opts.servicePath :
+        ((opts && opts.apiEndpoint) ? opts.apiEndpoint :
+                                      staticMembers.servicePath);
     const port = opts && opts.port ? opts.port : staticMembers.port;
 
     if (!opts) {
@@ -94,8 +84,8 @@ export class GameServerClustersServiceClient {
     opts.port = opts.port || port;
     opts.clientConfig = opts.clientConfig || {};
 
-    const isBrowser = typeof window !== 'undefined';
-    if (isBrowser) {
+    const isBrowser = (typeof window !== 'undefined');
+    if (isBrowser){
       opts.fallback = true;
     }
     // If we are in browser, we are already using fallback because of the
@@ -105,15 +95,17 @@ export class GameServerClustersServiceClient {
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
-    opts.scopes = (this
-      .constructor as typeof GameServerClustersServiceClient).scopes;
+    opts.scopes = (this.constructor as typeof GameServerClustersServiceClient).scopes;
     const gaxGrpc = new gaxModule.GrpcClient(opts);
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = gaxGrpc.auth as gax.GoogleAuth;
+    this.auth = (gaxGrpc.auth as gax.GoogleAuth);
 
     // Determine the client header string.
-    const clientHeader = [`gax/${gaxModule.version}`, `gapic/${version}`];
+    const clientHeader = [
+      `gax/${gaxModule.version}`,
+      `gapic/${version}`,
+    ];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
@@ -129,15 +121,11 @@ export class GameServerClustersServiceClient {
     // For Node.js, pass the path to JSON proto file.
     // For browsers, pass the JSON content.
 
-    const nodejsProtoPath = path.join(
-      __dirname,
-      '..',
-      '..',
-      'protos',
-      'protos.json'
-    );
+    const nodejsProtoPath = path.join(__dirname, '..', '..', 'protos', 'protos.json');
     const protos = gaxGrpc.loadProto(
-      opts.fallback ? require('../../protos/protos.json') : nodejsProtoPath
+      opts.fallback ?
+        require("../../protos/protos.json") :
+        nodejsProtoPath
     );
 
     // This API contains "path templates"; forward-slash-separated
@@ -164,72 +152,46 @@ export class GameServerClustersServiceClient {
     // This API contains "long-running operations", which return a
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
-    const protoFilesRoot = opts.fallback
-      ? gaxModule.protobuf.Root.fromJSON(require('../../protos/protos.json'))
-      : gaxModule.protobuf.loadSync(nodejsProtoPath);
+    const protoFilesRoot = opts.fallback?
+      gaxModule.protobuf.Root.fromJSON(require("../../protos/protos.json")) :
+      gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = gaxModule
-      .lro({
-        auth: this.auth,
-        grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined,
-      })
-      .operationsClient(opts);
+    this.operationsClient = gaxModule.lro({
+      auth: this.auth,
+      grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined
+    }).operationsClient(opts);
     const createGameServerClusterResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerCluster'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerCluster') as gax.protobuf.Type;
     const createGameServerClusterMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
     const deleteGameServerClusterResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerCluster'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerCluster') as gax.protobuf.Type;
     const deleteGameServerClusterMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
     const updateGameServerClusterResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerCluster'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerCluster') as gax.protobuf.Type;
     const updateGameServerClusterMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata'
-    ) as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
 
     this._descriptors.longrunning = {
       createGameServerCluster: new gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        createGameServerClusterResponse.decode.bind(
-          createGameServerClusterResponse
-        ),
-        createGameServerClusterMetadata.decode.bind(
-          createGameServerClusterMetadata
-        )
-      ),
+        createGameServerClusterResponse.decode.bind(createGameServerClusterResponse),
+        createGameServerClusterMetadata.decode.bind(createGameServerClusterMetadata)),
       deleteGameServerCluster: new gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        deleteGameServerClusterResponse.decode.bind(
-          deleteGameServerClusterResponse
-        ),
-        deleteGameServerClusterMetadata.decode.bind(
-          deleteGameServerClusterMetadata
-        )
-      ),
+        deleteGameServerClusterResponse.decode.bind(deleteGameServerClusterResponse),
+        deleteGameServerClusterMetadata.decode.bind(deleteGameServerClusterMetadata)),
       updateGameServerCluster: new gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        updateGameServerClusterResponse.decode.bind(
-          updateGameServerClusterResponse
-        ),
-        updateGameServerClusterMetadata.decode.bind(
-          updateGameServerClusterMetadata
-        )
-      ),
+        updateGameServerClusterResponse.decode.bind(updateGameServerClusterResponse),
+        updateGameServerClusterMetadata.decode.bind(updateGameServerClusterMetadata))
     };
 
     // Put together the default options sent with requests.
     const defaults = gaxGrpc.constructSettings(
-      'google.cloud.gaming.v1beta.GameServerClustersService',
-      gapicConfig as gax.ClientConfig,
-      opts.clientConfig || {},
-      {'x-goog-api-client': clientHeader.join(' ')}
-    );
+        'google.cloud.gaming.v1beta.GameServerClustersService', gapicConfig as gax.ClientConfig,
+        opts.clientConfig || {}, {'x-goog-api-client': clientHeader.join(' ')});
 
     // Set up a dictionary of "inner API calls"; the core implementation
     // of calling the API is handled in `google-gax`, with this code
@@ -239,27 +201,16 @@ export class GameServerClustersServiceClient {
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.GameServerClustersService.
     this.gameServerClustersServiceStub = gaxGrpc.createStub(
-      opts.fallback
-        ? (protos as protobuf.Root).lookupService(
-            'google.cloud.gaming.v1beta.GameServerClustersService'
-          )
-        : // tslint:disable-next-line no-any
+        opts.fallback ?
+          (protos as protobuf.Root).lookupService('google.cloud.gaming.v1beta.GameServerClustersService') :
+          // tslint:disable-next-line no-any
           (protos as any).google.cloud.gaming.v1beta.GameServerClustersService,
-      opts
-    ) as Promise<{[method: string]: Function}>;
+        opts) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
     // and create an API call method for each.
-    const gameServerClustersServiceStubMethods = [
-      'listGameServerClusters',
-      'getGameServerCluster',
-      'createGameServerCluster',
-      'previewCreateGameServerCluster',
-      'deleteGameServerCluster',
-      'previewDeleteGameServerCluster',
-      'updateGameServerCluster',
-      'previewUpdateGameServerCluster',
-    ];
+    const gameServerClustersServiceStubMethods =
+        ['listGameServerClusters', 'getGameServerCluster', 'createGameServerCluster', 'previewCreateGameServerCluster', 'deleteGameServerCluster', 'previewDeleteGameServerCluster', 'updateGameServerCluster', 'previewUpdateGameServerCluster'];
 
     for (const methodName of gameServerClustersServiceStubMethods) {
       const innerCallPromise = this.gameServerClustersServiceStub.then(
@@ -269,17 +220,16 @@ export class GameServerClustersServiceClient {
           }
           return stub[methodName].apply(stub, args);
         },
-        (err: Error | null | undefined) => () => {
+        (err: Error|null|undefined) => () => {
           throw err;
-        }
-      );
+        });
 
       const apiCall = gaxModule.createApiCall(
         innerCallPromise,
         defaults[methodName],
         this._descriptors.page[methodName] ||
-          this._descriptors.stream[methodName] ||
-          this._descriptors.longrunning[methodName]
+            this._descriptors.stream[methodName] ||
+            this._descriptors.longrunning[methodName]
       );
 
       this._innerApiCalls[methodName] = (
@@ -319,7 +269,9 @@ export class GameServerClustersServiceClient {
    * in this service.
    */
   static get scopes() {
-    return ['https://www.googleapis.com/auth/cloud-platform'];
+    return [
+      'https://www.googleapis.com/auth/cloud-platform'
+    ];
   }
 
   getProjectId(): Promise<string>;
@@ -329,9 +281,8 @@ export class GameServerClustersServiceClient {
    * @param {function(Error, string)} callback - the callback to
    *   be called with the current project Id.
    */
-  getProjectId(
-    callback?: Callback<string, undefined, undefined>
-  ): Promise<string> | void {
+  getProjectId(callback?: Callback<string, undefined, undefined>):
+      Promise<string>|void {
     if (callback) {
       this.auth.getProjectId(callback);
       return;
@@ -343,71 +294,50 @@ export class GameServerClustersServiceClient {
   // -- Service calls --
   // -------------------
   listGameServerClusters(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest|undefined, {}|undefined
+      ]>;
   listGameServerClusters(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Lists Game Server Clusters in a given project and location.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [ListGameServerClustersResponse]{@link google.cloud.gaming.v1beta.ListGameServerClustersResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  listGameServerClusters(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Lists Game Server Clusters in a given project and location.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [ListGameServerClustersResponse]{@link google.cloud.gaming.v1beta.ListGameServerClustersResponse}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  listGameServerClusters(
+      request: protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
+          protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersResponse,
+        protosTypes.google.cloud.gaming.v1beta.IListGameServerClustersRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -416,80 +346,55 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
+      'parent': request.parent || '',
     });
-    return this._innerApiCalls.listGameServerClusters(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.listGameServerClusters(request, options, callback);
   }
   getGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
+        protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest|undefined, {}|undefined
+      ]>;
   getGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Gets details of a single game server cluster.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [GameServerCluster]{@link google.cloud.gaming.v1beta.GameServerCluster}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  getGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-          | protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Gets details of a single game server cluster.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [GameServerCluster]{@link google.cloud.gaming.v1beta.GameServerCluster}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  getGameServerCluster(
+      request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
+          protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
+        protosTypes.google.cloud.gaming.v1beta.IGetGameServerClusterRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -498,77 +403,56 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      name: request.name || '',
+      'name': request.name || '',
     });
     return this._innerApiCalls.getGameServerCluster(request, options, callback);
   }
   previewCreateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest|undefined, {}|undefined
+      ]>;
   previewCreateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Previews creation of a new game server cluster in a given project and
-   * location.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [PreviewCreateGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewCreateGameServerClusterResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  previewCreateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Previews creation of a new game server cluster in a given project and
+ * location.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [PreviewCreateGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewCreateGameServerClusterResponse}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  previewCreateGameServerCluster(
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewCreateGameServerClusterRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -577,80 +461,55 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
+      'parent': request.parent || '',
     });
-    return this._innerApiCalls.previewCreateGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.previewCreateGameServerCluster(request, options, callback);
   }
   previewDeleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest|undefined, {}|undefined
+      ]>;
   previewDeleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Previews deletion of a single game server cluster.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [PreviewDeleteGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewDeleteGameServerClusterResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  previewDeleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Previews deletion of a single game server cluster.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [PreviewDeleteGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewDeleteGameServerClusterResponse}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  previewDeleteGameServerCluster(
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewDeleteGameServerClusterRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -659,80 +518,55 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      name: request.name || '',
+      'name': request.name || '',
     });
-    return this._innerApiCalls.previewDeleteGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.previewDeleteGameServerCluster(request, options, callback);
   }
   previewUpdateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest|undefined, {}|undefined
+      ]>;
   previewUpdateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Previews updating a GameServerCluster.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [PreviewUpdateGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewUpdateGameServerClusterResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  previewUpdateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
           protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest
-          | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest
-      | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
+          protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest|undefined,
+          {}|undefined>): void;
+/**
+ * Previews updating a GameServerCluster.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [PreviewUpdateGameServerClusterResponse]{@link google.cloud.gaming.v1beta.PreviewUpdateGameServerClusterResponse}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
+  previewUpdateGameServerCluster(
+      request: protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest|undefined, {}|undefined>,
+      callback?: Callback<
+          protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
+          protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest|undefined,
+          {}|undefined>):
+      Promise<[
+        protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterResponse,
+        protosTypes.google.cloud.gaming.v1beta.IPreviewUpdateGameServerClusterRequest|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -743,85 +577,54 @@ export class GameServerClustersServiceClient {
     ] = gax.routingHeader.fromParams({
       'game_server_cluster.name': request.gameServerCluster!.name || '',
     });
-    return this._innerApiCalls.previewUpdateGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.previewUpdateGameServerCluster(request, options, callback);
   }
 
   createGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>;
   createGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Creates a new game server cluster in a given project and location.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>): void;
+/**
+ * Creates a new game server cluster in a given project and location.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
   createGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-          >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  > | void {
+      request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined, {}|undefined>,
+      callback?: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -830,86 +633,55 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
+      'parent': request.parent || '',
     });
-    return this._innerApiCalls.createGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.createGameServerCluster(request, options, callback);
   }
   deleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>;
   deleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Deletes a single game server cluster.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>): void;
+/**
+ * Deletes a single game server cluster.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
   deleteGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-          >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  > | void {
+      request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined, {}|undefined>,
+      callback?: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -918,86 +690,55 @@ export class GameServerClustersServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      name: request.name || '',
+      'name': request.name || '',
     });
-    return this._innerApiCalls.deleteGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.deleteGameServerCluster(request, options, callback);
   }
   updateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  >;
+      request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
+      options?: gax.CallOptions):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>;
   updateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): void;
-  /**
-   * Patches a single game server cluster.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
+      request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
+      options: gax.CallOptions,
+      callback: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>): void;
+/**
+ * Patches a single game server cluster.
+ *
+ * @param {Object} request
+ *   The request object that will be sent.
+ * @param {object} [options]
+ *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+ * @returns {Promise} - The promise which resolves to an array.
+ *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+ *   The promise has a method named "cancel" which cancels the ongoing API call.
+ */
   updateGameServerCluster(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-          >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
-        >,
-    callback?: Callback<
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    >
-  ): Promise<
-    [
-      LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerCluster,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
-      >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
-    ]
-  > | void {
+      request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerClusterRequest,
+      optionsOrCallback?: gax.CallOptions|Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined, {}|undefined>,
+      callback?: Callback<
+          LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+          protosTypes.google.longrunning.IOperation|undefined,
+          {}|undefined>):
+      Promise<[
+        LROperation<protosTypes.google.cloud.gaming.v1beta.IGameServerCluster, protosTypes.google.cloud.gaming.v1beta.IOperationMetadata>,
+        protosTypes.google.longrunning.IOperation|undefined, {}|undefined
+      ]>|void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    } else {
+    }
+    else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -1008,11 +749,7 @@ export class GameServerClustersServiceClient {
     ] = gax.routingHeader.fromParams({
       'game_server_cluster.name': request.gameServerCluster!.name || '',
     });
-    return this._innerApiCalls.updateGameServerCluster(
-      request,
-      options,
-      callback
-    );
+    return this._innerApiCalls.updateGameServerCluster(request, options, callback);
   }
   // --------------------
   // -- Path templates --
@@ -1027,17 +764,12 @@ export class GameServerClustersServiceClient {
    * @param {string} cluster
    * @returns {string} Resource name string.
    */
-  gameServerClusterPath(
-    project: string,
-    location: string,
-    realm: string,
-    cluster: string
-  ) {
+  gameServerClusterPath(project:string,location:string,realm:string,cluster:string) {
     return this._pathTemplates.gameServerClusterPathTemplate.render({
-      project,
-      location,
-      realm,
-      cluster,
+      project: project,
+      location: location,
+      realm: realm,
+      cluster: cluster,
     });
   }
 
@@ -1049,9 +781,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).project;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).project;
   }
 
   /**
@@ -1062,9 +792,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).location;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).location;
   }
 
   /**
@@ -1075,9 +803,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).realm;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).realm;
   }
 
   /**
@@ -1088,9 +814,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the cluster.
    */
   matchClusterFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
-      gameServerClusterName
-    ).cluster;
+    return this._pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).cluster;
   }
 
   /**
@@ -1102,17 +826,12 @@ export class GameServerClustersServiceClient {
    * @param {string} config
    * @returns {string} Resource name string.
    */
-  gameServerConfigPath(
-    project: string,
-    location: string,
-    deployment: string,
-    config: string
-  ) {
+  gameServerConfigPath(project:string,location:string,deployment:string,config:string) {
     return this._pathTemplates.gameServerConfigPathTemplate.render({
-      project,
-      location,
-      deployment,
-      config,
+      project: project,
+      location: location,
+      deployment: deployment,
+      config: config,
     });
   }
 
@@ -1124,9 +843,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).project;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).project;
   }
 
   /**
@@ -1137,9 +854,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).location;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).location;
   }
 
   /**
@@ -1150,9 +865,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the deployment.
    */
   matchDeploymentFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).deployment;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).deployment;
   }
 
   /**
@@ -1163,9 +876,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the config.
    */
   matchConfigFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
-      gameServerConfigName
-    ).config;
+    return this._pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).config;
   }
 
   /**
@@ -1176,15 +887,11 @@ export class GameServerClustersServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentPath(
-    project: string,
-    location: string,
-    deployment: string
-  ) {
+  gameServerDeploymentPath(project:string,location:string,deployment:string) {
     return this._pathTemplates.gameServerDeploymentPathTemplate.render({
-      project,
-      location,
-      deployment,
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -1196,9 +903,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).project;
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).project;
   }
 
   /**
@@ -1209,9 +914,7 @@ export class GameServerClustersServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).location;
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).location;
   }
 
   /**
@@ -1221,12 +924,8 @@ export class GameServerClustersServiceClient {
    *   A fully-qualified path representing GameServerDeployment resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentName(
-    gameServerDeploymentName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
-      gameServerDeploymentName
-    ).deployment;
+  matchDeploymentFromGameServerDeploymentName(gameServerDeploymentName: string) {
+    return this._pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).deployment;
   }
 
   /**
@@ -1237,15 +936,11 @@ export class GameServerClustersServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentRolloutPath(
-    project: string,
-    location: string,
-    deployment: string
-  ) {
+  gameServerDeploymentRolloutPath(project:string,location:string,deployment:string) {
     return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
-      project,
-      location,
-      deployment,
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -1256,12 +951,8 @@ export class GameServerClustersServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the project.
    */
-  matchProjectFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).project;
+  matchProjectFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).project;
   }
 
   /**
@@ -1271,12 +962,8 @@ export class GameServerClustersServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the location.
    */
-  matchLocationFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).location;
+  matchLocationFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).location;
   }
 
   /**
@@ -1286,12 +973,8 @@ export class GameServerClustersServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentRolloutName(
-    gameServerDeploymentRolloutName: string
-  ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
-      gameServerDeploymentRolloutName
-    ).deployment;
+  matchDeploymentFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
+    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).deployment;
   }
 
   /**
@@ -1302,11 +985,11 @@ export class GameServerClustersServiceClient {
    * @param {string} realm
    * @returns {string} Resource name string.
    */
-  realmPath(project: string, location: string, realm: string) {
+  realmPath(project:string,location:string,realm:string) {
     return this._pathTemplates.realmPathTemplate.render({
-      project,
-      location,
-      realm,
+      project: project,
+      location: location,
+      realm: realm,
     });
   }
 
