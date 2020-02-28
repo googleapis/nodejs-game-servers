@@ -17,8 +17,9 @@
  * Create a Game Servers realm.
  * @param {string} projectId string project identifier.
  * @param {string} location Compute Engine region.
+ * @param {string} realmId unique identifier for the realm.
  */
-async function main(projectId, location) {
+async function main(projectId, location, realmId = 'my-realm') {
   // [START game_servers_quickstart]
   const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
@@ -26,9 +27,9 @@ async function main(projectId, location) {
 
   const request = {
     parent: `projects/${projectId}/locations/${location}`,
-    realmId: 'my-realm',
+    realmId: realmId,
     realm: {
-      // Must use a valid support time zone.
+      // Must use a supported time zone name.
       // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
       timeZone: 'US/Pacific',
       description: 'My Game Server realm',
