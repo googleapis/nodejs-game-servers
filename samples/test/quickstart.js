@@ -19,7 +19,6 @@
 'use strict';
 
 const path = require('path');
-const {assert} = require('chai');
 const cp = require('child_process');
 const {describe, it} = require('mocha');
 
