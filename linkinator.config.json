@@ -5,6 +5,7 @@
     "www.googleapis.com",
     "img.shields.io",
     "https://console.cloud.google.com/flows/enableapi?apiid=gameservices.googleapis.com",
-    "https://cloud.google.com/terms/launch-stages"
+    "https://cloud.google.com/terms/launch-stages",
+    "http://localhost:5594/google.cloud.gaming.v1beta.FetchDeploymentStateRequest.html"
   ]
 }
