@@ -22,28 +22,31 @@ async function main(projectId, location) {
   // [START game_servers_quickstart]
   const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
-  const client = new RealmsServiceClient();
+  async function quickstart() {
+    const client = new RealmsServiceClient();
 
-  const request = {
-    parent: `projects/${projectId}/locations/${location}`,
-    realmId: 'my-realm',
-    realm: {
-      // Must use a valid support time zone.
-      // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
-      timeZone: 'US/Pacific',
-      description: 'My Game Server realm',
-    },
-  };
+    const request = {
+      parent: `projects/${projectId}/locations/${location}`,
+      realmId: 'my-realm',
+      realm: {
+        // Must use a valid support time zone.
+        // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
+        timeZone: 'US/Pacific',
+        description: 'My Game Server realm',
+      },
+    };
 
-  const [operation] = await client.createRealm(request);
-  const results = await operation.promise();
-  const [realm] = results;
+    const [operation] = await client.createRealm(request);
+    const results = await operation.promise();
+    const [realm] = results;
 
-  console.log('Realm created:');
+    console.log('Realm created:');
 
-  console.log(`\tRealm name: ${realm.name}`);
-  console.log(`\tRealm description: ${realm.description}`);
-  console.log(`\tRealm time zone: ${realm.timeZone}`);
+    console.log(`\tRealm name: ${realm.name}`);
+    console.log(`\tRealm description: ${realm.description}`);
+    console.log(`\tRealm time zone: ${realm.timeZone}`);
+  }
+  quickstart();
   // [END game_servers_quickstart]
 }
 

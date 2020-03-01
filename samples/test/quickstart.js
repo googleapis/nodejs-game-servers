@@ -30,5 +30,6 @@ const cwd = path.join(__dirname, '..');
 describe('Quickstart', () => {
   it('should run quickstart', async () => {
     const stdout = execSync(`node quickstart.js`, {cwd});
+    assert.ok(stdout);
   });
 });
