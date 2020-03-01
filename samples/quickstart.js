@@ -13,21 +13,31 @@
 
 'use strict';
 
+// sample-metadata:
+//   title: Create Game Server Realm
+//   description: Creates a new Realm within Cloud Game Servers
+//   usage: node quickstart.js <project_id> <location> <realmId>
+
 /**
  * Create a Game Servers realm.
  * @param {string} projectId string project identifier.
  * @param {string} location Compute Engine region.
  */
-async function main(projectId, location) {
+async function main(projectId, location, realmId) {
   // [START game_servers_quickstart]
   const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
   async function quickstart() {
     const client = new RealmsServiceClient();
 
+    // TODO(developer): uncomment the following section, and add values
+    // const projectId = 'YOUR_PROJECT_ID';
+    // const location = 'us-central1;
+    // const realIm = 'DESIRED_REALM_ID';
+
     const request = {
       parent: `projects/${projectId}/locations/${location}`,
-      realmId: 'my-realm',
+      realmId,
       realm: {
         // Must use a valid support time zone.
         // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
