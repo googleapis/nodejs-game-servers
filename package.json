@@ -1,8 +1,8 @@
 {
   "name": "@google-cloud/game-servers",
   "version": "1.0.0",
-  "description": "Gaming client for Node.js",
-  "repository": "googleapis/nodejs-gaming",
+  "description": "Game service client for Node.js",
+  "repository": "googleapis/nodejs-game-servers",
   "license": "Apache-2.0",
   "author": "Google LLC",
   "files": [
@@ -29,9 +29,9 @@
     "google-gax": "^1.14.2"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^7.0.0",
     "@types/node": "^12.0.0",
-    "c8": "^6.0.0",
+    "c8": "^7.0.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-node": "^11.0.0",
@@ -41,7 +41,7 @@
     "jsdoc-fresh": "^1.0.1",
     "jsdoc-region-tag": "^1.0.2",
     "linkinator": "^2.0.3",
-    "mocha": "^6.0.0",
+    "mocha": "^7.0.0",
     "null-loader": "^3.0.0",
     "pack-n-play": "^1.0.0-2",
     "prettier": "^1.19.1",
