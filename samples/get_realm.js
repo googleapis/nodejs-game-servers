@@ -24,7 +24,7 @@ function main(
   location = 'LOCATION_ID',
   realmId = 'REALM_ID'
 ) {
-  // [START game_servers_get_realm]
+  // [START cloud_game_servers_get_realm]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -45,7 +45,7 @@ function main(
     console.log(`Realm name: ${realm.name}`);
     console.log(`Realm description: ${realm.description}`);
     console.log(`Realm time zone: ${realm.timeZone}`);
-    // [END game_servers_get_realm]
+    // [END cloud_game_servers_get_realm]
   }
 
   getRealm();

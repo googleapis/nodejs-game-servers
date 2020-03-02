@@ -25,7 +25,7 @@
  * @param {string} realmId unique identifier for the realm.
  */
 async function main(projectId, location, realmId) {
-  // [START game_servers_quickstart]
+  // [START cloud_game_servers_quickstart]
   const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
   async function quickstart() {
@@ -58,7 +58,7 @@ async function main(projectId, location, realmId) {
     console.log(`\tRealm time zone: ${realm.timeZone}`);
   }
   quickstart();
-  // [END game_servers_quickstart]
+  // [END cloud_game_servers_quickstart]
 }
 
 main(...process.argv.slice(2)).catch(err => {

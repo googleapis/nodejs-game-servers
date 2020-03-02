@@ -24,7 +24,7 @@ function main(
   location = 'LOCATION_ID',
   realmId = 'REALM_ID'
 ) {
-  // [START game_servers_delete_realm]
+  // [START cloud_game_servers_delete_realm]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -46,7 +46,7 @@ function main(
     await operation.promise();
     console.log(`Realm with ID ${realmId} deleted.`);
 
-    // [END game_servers_delete_realm]
+    // [END cloud_game_servers_delete_realm]
   }
 
   deleteRealm();

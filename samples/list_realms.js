@@ -19,7 +19,7 @@
  * @param {string} location Compute Engine region.
  */
 function main(projectId = 'YOUR_PROJECT_ID', location = 'LOCATION_ID') {
-  // [START game_servers_list_realms]
+  // [START cloud_game_servers_list_realms]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -40,7 +40,7 @@ function main(projectId = 'YOUR_PROJECT_ID', location = 'LOCATION_ID') {
       console.log(`Realm description: ${realm.description}`);
       console.log(`Realm time zone: ${realm.timeZone}\n`);
     }
-    // [END game_servers_list_realms]
+    // [END cloud_game_servers_list_realms]
   }
 
   listRealms();
