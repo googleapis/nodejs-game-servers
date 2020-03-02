@@ -13,38 +13,51 @@
 
 'use strict';
 
+// sample-metadata:
+//   title: Create Game Server Realm
+//   description: Creates a new Realm within Cloud Game Servers
+//   usage: node quickstart.js <project_id> <location> <realmId>
+
 /**
  * Create a Game Servers realm.
  * @param {string} projectId string project identifier.
  * @param {string} location Compute Engine region.
  * @param {string} realmId unique identifier for the realm.
  */
-async function main(projectId, location, realmId = 'my-realm') {
+async function main(projectId, location, realmId) {
   // [START game_servers_quickstart]
   const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
-  const client = new RealmsServiceClient();
+  async function quickstart() {
+    const client = new RealmsServiceClient();
 
-  const request = {
-    parent: `projects/${projectId}/locations/${location}`,
-    realmId: realmId,
-    realm: {
-      // Must use a supported time zone name.
-      // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
-      timeZone: 'US/Pacific',
-      description: 'My Game Server realm',
-    },
-  };
+    // TODO(developer): uncomment the following section, and add values
+    // const projectId = 'YOUR_PROJECT_ID';
+    // const location = 'us-central1;
+    // const realmId = 'DESIRED_REALM_ID';
 
-  const [operation] = await client.createRealm(request);
-  const results = await operation.promise();
-  const [realm] = results;
+    const request = {
+      parent: `projects/${projectId}/locations/${location}`,
+      realmId,
+      realm: {
+        // Must use a valid support time zone.
+        // See https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188
+        timeZone: 'US/Pacific',
+        description: 'My Game Server realm',
+      },
+    };
 
-  console.log('Realm created:');
+    const [operation] = await client.createRealm(request);
+    const results = await operation.promise();
+    const [realm] = results;
 
-  console.log(`\tRealm name: ${realm.name}`);
-  console.log(`\tRealm description: ${realm.description}`);
-  console.log(`\tRealm time zone: ${realm.timeZone}`);
+    console.log('Realm created:');
+
+    console.log(`\tRealm name: ${realm.name}`);
+    console.log(`\tRealm description: ${realm.description}`);
+    console.log(`\tRealm time zone: ${realm.timeZone}`);
+  }
+  quickstart();
   // [END game_servers_quickstart]
 }
 

@@ -13,11 +13,12 @@
     "test": "c8 mocha --timeout 600000 test/*.js"
   },
   "dependencies": {
-    "@google-cloud/game-servers": "^0.1.0"
+    "@google-cloud/game-servers": "^1.0.0"
   },
   "devDependencies": {
-    "c8": "^5.0.1",
+    "c8": "^7.0.0",
     "chai": "^4.2.0",
-    "mocha": "^6.1.4"
+    "mocha": "^7.0.0",
+    "uuid": "^7.0.1"
   }
 }
