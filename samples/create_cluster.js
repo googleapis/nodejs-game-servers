@@ -30,7 +30,7 @@ function main(
   gkeClusterId = 'GKE_CLUSTER_ID',
   gkeLocation = 'GKE_CLUSTER_LOCATION'
 ) {
-  // [START game_servers_create_cluster]
+  // [START cloud_game_servers_create_cluster]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -72,7 +72,7 @@ function main(
     console.log(
       `\tGKE cluster: ${result.connectionInfo.gkeClusterReference.cluster}`
     );
-    // [END game_servers_create_cluster]
+    // [END cloud_game_servers_create_cluster]
   }
 
   createGameServerCluster();

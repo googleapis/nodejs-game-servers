@@ -24,7 +24,7 @@ function main(
   location = 'LOCATION_ID',
   realmId = 'REALM_ID'
 ) {
-  // [START game_servers_list_clusters]
+  // [START cloud_game_servers_list_clusters]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -54,7 +54,7 @@ function main(
         `\tGKE cluster: ${cluster.connectionInfo.gkeClusterReference.cluster}`
       );
     }
-    // [END game_servers_list_clusters]
+    // [END cloud_game_servers_list_clusters]
   }
 
   listGameServerClusters();

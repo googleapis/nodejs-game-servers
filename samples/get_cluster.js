@@ -26,7 +26,7 @@ function main(
   realmId = 'REALM_ID',
   gameClusterId = 'GAME_CLUSTER_ID'
 ) {
-  // [START game_servers_get_cluster]
+  // [START cloud_game_servers_get_cluster]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -54,7 +54,7 @@ function main(
     console.log(
       `\tGKE cluster: ${cluster.connectionInfo.gkeClusterReference.cluster}`
     );
-    // [END game_servers_get_cluster]
+    // [END cloud_game_servers_get_cluster]
   }
 
   getGameServerCluster();

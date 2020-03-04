@@ -26,7 +26,7 @@ function main(
   realmId = 'REALM_ID',
   gameClusterId = 'GAME_CLUSTER_ID'
 ) {
-  // [START game_servers_delete_cluster]
+  // [START cloud_game_servers_delete_cluster]
   /**
    * TODO(developer): Uncomment these variables before running the sample.
    */
@@ -49,7 +49,7 @@ function main(
     await client.deleteGameServerCluster(request);
 
     console.log('Game Server cluster deleted');
-    // [END game_servers_delete_cluster]
+    // [END cloud_game_servers_delete_cluster]
   }
 
   deleteGameServerCluster();
