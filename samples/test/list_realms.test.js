@@ -34,7 +34,7 @@ describe('Game Servers List Realms Test', () => {
     const projectId = await client.getProjectId();
 
     // Clean up any stray realms
-    cleanup(client, null, projectId, LOCATION);
+    await cleanup(client, null, projectId, LOCATION);
 
     realmId = `test-${uuid.v4()}`;
 
