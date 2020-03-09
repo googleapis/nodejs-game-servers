@@ -15,7 +15,8 @@
 'use strict';
 
 const {assert} = require('chai');
-const {describe, it, after} = require('mocha');
+const cleanup = require('./utils/clean.js');
+const {describe, before, it, after} = require('mocha');
 const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
 const cp = require('child_process');
@@ -28,6 +29,11 @@ const LOCATION = 'us-central1';
 describe('Game Servers Create Realm Test', () => {
   const client = new RealmsServiceClient();
   let realmId;
+
+  before(async () => {
+    const projectId = await client.getProjectId();
+    cleanup(client, null, projectId, LOCATION);
+  });
 
   it('should create a realm', async () => {
     const projectId = await client.getProjectId();
