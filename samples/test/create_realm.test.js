@@ -15,7 +15,7 @@
 'use strict';
 
 const {assert} = require('chai');
-const cleanup = require('./utils/clean.js');
+const cleanup = require('./clean.js');
 const {describe, before, it, after} = require('mocha');
 const {RealmsServiceClient} = require('@google-cloud/game-servers');
 
