@@ -13,28 +13,21 @@
 // limitations under the License.
 
 const {GameServerClustersServiceClient} = require('@google-cloud/game-servers');
+const {RealmsServiceClient} = require('@google-cloud/game-servers');
+
+const gameServerClusterClient = new GameServerClustersServiceClient();
+const realmsClient = new RealmsServiceClient();
 
 /**
  * Utility function for removing unneeded realms from project.
- * @param {RealmsServiceClient} realmsClient Realms service client for project
- * @param {GameServerClustersServiceClient} gameServerClusterClient Game Server service client for project
- * @param {string} projectId Google Cloud Project ID
- * @param {string} location project location
  */
-module.exports = async (
-  realmsClient,
-  gameServerClusterClient,
-  projectId,
-  location
-) => {
+module.exports = async () => {
+  const projectId = await realmsClient.getProjectId();
+  const location = 'us-central1';
+
   const request = {
     parent: `projects/${projectId}/locations/${location}`,
   };
-
-  // Allow callers to pass null in for gameServerClusterClient
-  if (!gameServerClusterClient) {
-    gameServerClusterClient = new GameServerClustersServiceClient();
-  }
 
   const MAX_REALM_LIFESPAN = 3600000; // One hour (in milliseconds)
   const NOW = new Date();
