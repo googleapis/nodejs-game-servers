@@ -31,7 +31,6 @@ describe('Game Servers Quickstart Test', () => {
   let realmId;
 
   before(async () => {
-    const projectId = await client.getProjectId();
     await cleanup();
   });
 
