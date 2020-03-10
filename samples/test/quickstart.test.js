@@ -32,7 +32,7 @@ describe('Game Servers Quickstart Test', () => {
 
   before(async () => {
     const projectId = await client.getProjectId();
-    await cleanup(client, null, projectId, LOCATION);
+    await cleanup();
   });
 
   it('should create a realm', async () => {

@@ -34,7 +34,7 @@ describe('Game Servers Delete Realm Test', () => {
     const projectId = await client.getProjectId();
 
     // Clean up any stray realms
-    await cleanup(client, null, projectId, LOCATION);
+    await cleanup();
 
     realmId = `test-${uuid.v4()}`;
 
