@@ -63,7 +63,7 @@ npm install @google-cloud/game-servers
     // TODO(developer): uncomment the following section, and add values
     // const projectId = 'YOUR_PROJECT_ID';
     // const location = 'us-central1;
-    // const realIm = 'DESIRED_REALM_ID';
+    // const realmId = 'DESIRED_REALM_ID';
 
     const request = {
       parent: `projects/${projectId}/locations/${location}`,
@@ -99,6 +99,10 @@ has instructions for running the samples.
 
 | Sample                      | Source Code                       | Try it |
 | --------------------------- | --------------------------------- | ------ |
+| Create_realm | [source code](https://github.com/googleapis/nodejs-game-servers/blob/master/samples/create_realm.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-game-servers&page=editor&open_in_editor=samples/create_realm.js,samples/README.md) |
+| Delete_realm | [source code](https://github.com/googleapis/nodejs-game-servers/blob/master/samples/delete_realm.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-game-servers&page=editor&open_in_editor=samples/delete_realm.js,samples/README.md) |
+| Get_realm | [source code](https://github.com/googleapis/nodejs-game-servers/blob/master/samples/get_realm.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-game-servers&page=editor&open_in_editor=samples/get_realm.js,samples/README.md) |
+| List_realms | [source code](https://github.com/googleapis/nodejs-game-servers/blob/master/samples/list_realms.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-game-servers&page=editor&open_in_editor=samples/list_realms.js,samples/README.md) |
 | Create Game Server Realm | [source code](https://github.com/googleapis/nodejs-game-servers/blob/master/samples/quickstart.js) | [![Open in Cloud Shell][shell_img]](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/googleapis/nodejs-game-servers&page=editor&open_in_editor=samples/quickstart.js,samples/README.md) |
 
 
