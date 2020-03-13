@@ -15,6 +15,7 @@
 'use strict';
 
 const {assert} = require('chai');
+const cleanup = require('./clean.js');
 const {describe, it, before, after} = require('mocha');
 const {
   RealmsServiceClient,
@@ -36,6 +37,8 @@ describe('Game Servers Get Cluster Test', () => {
   let realmId, gameClusterId;
 
   before(async () => {
+    await cleanup();
+
     // Create a realm
     const projectId = await realmsClient.getProjectId();
     realmId = `realm-${uuid.v4()}`;
