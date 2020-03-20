@@ -43,9 +43,14 @@ export class GameServerDeploymentsServiceClient {
   private _innerApiCalls: {[name: string]: Function};
   private _pathTemplates: {[name: string]: gax.PathTemplate};
   private _terminated = false;
+  private _opts: ClientOptions;
+  private _gaxModule: typeof gax | typeof gax.fallback;
+  private _gaxGrpc: gax.GrpcClient | gax.fallback.GrpcClient;
+  private _protos: {};
+  private _defaults: {[method: string]: gax.CallSettings};
   auth: gax.GoogleAuth;
   operationsClient: gax.OperationsClient;
-  gameServerDeploymentsServiceStub: Promise<{[name: string]: Function}>;
+  gameServerDeploymentsServiceStub?: Promise<{[name: string]: Function}>;
 
   /**
    * Construct an instance of GameServerDeploymentsServiceClient.
@@ -69,8 +74,6 @@ export class GameServerDeploymentsServiceClient {
    *     app is running in an environment which supports
    *     {@link https://developers.google.com/identity/protocols/application-default-credentials Application Default Credentials},
    *     your project ID will be detected automatically.
-   * @param {function} [options.promise] - Custom promise module to use instead
-   *     of native Promises.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
    */
@@ -101,26 +104,29 @@ export class GameServerDeploymentsServiceClient {
     // If we are in browser, we are already using fallback because of the
     // "browser" field in package.json.
     // But if we were explicitly requested to use fallback, let's do it now.
-    const gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
+    this._gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
     opts.scopes = (this
       .constructor as typeof GameServerDeploymentsServiceClient).scopes;
-    const gaxGrpc = new gaxModule.GrpcClient(opts);
+    this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
+
+    // Save options to use in initialize() method.
+    this._opts = opts;
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = gaxGrpc.auth as gax.GoogleAuth;
+    this.auth = this._gaxGrpc.auth as gax.GoogleAuth;
 
     // Determine the client header string.
-    const clientHeader = [`gax/${gaxModule.version}`, `gapic/${version}`];
+    const clientHeader = [`gax/${this._gaxModule.version}`, `gapic/${version}`];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
-      clientHeader.push(`gl-web/${gaxModule.version}`);
+      clientHeader.push(`gl-web/${this._gaxModule.version}`);
     }
     if (!opts.fallback) {
-      clientHeader.push(`grpc/${gaxGrpc.grpcVersion}`);
+      clientHeader.push(`grpc/${this._gaxGrpc.grpcVersion}`);
     }
     if (opts.libName && opts.libVersion) {
       clientHeader.push(`${opts.libName}/${opts.libVersion}`);
@@ -136,7 +142,7 @@ export class GameServerDeploymentsServiceClient {
       'protos',
       'protos.json'
     );
-    const protos = gaxGrpc.loadProto(
+    this._protos = this._gaxGrpc.loadProto(
       opts.fallback ? require('../../protos/protos.json') : nodejsProtoPath
     );
 
@@ -144,19 +150,19 @@ export class GameServerDeploymentsServiceClient {
     // identifiers to uniquely identify resources within the API.
     // Create useful helper objects for these.
     this._pathTemplates = {
-      gameServerClusterPathTemplate: new gaxModule.PathTemplate(
+      gameServerClusterPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}/gameServerClusters/{cluster}'
       ),
-      gameServerConfigPathTemplate: new gaxModule.PathTemplate(
+      gameServerConfigPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/configs/{config}'
       ),
-      gameServerDeploymentPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}'
       ),
-      gameServerDeploymentRolloutPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentRolloutPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/rollout'
       ),
-      realmPathTemplate: new gaxModule.PathTemplate(
+      realmPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}'
       ),
     };
@@ -165,13 +171,15 @@ export class GameServerDeploymentsServiceClient {
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
     const protoFilesRoot = opts.fallback
-      ? gaxModule.protobuf.Root.fromJSON(require('../../protos/protos.json'))
-      : gaxModule.protobuf.loadSync(nodejsProtoPath);
+      ? this._gaxModule.protobuf.Root.fromJSON(
+          require('../../protos/protos.json')
+        )
+      : this._gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = gaxModule
+    this.operationsClient = this._gaxModule
       .lro({
         auth: this.auth,
-        grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined,
+        grpc: 'grpc' in this._gaxGrpc ? this._gaxGrpc.grpc : undefined,
       })
       .operationsClient(opts);
     const createGameServerDeploymentResponse = protoFilesRoot.lookup(
@@ -200,7 +208,7 @@ export class GameServerDeploymentsServiceClient {
     ) as gax.protobuf.Type;
 
     this._descriptors.longrunning = {
-      createGameServerDeployment: new gaxModule.LongrunningDescriptor(
+      createGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         createGameServerDeploymentResponse.decode.bind(
           createGameServerDeploymentResponse
@@ -209,7 +217,7 @@ export class GameServerDeploymentsServiceClient {
           createGameServerDeploymentMetadata
         )
       ),
-      deleteGameServerDeployment: new gaxModule.LongrunningDescriptor(
+      deleteGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         deleteGameServerDeploymentResponse.decode.bind(
           deleteGameServerDeploymentResponse
@@ -218,7 +226,7 @@ export class GameServerDeploymentsServiceClient {
           deleteGameServerDeploymentMetadata
         )
       ),
-      updateGameServerDeployment: new gaxModule.LongrunningDescriptor(
+      updateGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         updateGameServerDeploymentResponse.decode.bind(
           updateGameServerDeploymentResponse
@@ -227,7 +235,7 @@ export class GameServerDeploymentsServiceClient {
           updateGameServerDeploymentMetadata
         )
       ),
-      updateGameServerDeploymentRollout: new gaxModule.LongrunningDescriptor(
+      updateGameServerDeploymentRollout: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         updateGameServerDeploymentRolloutResponse.decode.bind(
           updateGameServerDeploymentRolloutResponse
@@ -239,7 +247,7 @@ export class GameServerDeploymentsServiceClient {
     };
 
     // Put together the default options sent with requests.
-    const defaults = gaxGrpc.constructSettings(
+    this._defaults = this._gaxGrpc.constructSettings(
       'google.cloud.gaming.v1beta.GameServerDeploymentsService',
       gapicConfig as gax.ClientConfig,
       opts.clientConfig || {},
@@ -250,18 +258,36 @@ export class GameServerDeploymentsServiceClient {
     // of calling the API is handled in `google-gax`, with this code
     // merely providing the destination and request information.
     this._innerApiCalls = {};
+  }
+
+  /**
+   * Initialize the client.
+   * Performs asynchronous operations (such as authentication) and prepares the client.
+   * This function will be called automatically when any class method is called for the
+   * first time, but if you need to initialize it before calling an actual method,
+   * feel free to call initialize() directly.
+   *
+   * You can await on this method if you want to make sure the client is initialized.
+   *
+   * @returns {Promise} A promise that resolves to an authenticated service stub.
+   */
+  initialize() {
+    // If the client stub promise is already initialized, return immediately.
+    if (this.gameServerDeploymentsServiceStub) {
+      return this.gameServerDeploymentsServiceStub;
+    }
 
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.GameServerDeploymentsService.
-    this.gameServerDeploymentsServiceStub = gaxGrpc.createStub(
-      opts.fallback
-        ? (protos as protobuf.Root).lookupService(
+    this.gameServerDeploymentsServiceStub = this._gaxGrpc.createStub(
+      this._opts.fallback
+        ? (this._protos as protobuf.Root).lookupService(
             'google.cloud.gaming.v1beta.GameServerDeploymentsService'
           )
         : // tslint:disable-next-line no-any
-          (protos as any).google.cloud.gaming.v1beta
+          (this._protos as any).google.cloud.gaming.v1beta
             .GameServerDeploymentsService,
-      opts
+      this._opts
     ) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
@@ -291,9 +317,9 @@ export class GameServerDeploymentsServiceClient {
         }
       );
 
-      const apiCall = gaxModule.createApiCall(
+      const apiCall = this._gaxModule.createApiCall(
         innerCallPromise,
-        defaults[methodName],
+        this._defaults[methodName],
         this._descriptors.page[methodName] ||
           this._descriptors.stream[methodName] ||
           this._descriptors.longrunning[methodName]
@@ -307,6 +333,8 @@ export class GameServerDeploymentsServiceClient {
         return apiCall(argument, callOptions, callback);
       };
     }
+
+    return this.gameServerDeploymentsServiceStub;
   }
 
   /**
@@ -435,6 +463,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
+    this.initialize();
     return this._innerApiCalls.listGameServerDeployments(
       request,
       options,
@@ -517,6 +546,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.getGameServerDeployment(
       request,
       options,
@@ -599,6 +629,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.getGameServerDeploymentRollout(
       request,
       options,
@@ -682,6 +713,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'rollout.name': request.rollout!.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.previewGameServerDeploymentRollout(
       request,
       options,
@@ -766,6 +798,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.fetchDeploymentState(request, options, callback);
   }
 
@@ -851,6 +884,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
+    this.initialize();
     return this._innerApiCalls.createGameServerDeployment(
       request,
       options,
@@ -939,6 +973,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.deleteGameServerDeployment(
       request,
       options,
@@ -1027,6 +1062,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'game_server_deployment.name': request.gameServerDeployment!.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.updateGameServerDeployment(
       request,
       options,
@@ -1115,6 +1151,7 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'rollout.name': request.rollout!.name || '',
     });
+    this.initialize();
     return this._innerApiCalls.updateGameServerDeploymentRollout(
       request,
       options,
@@ -1456,8 +1493,9 @@ export class GameServerDeploymentsServiceClient {
    * The client will no longer be usable and all future behavior is undefined.
    */
   close(): Promise<void> {
+    this.initialize();
     if (!this._terminated) {
-      return this.gameServerDeploymentsServiceStub.then(stub => {
+      return this.gameServerDeploymentsServiceStub!.then(stub => {
         this._terminated = true;
         stub.close();
       });
