@@ -27,8 +27,7 @@ function main(
   location = 'LOCATION_ID',
   realmId = 'REALM_ID',
   gameClusterId = 'GAME_CLUSTER_ID',
-  gkeClusterId = 'GKE_CLUSTER_ID',
-  gkeLocation = 'GKE_CLUSTER_LOCATION'
+  gkeClusterName = 'GKE_CLUSTER_NAME'
 ) {
   // [START cloud_game_servers_create_cluster]
   /**
@@ -38,8 +37,7 @@ function main(
   // const location = 'A Compute Engine region, e.g. "us-central1"';
   // const realmId = 'The ID of the realm to locate this cluster in';
   // const gameClusterId = 'A unique ID for this Game Server Cluster';
-  // const gkeClusterId = 'The ID of the GKE cluster to use';
-  // const gkeLocation = 'The location of your GKE cluster';
+  // const gkeClusterName= 'The full resource name of the GKE cluster to use';
   const {
     GameServerClustersServiceClient,
   } = require('@google-cloud/game-servers');
@@ -56,7 +54,7 @@ function main(
         connectionInfo: {
           gkeClusterReference: {
             // Provide full resource name of a Kubernetes Engine cluster
-            cluster: `projects/${projectId}/locations/${gkeLocation}/clusters/${gkeClusterId}`,
+            cluster: gkeClusterName,
           },
           namespace: 'default',
         },

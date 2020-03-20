@@ -28,8 +28,9 @@ const uuid = require('uuid');
 const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const LOCATION = 'us-central1';
-const GKE_LOCATION = 'us-central1-a';
-const GKE_CLUSTER_ID = process.env.SAMPLE_CLUSTER_ID;
+const GKE_CLUSTER_NAME =
+  process.env.SAMPLE_CLUSTER_NAME ||
+  'projects/1046198160504/locations/us-west1-a/clusters/grpc-bug-cluster';
 
 describe('Game Servers Create Cluster Test', () => {
   const realmsClient = new RealmsServiceClient();
@@ -41,7 +42,7 @@ describe('Game Servers Create Cluster Test', () => {
 
     // Create a realm
     const projectId = await realmsClient.getProjectId();
-    realmId = `realm-${uuid.v4()}`;
+    realmId = `create-realm-${uuid.v4()}`;
     gameClusterId = `test-${uuid.v4()}`;
 
     const request = {
@@ -62,7 +63,7 @@ describe('Game Servers Create Cluster Test', () => {
     gameClusterId = `test-${uuid.v4()}`;
 
     const create_output = execSync(
-      `node create_cluster.js ${projectId} ${LOCATION} ${realmId} ${gameClusterId} ${GKE_CLUSTER_ID} ${GKE_LOCATION}`
+      `node create_cluster.js ${projectId} ${LOCATION} ${realmId} ${gameClusterId} ${GKE_CLUSTER_NAME}`
     );
     assert.match(create_output, /Cluster name:/);
   });

@@ -28,8 +28,9 @@ const uuid = require('uuid');
 const execSync = cmd => cp.execSync(cmd, {encoding: 'utf-8'});
 
 const LOCATION = 'us-central1';
-const GKE_LOCATION = 'us-central1-a';
-const GKE_CLUSTER_ID = process.env.SAMPLE_CLUSTER_ID;
+const GKE_CLUSTER_NAME =
+  process.env.SAMPLE_CLUSTER_NAME ||
+  'projects/1046198160504/locations/us-west1-a/clusters/grpc-bug-cluster';
 
 describe('Game Servers Get Cluster Test', () => {
   const realmsClient = new RealmsServiceClient();
@@ -41,7 +42,7 @@ describe('Game Servers Get Cluster Test', () => {
 
     // Create a realm
     const projectId = await realmsClient.getProjectId();
-    realmId = `realm-${uuid.v4()}`;
+    realmId = `get-realm-${uuid.v4()}`;
     gameClusterId = `test-${uuid.v4()}`;
 
     const createRealmRequest = {
@@ -65,7 +66,7 @@ describe('Game Servers Get Cluster Test', () => {
         connectionInfo: {
           gkeClusterReference: {
             // Provide full resource name of a Kubernetes Engine cluster
-            cluster: `projects/${projectId}/locations/${GKE_LOCATION}/clusters/${GKE_CLUSTER_ID}`,
+            cluster: GKE_CLUSTER_NAME,
           },
           namespace: 'default',
         },
