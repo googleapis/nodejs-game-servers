@@ -35,13 +35,13 @@ const GKE_CLUSTER_NAME =
 describe('Game Servers Delete Cluster Test', () => {
   const realmsClient = new RealmsServiceClient();
   const gameClustersClient = new GameServerClustersServiceClient();
-  let realmId, gameClusterId;
+  let projectId, realmId, gameClusterId;
 
   before(async () => {
     await cleanup();
 
     // Create a realm
-    const projectId = await realmsClient.getProjectId();
+    projectId = await realmsClient.getProjectId();
     realmId = `delete-realm-${uuid.v4()}`;
     gameClusterId = `test-${uuid.v4()}`;
 
@@ -80,8 +80,6 @@ describe('Game Servers Delete Cluster Test', () => {
   });
 
   it('should delete a Game Server cluster in a realm', async () => {
-    const projectId = await realmsClient.getProjectId();
-
     const create_output = execSync(
       `node delete_cluster.js ${projectId} ${LOCATION} ${realmId} ${gameClusterId}`
     );
@@ -89,8 +87,6 @@ describe('Game Servers Delete Cluster Test', () => {
   });
 
   after(async () => {
-    const projectId = await realmsClient.getProjectId();
-
     // Delete the realm
     const deleteRealmRequest = {
       name: `projects/${projectId}/locations/${LOCATION}/realms/${realmId}`,
