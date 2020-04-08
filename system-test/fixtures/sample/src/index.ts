@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,13 +16,18 @@
 // ** https://github.com/googleapis/gapic-generator-typescript **
 // ** All changes to this file may be overwritten. **
 
-import {GameServerClustersServiceClient, GameServerConfigsServiceClient, GameServerDeploymentsServiceClient, RealmsServiceClient} from '@google-cloud/game-servers';
+import {
+  GameServerClustersServiceClient,
+  GameServerConfigsServiceClient,
+  GameServerDeploymentsServiceClient,
+  RealmsServiceClient,
+} from '@google-cloud/game-servers';
 
 function main() {
-  const gameServerClustersServiceClient = new GameServerClustersServiceClient();
-  const gameServerConfigsServiceClient = new GameServerConfigsServiceClient();
-  const gameServerDeploymentsServiceClient = new GameServerDeploymentsServiceClient();
-  const realmsServiceClient = new RealmsServiceClient();
+  new GameServerClustersServiceClient();
+  new GameServerConfigsServiceClient();
+  new GameServerDeploymentsServiceClient();
+  new RealmsServiceClient();
 }
 
 main();

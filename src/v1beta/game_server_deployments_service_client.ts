@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 import * as gax from 'google-gax';
 import {
-  APICallback,
   Callback,
   CallOptions,
   Descriptors,
@@ -27,7 +26,7 @@ import {
 } from 'google-gax';
 import * as path from 'path';
 
-import * as protosTypes from '../../protos/protos';
+import * as protos from '../../protos/protos';
 import * as gapicConfig from './game_server_deployments_service_client_config.json';
 
 const version = require('../../../package.json').version;
@@ -39,13 +38,23 @@ const version = require('../../../package.json').version;
  * @memberof v1beta
  */
 export class GameServerDeploymentsServiceClient {
-  private _descriptors: Descriptors = {page: {}, stream: {}, longrunning: {}};
-  private _innerApiCalls: {[name: string]: Function};
-  private _pathTemplates: {[name: string]: gax.PathTemplate};
   private _terminated = false;
+  private _opts: ClientOptions;
+  private _gaxModule: typeof gax | typeof gax.fallback;
+  private _gaxGrpc: gax.GrpcClient | gax.fallback.GrpcClient;
+  private _protos: {};
+  private _defaults: {[method: string]: gax.CallSettings};
   auth: gax.GoogleAuth;
+  descriptors: Descriptors = {
+    page: {},
+    stream: {},
+    longrunning: {},
+    batching: {},
+  };
+  innerApiCalls: {[name: string]: Function};
+  pathTemplates: {[name: string]: gax.PathTemplate};
   operationsClient: gax.OperationsClient;
-  gameServerDeploymentsServiceStub: Promise<{[name: string]: Function}>;
+  gameServerDeploymentsServiceStub?: Promise<{[name: string]: Function}>;
 
   /**
    * Construct an instance of GameServerDeploymentsServiceClient.
@@ -69,8 +78,6 @@ export class GameServerDeploymentsServiceClient {
    *     app is running in an environment which supports
    *     {@link https://developers.google.com/identity/protocols/application-default-credentials Application Default Credentials},
    *     your project ID will be detected automatically.
-   * @param {function} [options.promise] - Custom promise module to use instead
-   *     of native Promises.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
    */
@@ -101,26 +108,29 @@ export class GameServerDeploymentsServiceClient {
     // If we are in browser, we are already using fallback because of the
     // "browser" field in package.json.
     // But if we were explicitly requested to use fallback, let's do it now.
-    const gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
+    this._gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
     opts.scopes = (this
       .constructor as typeof GameServerDeploymentsServiceClient).scopes;
-    const gaxGrpc = new gaxModule.GrpcClient(opts);
+    this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
+
+    // Save options to use in initialize() method.
+    this._opts = opts;
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = gaxGrpc.auth as gax.GoogleAuth;
+    this.auth = this._gaxGrpc.auth as gax.GoogleAuth;
 
     // Determine the client header string.
-    const clientHeader = [`gax/${gaxModule.version}`, `gapic/${version}`];
+    const clientHeader = [`gax/${this._gaxModule.version}`, `gapic/${version}`];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
-      clientHeader.push(`gl-web/${gaxModule.version}`);
+      clientHeader.push(`gl-web/${this._gaxModule.version}`);
     }
     if (!opts.fallback) {
-      clientHeader.push(`grpc/${gaxGrpc.grpcVersion}`);
+      clientHeader.push(`grpc/${this._gaxGrpc.grpcVersion}`);
     }
     if (opts.libName && opts.libVersion) {
       clientHeader.push(`${opts.libName}/${opts.libVersion}`);
@@ -136,27 +146,30 @@ export class GameServerDeploymentsServiceClient {
       'protos',
       'protos.json'
     );
-    const protos = gaxGrpc.loadProto(
-      opts.fallback ? require('../../protos/protos.json') : nodejsProtoPath
+    this._protos = this._gaxGrpc.loadProto(
+      opts.fallback
+        ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        : nodejsProtoPath
     );
 
     // This API contains "path templates"; forward-slash-separated
     // identifiers to uniquely identify resources within the API.
     // Create useful helper objects for these.
-    this._pathTemplates = {
-      gameServerClusterPathTemplate: new gaxModule.PathTemplate(
+    this.pathTemplates = {
+      gameServerClusterPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}/gameServerClusters/{cluster}'
       ),
-      gameServerConfigPathTemplate: new gaxModule.PathTemplate(
+      gameServerConfigPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/configs/{config}'
       ),
-      gameServerDeploymentPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}'
       ),
-      gameServerDeploymentRolloutPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentRolloutPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/rollout'
       ),
-      realmPathTemplate: new gaxModule.PathTemplate(
+      realmPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}'
       ),
     };
@@ -165,13 +178,16 @@ export class GameServerDeploymentsServiceClient {
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
     const protoFilesRoot = opts.fallback
-      ? gaxModule.protobuf.Root.fromJSON(require('../../protos/protos.json'))
-      : gaxModule.protobuf.loadSync(nodejsProtoPath);
+      ? this._gaxModule.protobuf.Root.fromJSON(
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        )
+      : this._gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = gaxModule
+    this.operationsClient = this._gaxModule
       .lro({
         auth: this.auth,
-        grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined,
+        grpc: 'grpc' in this._gaxGrpc ? this._gaxGrpc.grpc : undefined,
       })
       .operationsClient(opts);
     const createGameServerDeploymentResponse = protoFilesRoot.lookup(
@@ -199,8 +215,8 @@ export class GameServerDeploymentsServiceClient {
       '.google.cloud.gaming.v1beta.OperationMetadata'
     ) as gax.protobuf.Type;
 
-    this._descriptors.longrunning = {
-      createGameServerDeployment: new gaxModule.LongrunningDescriptor(
+    this.descriptors.longrunning = {
+      createGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         createGameServerDeploymentResponse.decode.bind(
           createGameServerDeploymentResponse
@@ -209,7 +225,7 @@ export class GameServerDeploymentsServiceClient {
           createGameServerDeploymentMetadata
         )
       ),
-      deleteGameServerDeployment: new gaxModule.LongrunningDescriptor(
+      deleteGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         deleteGameServerDeploymentResponse.decode.bind(
           deleteGameServerDeploymentResponse
@@ -218,7 +234,7 @@ export class GameServerDeploymentsServiceClient {
           deleteGameServerDeploymentMetadata
         )
       ),
-      updateGameServerDeployment: new gaxModule.LongrunningDescriptor(
+      updateGameServerDeployment: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         updateGameServerDeploymentResponse.decode.bind(
           updateGameServerDeploymentResponse
@@ -227,7 +243,7 @@ export class GameServerDeploymentsServiceClient {
           updateGameServerDeploymentMetadata
         )
       ),
-      updateGameServerDeploymentRollout: new gaxModule.LongrunningDescriptor(
+      updateGameServerDeploymentRollout: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         updateGameServerDeploymentRolloutResponse.decode.bind(
           updateGameServerDeploymentRolloutResponse
@@ -239,7 +255,7 @@ export class GameServerDeploymentsServiceClient {
     };
 
     // Put together the default options sent with requests.
-    const defaults = gaxGrpc.constructSettings(
+    this._defaults = this._gaxGrpc.constructSettings(
       'google.cloud.gaming.v1beta.GameServerDeploymentsService',
       gapicConfig as gax.ClientConfig,
       opts.clientConfig || {},
@@ -249,19 +265,37 @@ export class GameServerDeploymentsServiceClient {
     // Set up a dictionary of "inner API calls"; the core implementation
     // of calling the API is handled in `google-gax`, with this code
     // merely providing the destination and request information.
-    this._innerApiCalls = {};
+    this.innerApiCalls = {};
+  }
+
+  /**
+   * Initialize the client.
+   * Performs asynchronous operations (such as authentication) and prepares the client.
+   * This function will be called automatically when any class method is called for the
+   * first time, but if you need to initialize it before calling an actual method,
+   * feel free to call initialize() directly.
+   *
+   * You can await on this method if you want to make sure the client is initialized.
+   *
+   * @returns {Promise} A promise that resolves to an authenticated service stub.
+   */
+  initialize() {
+    // If the client stub promise is already initialized, return immediately.
+    if (this.gameServerDeploymentsServiceStub) {
+      return this.gameServerDeploymentsServiceStub;
+    }
 
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.GameServerDeploymentsService.
-    this.gameServerDeploymentsServiceStub = gaxGrpc.createStub(
-      opts.fallback
-        ? (protos as protobuf.Root).lookupService(
+    this.gameServerDeploymentsServiceStub = this._gaxGrpc.createStub(
+      this._opts.fallback
+        ? (this._protos as protobuf.Root).lookupService(
             'google.cloud.gaming.v1beta.GameServerDeploymentsService'
           )
-        : // tslint:disable-next-line no-any
-          (protos as any).google.cloud.gaming.v1beta
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (this._protos as any).google.cloud.gaming.v1beta
             .GameServerDeploymentsService,
-      opts
+      this._opts
     ) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
@@ -277,36 +311,32 @@ export class GameServerDeploymentsServiceClient {
       'previewGameServerDeploymentRollout',
       'fetchDeploymentState',
     ];
-
     for (const methodName of gameServerDeploymentsServiceStubMethods) {
-      const innerCallPromise = this.gameServerDeploymentsServiceStub.then(
+      const callPromise = this.gameServerDeploymentsServiceStub.then(
         stub => (...args: Array<{}>) => {
           if (this._terminated) {
             return Promise.reject('The client has already been closed.');
           }
-          return stub[methodName].apply(stub, args);
+          const func = stub[methodName];
+          return func.apply(stub, args);
         },
         (err: Error | null | undefined) => () => {
           throw err;
         }
       );
 
-      const apiCall = gaxModule.createApiCall(
-        innerCallPromise,
-        defaults[methodName],
-        this._descriptors.page[methodName] ||
-          this._descriptors.stream[methodName] ||
-          this._descriptors.longrunning[methodName]
+      const apiCall = this._gaxModule.createApiCall(
+        callPromise,
+        this._defaults[methodName],
+        this.descriptors.page[methodName] ||
+          this.descriptors.stream[methodName] ||
+          this.descriptors.longrunning[methodName]
       );
 
-      this._innerApiCalls[methodName] = (
-        argument: {},
-        callOptions?: CallOptions,
-        callback?: APICallback
-      ) => {
-        return apiCall(argument, callOptions, callback);
-      };
+      this.innerApiCalls[methodName] = apiCall;
     }
+
+    return this.gameServerDeploymentsServiceStub;
   }
 
   /**
@@ -360,26 +390,37 @@ export class GameServerDeploymentsServiceClient {
   // -- Service calls --
   // -------------------
   listGameServerDeployments(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+        | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
         | undefined
       ),
       {} | undefined
     ]
   >;
   listGameServerDeployments(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -394,26 +435,28 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   listGameServerDeployments(
-    request: protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+          protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+          | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
+        | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
         | undefined
       ),
       {} | undefined
@@ -435,33 +478,45 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
-    return this._innerApiCalls.listGameServerDeployments(
+    this.initialize();
+    return this.innerApiCalls.listGameServerDeployments(
       request,
       options,
       callback
     );
   }
   getGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+        | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
         | undefined
       ),
       {} | undefined
     ]
   >;
   getGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  getGameServerDeployment(
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -476,26 +531,28 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-          | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+          protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+          | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+        | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
         | undefined
       ),
       {} | undefined
@@ -517,33 +574,45 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.getGameServerDeployment(
+    this.initialize();
+    return this.innerApiCalls.getGameServerDeployment(
       request,
       options,
       callback
     );
   }
   getGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+        | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
         | undefined
       ),
       {} | undefined
     ]
   >;
   getGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  getGameServerDeploymentRollout(
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -558,26 +627,28 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
-          | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+          protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+          | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
-      | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+        | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
         | undefined
       ),
       {} | undefined
@@ -599,33 +670,45 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.getGameServerDeploymentRollout(
+    this.initialize();
+    return this.innerApiCalls.getGameServerDeploymentRollout(
       request,
       options,
       callback
     );
   }
   previewGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+        | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
         | undefined
       ),
       {} | undefined
     ]
   >;
   previewGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  previewGameServerDeploymentRollout(
+    request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -641,26 +724,28 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   previewGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+          protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+          | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+        | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
         | undefined
       ),
       {} | undefined
@@ -682,33 +767,45 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'rollout.name': request.rollout!.name || '',
     });
-    return this._innerApiCalls.previewGameServerDeploymentRollout(
+    this.initialize();
+    return this.innerApiCalls.previewGameServerDeploymentRollout(
       request,
       options,
       callback
     );
   }
   fetchDeploymentState(
-    request: protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
+    request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+        | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
         | undefined
       ),
       {} | undefined
     ]
   >;
   fetchDeploymentState(
-    request: protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
+    request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  fetchDeploymentState(
+    request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -725,26 +822,28 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   fetchDeploymentState(
-    request: protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
+    request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+          protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+          | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
       (
-        | protosTypes.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+        | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
         | undefined
       ),
       {} | undefined
@@ -766,32 +865,44 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.fetchDeploymentState(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.fetchDeploymentState(request, options, callback);
   }
 
   createGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   createGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  createGameServerDeployment(
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -806,32 +917,32 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   createGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -851,35 +962,47 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
-    return this._innerApiCalls.createGameServerDeployment(
+    this.initialize();
+    return this.innerApiCalls.createGameServerDeployment(
       request,
       options,
       callback
     );
   }
   deleteGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   deleteGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  deleteGameServerDeployment(
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -894,32 +1017,32 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   deleteGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -939,35 +1062,47 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.deleteGameServerDeployment(
+    this.initialize();
+    return this.innerApiCalls.deleteGameServerDeployment(
       request,
       options,
       callback
     );
   }
   updateGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   updateGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  updateGameServerDeployment(
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -982,32 +1117,32 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   updateGameServerDeployment(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -1027,35 +1162,47 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'game_server_deployment.name': request.gameServerDeployment!.name || '',
     });
-    return this._innerApiCalls.updateGameServerDeployment(
+    this.initialize();
+    return this.innerApiCalls.updateGameServerDeployment(
       request,
       options,
       callback
     );
   }
   updateGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   updateGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  updateGameServerDeploymentRollout(
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -1070,32 +1217,32 @@ export class GameServerDeploymentsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   updateGameServerDeploymentRollout(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IGameServerDeployment,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -1115,7 +1262,8 @@ export class GameServerDeploymentsServiceClient {
     ] = gax.routingHeader.fromParams({
       'rollout.name': request.rollout!.name || '',
     });
-    return this._innerApiCalls.updateGameServerDeploymentRollout(
+    this.initialize();
+    return this.innerApiCalls.updateGameServerDeploymentRollout(
       request,
       options,
       callback
@@ -1140,11 +1288,11 @@ export class GameServerDeploymentsServiceClient {
     realm: string,
     cluster: string
   ) {
-    return this._pathTemplates.gameServerClusterPathTemplate.render({
-      project,
-      location,
-      realm,
-      cluster,
+    return this.pathTemplates.gameServerClusterPathTemplate.render({
+      project: project,
+      location: location,
+      realm: realm,
+      cluster: cluster,
     });
   }
 
@@ -1156,7 +1304,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).project;
   }
@@ -1169,7 +1317,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).location;
   }
@@ -1182,7 +1330,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).realm;
   }
@@ -1195,7 +1343,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the cluster.
    */
   matchClusterFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).cluster;
   }
@@ -1215,11 +1363,11 @@ export class GameServerDeploymentsServiceClient {
     deployment: string,
     config: string
   ) {
-    return this._pathTemplates.gameServerConfigPathTemplate.render({
-      project,
-      location,
-      deployment,
-      config,
+    return this.pathTemplates.gameServerConfigPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
+      config: config,
     });
   }
 
@@ -1231,7 +1379,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).project;
   }
@@ -1244,7 +1392,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).location;
   }
@@ -1257,7 +1405,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the deployment.
    */
   matchDeploymentFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).deployment;
   }
@@ -1270,7 +1418,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the config.
    */
   matchConfigFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).config;
   }
@@ -1288,10 +1436,10 @@ export class GameServerDeploymentsServiceClient {
     location: string,
     deployment: string
   ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.render({
-      project,
-      location,
-      deployment,
+    return this.pathTemplates.gameServerDeploymentPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -1303,7 +1451,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).project;
   }
@@ -1316,7 +1464,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).location;
   }
@@ -1331,7 +1479,7 @@ export class GameServerDeploymentsServiceClient {
   matchDeploymentFromGameServerDeploymentName(
     gameServerDeploymentName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).deployment;
   }
@@ -1349,10 +1497,10 @@ export class GameServerDeploymentsServiceClient {
     location: string,
     deployment: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
-      project,
-      location,
-      deployment,
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -1366,7 +1514,7 @@ export class GameServerDeploymentsServiceClient {
   matchProjectFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).project;
   }
@@ -1381,7 +1529,7 @@ export class GameServerDeploymentsServiceClient {
   matchLocationFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).location;
   }
@@ -1396,7 +1544,7 @@ export class GameServerDeploymentsServiceClient {
   matchDeploymentFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).deployment;
   }
@@ -1410,10 +1558,10 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} Resource name string.
    */
   realmPath(project: string, location: string, realm: string) {
-    return this._pathTemplates.realmPathTemplate.render({
-      project,
-      location,
-      realm,
+    return this.pathTemplates.realmPathTemplate.render({
+      project: project,
+      location: location,
+      realm: realm,
     });
   }
 
@@ -1425,7 +1573,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).project;
+    return this.pathTemplates.realmPathTemplate.match(realmName).project;
   }
 
   /**
@@ -1436,7 +1584,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).location;
+    return this.pathTemplates.realmPathTemplate.match(realmName).location;
   }
 
   /**
@@ -1447,7 +1595,7 @@ export class GameServerDeploymentsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).realm;
+    return this.pathTemplates.realmPathTemplate.match(realmName).realm;
   }
 
   /**
@@ -1456,8 +1604,9 @@ export class GameServerDeploymentsServiceClient {
    * The client will no longer be usable and all future behavior is undefined.
    */
   close(): Promise<void> {
+    this.initialize();
     if (!this._terminated) {
-      return this.gameServerDeploymentsServiceStub.then(stub => {
+      return this.gameServerDeploymentsServiceStub!.then(stub => {
         this._terminated = true;
         stub.close();
       });

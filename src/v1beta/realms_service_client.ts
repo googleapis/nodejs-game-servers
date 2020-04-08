@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 import * as gax from 'google-gax';
 import {
-  APICallback,
   Callback,
   CallOptions,
   Descriptors,
@@ -27,7 +26,7 @@ import {
 } from 'google-gax';
 import * as path from 'path';
 
-import * as protosTypes from '../../protos/protos';
+import * as protos from '../../protos/protos';
 import * as gapicConfig from './realms_service_client_config.json';
 
 const version = require('../../../package.json').version;
@@ -39,13 +38,23 @@ const version = require('../../../package.json').version;
  * @memberof v1beta
  */
 export class RealmsServiceClient {
-  private _descriptors: Descriptors = {page: {}, stream: {}, longrunning: {}};
-  private _innerApiCalls: {[name: string]: Function};
-  private _pathTemplates: {[name: string]: gax.PathTemplate};
   private _terminated = false;
+  private _opts: ClientOptions;
+  private _gaxModule: typeof gax | typeof gax.fallback;
+  private _gaxGrpc: gax.GrpcClient | gax.fallback.GrpcClient;
+  private _protos: {};
+  private _defaults: {[method: string]: gax.CallSettings};
   auth: gax.GoogleAuth;
+  descriptors: Descriptors = {
+    page: {},
+    stream: {},
+    longrunning: {},
+    batching: {},
+  };
+  innerApiCalls: {[name: string]: Function};
+  pathTemplates: {[name: string]: gax.PathTemplate};
   operationsClient: gax.OperationsClient;
-  realmsServiceStub: Promise<{[name: string]: Function}>;
+  realmsServiceStub?: Promise<{[name: string]: Function}>;
 
   /**
    * Construct an instance of RealmsServiceClient.
@@ -69,8 +78,6 @@ export class RealmsServiceClient {
    *     app is running in an environment which supports
    *     {@link https://developers.google.com/identity/protocols/application-default-credentials Application Default Credentials},
    *     your project ID will be detected automatically.
-   * @param {function} [options.promise] - Custom promise module to use instead
-   *     of native Promises.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
    */
@@ -100,25 +107,28 @@ export class RealmsServiceClient {
     // If we are in browser, we are already using fallback because of the
     // "browser" field in package.json.
     // But if we were explicitly requested to use fallback, let's do it now.
-    const gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
+    this._gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
     opts.scopes = (this.constructor as typeof RealmsServiceClient).scopes;
-    const gaxGrpc = new gaxModule.GrpcClient(opts);
+    this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
+
+    // Save options to use in initialize() method.
+    this._opts = opts;
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = gaxGrpc.auth as gax.GoogleAuth;
+    this.auth = this._gaxGrpc.auth as gax.GoogleAuth;
 
     // Determine the client header string.
-    const clientHeader = [`gax/${gaxModule.version}`, `gapic/${version}`];
+    const clientHeader = [`gax/${this._gaxModule.version}`, `gapic/${version}`];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
-      clientHeader.push(`gl-web/${gaxModule.version}`);
+      clientHeader.push(`gl-web/${this._gaxModule.version}`);
     }
     if (!opts.fallback) {
-      clientHeader.push(`grpc/${gaxGrpc.grpcVersion}`);
+      clientHeader.push(`grpc/${this._gaxGrpc.grpcVersion}`);
     }
     if (opts.libName && opts.libVersion) {
       clientHeader.push(`${opts.libName}/${opts.libVersion}`);
@@ -134,27 +144,30 @@ export class RealmsServiceClient {
       'protos',
       'protos.json'
     );
-    const protos = gaxGrpc.loadProto(
-      opts.fallback ? require('../../protos/protos.json') : nodejsProtoPath
+    this._protos = this._gaxGrpc.loadProto(
+      opts.fallback
+        ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        : nodejsProtoPath
     );
 
     // This API contains "path templates"; forward-slash-separated
     // identifiers to uniquely identify resources within the API.
     // Create useful helper objects for these.
-    this._pathTemplates = {
-      gameServerClusterPathTemplate: new gaxModule.PathTemplate(
+    this.pathTemplates = {
+      gameServerClusterPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}/gameServerClusters/{cluster}'
       ),
-      gameServerConfigPathTemplate: new gaxModule.PathTemplate(
+      gameServerConfigPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/configs/{config}'
       ),
-      gameServerDeploymentPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}'
       ),
-      gameServerDeploymentRolloutPathTemplate: new gaxModule.PathTemplate(
+      gameServerDeploymentRolloutPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/gameServerDeployments/{deployment}/rollout'
       ),
-      realmPathTemplate: new gaxModule.PathTemplate(
+      realmPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}'
       ),
     };
@@ -163,13 +176,16 @@ export class RealmsServiceClient {
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
     const protoFilesRoot = opts.fallback
-      ? gaxModule.protobuf.Root.fromJSON(require('../../protos/protos.json'))
-      : gaxModule.protobuf.loadSync(nodejsProtoPath);
+      ? this._gaxModule.protobuf.Root.fromJSON(
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        )
+      : this._gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = gaxModule
+    this.operationsClient = this._gaxModule
       .lro({
         auth: this.auth,
-        grpc: 'grpc' in gaxGrpc ? gaxGrpc.grpc : undefined,
+        grpc: 'grpc' in this._gaxGrpc ? this._gaxGrpc.grpc : undefined,
       })
       .operationsClient(opts);
     const createRealmResponse = protoFilesRoot.lookup(
@@ -191,18 +207,18 @@ export class RealmsServiceClient {
       '.google.cloud.gaming.v1beta.OperationMetadata'
     ) as gax.protobuf.Type;
 
-    this._descriptors.longrunning = {
-      createRealm: new gaxModule.LongrunningDescriptor(
+    this.descriptors.longrunning = {
+      createRealm: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         createRealmResponse.decode.bind(createRealmResponse),
         createRealmMetadata.decode.bind(createRealmMetadata)
       ),
-      deleteRealm: new gaxModule.LongrunningDescriptor(
+      deleteRealm: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         deleteRealmResponse.decode.bind(deleteRealmResponse),
         deleteRealmMetadata.decode.bind(deleteRealmMetadata)
       ),
-      updateRealm: new gaxModule.LongrunningDescriptor(
+      updateRealm: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
         updateRealmResponse.decode.bind(updateRealmResponse),
         updateRealmMetadata.decode.bind(updateRealmMetadata)
@@ -210,7 +226,7 @@ export class RealmsServiceClient {
     };
 
     // Put together the default options sent with requests.
-    const defaults = gaxGrpc.constructSettings(
+    this._defaults = this._gaxGrpc.constructSettings(
       'google.cloud.gaming.v1beta.RealmsService',
       gapicConfig as gax.ClientConfig,
       opts.clientConfig || {},
@@ -220,18 +236,36 @@ export class RealmsServiceClient {
     // Set up a dictionary of "inner API calls"; the core implementation
     // of calling the API is handled in `google-gax`, with this code
     // merely providing the destination and request information.
-    this._innerApiCalls = {};
+    this.innerApiCalls = {};
+  }
+
+  /**
+   * Initialize the client.
+   * Performs asynchronous operations (such as authentication) and prepares the client.
+   * This function will be called automatically when any class method is called for the
+   * first time, but if you need to initialize it before calling an actual method,
+   * feel free to call initialize() directly.
+   *
+   * You can await on this method if you want to make sure the client is initialized.
+   *
+   * @returns {Promise} A promise that resolves to an authenticated service stub.
+   */
+  initialize() {
+    // If the client stub promise is already initialized, return immediately.
+    if (this.realmsServiceStub) {
+      return this.realmsServiceStub;
+    }
 
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.RealmsService.
-    this.realmsServiceStub = gaxGrpc.createStub(
-      opts.fallback
-        ? (protos as protobuf.Root).lookupService(
+    this.realmsServiceStub = this._gaxGrpc.createStub(
+      this._opts.fallback
+        ? (this._protos as protobuf.Root).lookupService(
             'google.cloud.gaming.v1beta.RealmsService'
           )
-        : // tslint:disable-next-line no-any
-          (protos as any).google.cloud.gaming.v1beta.RealmsService,
-      opts
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (this._protos as any).google.cloud.gaming.v1beta.RealmsService,
+      this._opts
     ) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
@@ -244,36 +278,32 @@ export class RealmsServiceClient {
       'updateRealm',
       'previewRealmUpdate',
     ];
-
     for (const methodName of realmsServiceStubMethods) {
-      const innerCallPromise = this.realmsServiceStub.then(
+      const callPromise = this.realmsServiceStub.then(
         stub => (...args: Array<{}>) => {
           if (this._terminated) {
             return Promise.reject('The client has already been closed.');
           }
-          return stub[methodName].apply(stub, args);
+          const func = stub[methodName];
+          return func.apply(stub, args);
         },
         (err: Error | null | undefined) => () => {
           throw err;
         }
       );
 
-      const apiCall = gaxModule.createApiCall(
-        innerCallPromise,
-        defaults[methodName],
-        this._descriptors.page[methodName] ||
-          this._descriptors.stream[methodName] ||
-          this._descriptors.longrunning[methodName]
+      const apiCall = this._gaxModule.createApiCall(
+        callPromise,
+        this._defaults[methodName],
+        this.descriptors.page[methodName] ||
+          this.descriptors.stream[methodName] ||
+          this.descriptors.longrunning[methodName]
       );
 
-      this._innerApiCalls[methodName] = (
-        argument: {},
-        callOptions?: CallOptions,
-        callback?: APICallback
-      ) => {
-        return apiCall(argument, callOptions, callback);
-      };
+      this.innerApiCalls[methodName] = apiCall;
     }
+
+    return this.realmsServiceStub;
   }
 
   /**
@@ -327,22 +357,30 @@ export class RealmsServiceClient {
   // -- Service calls --
   // -------------------
   listRealms(
-    request: protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsResponse,
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
       {} | undefined
     ]
   >;
   listRealms(
-    request: protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsResponse,
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
-      {} | undefined
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  listRealms(
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -357,23 +395,25 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   listRealms(
-    request: protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest,
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IListRealmsResponse,
-          protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
-          {} | undefined
+          protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+          | protos.google.cloud.gaming.v1beta.IListRealmsRequest
+          | null
+          | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsResponse,
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
-      {} | undefined
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsResponse,
-      protosTypes.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse,
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | undefined,
       {} | undefined
     ]
   > | void {
@@ -393,25 +433,34 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
-    return this._innerApiCalls.listRealms(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.listRealms(request, options, callback);
   }
   getRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IRealm,
-      protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
       {} | undefined
     ]
   >;
   getRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IRealm,
-      protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
-      {} | undefined
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  getRealm(
+    request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -426,23 +475,23 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   getRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IRealm,
-          protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
-          {} | undefined
+          protos.google.cloud.gaming.v1beta.IRealm,
+          protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IRealm,
-      protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
-      {} | undefined
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IRealm,
-      protosTypes.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | undefined,
       {} | undefined
     ]
   > | void {
@@ -462,29 +511,38 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.getRealm(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.getRealm(request, options, callback);
   }
   previewRealmUpdate(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
     options?: gax.CallOptions
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
-        | undefined
-      ),
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest | undefined,
       {} | undefined
     ]
   >;
   previewRealmUpdate(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
     options: gax.CallOptions,
     callback: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
+    >
+  ): void;
+  previewRealmUpdate(
+    request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      | null
+      | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -499,28 +557,27 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   previewRealmUpdate(
-    request: protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
+    request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
-          protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-          | protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+          protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+          | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+          | null
           | undefined,
-          {} | undefined
+          {} | null | undefined
         >,
     callback?: Callback<
-      protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-      | protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      | null
       | undefined,
-      {} | undefined
+      {} | null | undefined
     >
   ): Promise<
     [
-      protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-      (
-        | protosTypes.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
-        | undefined
-      ),
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest | undefined,
       {} | undefined
     ]
   > | void {
@@ -540,32 +597,44 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       'realm.name': request.realm!.name || '',
     });
-    return this._innerApiCalls.previewRealmUpdate(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.previewRealmUpdate(request, options, callback);
   }
 
   createRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   createRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  createRealm(
+    request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -580,32 +649,32 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   createRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.ICreateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IRealm,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IRealm,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -625,31 +694,43 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       parent: request.parent || '',
     });
-    return this._innerApiCalls.createRealm(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.createRealm(request, options, callback);
   }
   deleteRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   deleteRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  deleteRealm(
+    request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -664,32 +745,32 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   deleteRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IDeleteRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IRealm,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IRealm,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -709,31 +790,43 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       name: request.name || '',
     });
-    return this._innerApiCalls.deleteRealm(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.deleteRealm(request, options, callback);
   }
   updateRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
     options?: gax.CallOptions
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   >;
   updateRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
     options: gax.CallOptions,
     callback: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  updateRealm(
+    request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): void;
   /**
@@ -748,32 +841,32 @@ export class RealmsServiceClient {
    *   The promise has a method named "cancel" which cancels the ongoing API call.
    */
   updateRealm(
-    request: protosTypes.google.cloud.gaming.v1beta.IUpdateRealmRequest,
+    request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
     optionsOrCallback?:
       | gax.CallOptions
       | Callback<
           LROperation<
-            protosTypes.google.cloud.gaming.v1beta.IRealm,
-            protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+            protos.google.cloud.gaming.v1beta.IRealm,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
           >,
-          protosTypes.google.longrunning.IOperation | undefined,
-          {} | undefined
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
         >,
     callback?: Callback<
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
-      {} | undefined
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
     >
   ): Promise<
     [
       LROperation<
-        protosTypes.google.cloud.gaming.v1beta.IRealm,
-        protosTypes.google.cloud.gaming.v1beta.IOperationMetadata
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
       >,
-      protosTypes.google.longrunning.IOperation | undefined,
+      protos.google.longrunning.IOperation | undefined,
       {} | undefined
     ]
   > | void {
@@ -793,7 +886,8 @@ export class RealmsServiceClient {
     ] = gax.routingHeader.fromParams({
       'realm.name': request.realm!.name || '',
     });
-    return this._innerApiCalls.updateRealm(request, options, callback);
+    this.initialize();
+    return this.innerApiCalls.updateRealm(request, options, callback);
   }
   // --------------------
   // -- Path templates --
@@ -814,11 +908,11 @@ export class RealmsServiceClient {
     realm: string,
     cluster: string
   ) {
-    return this._pathTemplates.gameServerClusterPathTemplate.render({
-      project,
-      location,
-      realm,
-      cluster,
+    return this.pathTemplates.gameServerClusterPathTemplate.render({
+      project: project,
+      location: location,
+      realm: realm,
+      cluster: cluster,
     });
   }
 
@@ -830,7 +924,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).project;
   }
@@ -843,7 +937,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).location;
   }
@@ -856,7 +950,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).realm;
   }
@@ -869,7 +963,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the cluster.
    */
   matchClusterFromGameServerClusterName(gameServerClusterName: string) {
-    return this._pathTemplates.gameServerClusterPathTemplate.match(
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
       gameServerClusterName
     ).cluster;
   }
@@ -889,11 +983,11 @@ export class RealmsServiceClient {
     deployment: string,
     config: string
   ) {
-    return this._pathTemplates.gameServerConfigPathTemplate.render({
-      project,
-      location,
-      deployment,
-      config,
+    return this.pathTemplates.gameServerConfigPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
+      config: config,
     });
   }
 
@@ -905,7 +999,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).project;
   }
@@ -918,7 +1012,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).location;
   }
@@ -931,7 +1025,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the deployment.
    */
   matchDeploymentFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).deployment;
   }
@@ -944,7 +1038,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the config.
    */
   matchConfigFromGameServerConfigName(gameServerConfigName: string) {
-    return this._pathTemplates.gameServerConfigPathTemplate.match(
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
       gameServerConfigName
     ).config;
   }
@@ -962,10 +1056,10 @@ export class RealmsServiceClient {
     location: string,
     deployment: string
   ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.render({
-      project,
-      location,
-      deployment,
+    return this.pathTemplates.gameServerDeploymentPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -977,7 +1071,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).project;
   }
@@ -990,7 +1084,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).location;
   }
@@ -1005,7 +1099,7 @@ export class RealmsServiceClient {
   matchDeploymentFromGameServerDeploymentName(
     gameServerDeploymentName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
       gameServerDeploymentName
     ).deployment;
   }
@@ -1023,10 +1117,10 @@ export class RealmsServiceClient {
     location: string,
     deployment: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
-      project,
-      location,
-      deployment,
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
+      project: project,
+      location: location,
+      deployment: deployment,
     });
   }
 
@@ -1040,7 +1134,7 @@ export class RealmsServiceClient {
   matchProjectFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).project;
   }
@@ -1055,7 +1149,7 @@ export class RealmsServiceClient {
   matchLocationFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).location;
   }
@@ -1070,7 +1164,7 @@ export class RealmsServiceClient {
   matchDeploymentFromGameServerDeploymentRolloutName(
     gameServerDeploymentRolloutName: string
   ) {
-    return this._pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
       gameServerDeploymentRolloutName
     ).deployment;
   }
@@ -1084,10 +1178,10 @@ export class RealmsServiceClient {
    * @returns {string} Resource name string.
    */
   realmPath(project: string, location: string, realm: string) {
-    return this._pathTemplates.realmPathTemplate.render({
-      project,
-      location,
-      realm,
+    return this.pathTemplates.realmPathTemplate.render({
+      project: project,
+      location: location,
+      realm: realm,
     });
   }
 
@@ -1099,7 +1193,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).project;
+    return this.pathTemplates.realmPathTemplate.match(realmName).project;
   }
 
   /**
@@ -1110,7 +1204,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).location;
+    return this.pathTemplates.realmPathTemplate.match(realmName).location;
   }
 
   /**
@@ -1121,7 +1215,7 @@ export class RealmsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromRealmName(realmName: string) {
-    return this._pathTemplates.realmPathTemplate.match(realmName).realm;
+    return this.pathTemplates.realmPathTemplate.match(realmName).realm;
   }
 
   /**
@@ -1130,8 +1224,9 @@ export class RealmsServiceClient {
    * The client will no longer be usable and all future behavior is undefined.
    */
   close(): Promise<void> {
+    this.initialize();
     if (!this._terminated) {
-      return this.realmsServiceStub.then(stub => {
+      return this.realmsServiceStub!.then(stub => {
         this._terminated = true;
         stub.close();
       });
