@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-game-servers.git",
-        "sha": "c75bb2de6ef48c26d5d90892a906b45dcf91755c"
+        "sha": "e5fda72901037c4b9808570195b2222326b2ecc8"
       }
     },
     {
