@@ -57,11 +57,157 @@ function stubLongRunningCallWithCallback<ResponseType>(response?: ResponseType, 
     return callError ? sinon.stub().callsArgWith(2, callError) : sinon.stub().callsArgWith(2, null, mockOperation);
 }
 
-function stubPageStreamingCall<ResponseType>(responses?: ResponseType[], error?: Error) {
-    const pagingStub = sinon.stub();
-    if (responses) {
-        for (let i = 0; i < responses.length; ++i) {
-            pagingStub.onCall(i).callsArgWith(2, null, responses[i]);
+function stubPageStreamingCall<ResponseType>(
+  responses?: ResponseType[],
+  error?: Error
+) {
+  const pagingStub = sinon.stub();
+  if (responses) {
+    for (let i = 0; i < responses.length; ++i) {
+      pagingStub.onCall(i).callsArgWith(2, null, responses[i]);
+    }
+  }
+  const transformStub = error
+    ? sinon.stub().callsArgWith(2, error)
+    : pagingStub;
+  const mockStream = new PassThrough({
+    objectMode: true,
+    transform: transformStub,
+  });
+  // trigger as many responses as needed
+  if (responses) {
+    for (let i = 0; i < responses.length; ++i) {
+      setImmediate(() => {
+        mockStream.write({});
+      });
+    }
+    setImmediate(() => {
+      mockStream.end();
+    });
+  } else {
+    setImmediate(() => {
+      mockStream.write({});
+    });
+    setImmediate(() => {
+      mockStream.end();
+    });
+  }
+  return sinon.stub().returns(mockStream);
+}
+
+function stubAsyncIterationCall<ResponseType>(
+  responses?: ResponseType[],
+  error?: Error
+) {
+  let counter = 0;
+  const asyncIterable = {
+    [Symbol.asyncIterator]() {
+      return {
+        async next() {
+          if (error) {
+            return Promise.reject(error);
+          }
+          if (counter >= responses!.length) {
+            return Promise.resolve({done: true, value: undefined});
+          }
+          return Promise.resolve({done: false, value: responses![counter++]});
+        },
+      };
+    },
+  };
+  return sinon.stub().returns(asyncIterable);
+}
+
+describe('v1beta.GameServerDeploymentsServiceClient', () => {
+  it('has servicePath', () => {
+    const servicePath =
+      gameserverdeploymentsserviceModule.v1beta
+        .GameServerDeploymentsServiceClient.servicePath;
+    assert(servicePath);
+  });
+
+  it('has apiEndpoint', () => {
+    const apiEndpoint =
+      gameserverdeploymentsserviceModule.v1beta
+        .GameServerDeploymentsServiceClient.apiEndpoint;
+    assert(apiEndpoint);
+  });
+
+  it('has port', () => {
+    const port =
+      gameserverdeploymentsserviceModule.v1beta
+        .GameServerDeploymentsServiceClient.port;
+    assert(port);
+    assert(typeof port === 'number');
+  });
+
+  it('should create a client with no option', () => {
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient();
+    assert(client);
+  });
+
+  it('should create a client with gRPC fallback', () => {
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+      {
+        fallback: true,
+      }
+    );
+    assert(client);
+  });
+
+  it('has initialize method and supports deferred initialization', async () => {
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+      {
+        credentials: {client_email: 'bogus', private_key: 'bogus'},
+        projectId: 'bogus',
+      }
+    );
+    assert.strictEqual(client.gameServerDeploymentsServiceStub, undefined);
+    await client.initialize();
+    assert(client.gameServerDeploymentsServiceStub);
+  });
+
+  it('has close method', () => {
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+      {
+        credentials: {client_email: 'bogus', private_key: 'bogus'},
+        projectId: 'bogus',
+      }
+    );
+    client.close();
+  });
+
+  it('has getProjectId method', async () => {
+    const fakeProjectId = 'fake-project-id';
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+      {
+        credentials: {client_email: 'bogus', private_key: 'bogus'},
+        projectId: 'bogus',
+      }
+    );
+    client.auth.getProjectId = sinon.stub().resolves(fakeProjectId);
+    const result = await client.getProjectId();
+    assert.strictEqual(result, fakeProjectId);
+    assert((client.auth.getProjectId as SinonStub).calledWithExactly());
+  });
+
+  it('has getProjectId method with callback', async () => {
+    const fakeProjectId = 'fake-project-id';
+    const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+      {
+        credentials: {client_email: 'bogus', private_key: 'bogus'},
+        projectId: 'bogus',
+      }
+    );
+    client.auth.getProjectId = sinon
+      .stub()
+      .callsArgWith(0, null, fakeProjectId);
+    const promise = new Promise((resolve, reject) => {
+      client.getProjectId((err?: Error | null, projectId?: string | null) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(projectId);
         }
     }
     const transformStub = error ? sinon.stub().callsArgWith(2, error) : pagingStub;
@@ -69,43 +215,44 @@ function stubPageStreamingCall<ResponseType>(responses?: ResponseType[], error?:
         objectMode: true,
         transform: transformStub,
     });
-    // trigger as many responses as needed
-    if (responses) {
-        for (let i = 0; i < responses.length; ++i) {
-            setImmediate(() => { mockStream.write({}); });
-        }
-        setImmediate(() => { mockStream.end(); });
-    } else {
-        setImmediate(() => { mockStream.write({}); });
-        setImmediate(() => { mockStream.end(); });
-    }
-    return sinon.stub().returns(mockStream);
-}
+    const result = await promise;
+    assert.strictEqual(result, fakeProjectId);
+  });
 
-function stubAsyncIterationCall<ResponseType>(responses?: ResponseType[], error?: Error) {
-    let counter = 0;
-    const asyncIterable = {
-        [Symbol.asyncIterator]() {
-            return {
-                async next() {
-                    if (error) {
-                        return Promise.reject(error);
-                    }
-                    if (counter >= responses!.length) {
-                        return Promise.resolve({done: true, value: undefined});
-                    }
-                    return Promise.resolve({done: false, value: responses![counter++]});
-                }
-            };
+  describe('getGameServerDeployment', () => {
+    it('invokes getGameServerDeployment without error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
         }
-    };
-    return sinon.stub().returns(asyncIterable);
-}
-
-describe('v1beta.GameServerDeploymentsServiceClient', () => {
-    it('has servicePath', () => {
-        const servicePath = gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient.servicePath;
-        assert(servicePath);
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.GetGameServerDeploymentRequest()
+      );
+      request.name = '';
+      const expectedHeaderRequestParams = 'name=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedResponse = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+      );
+      client.innerApiCalls.getGameServerDeployment = stubSimpleCall(
+        expectedResponse
+      );
+      const [response] = await client.getGameServerDeployment(request);
+      assert.deepStrictEqual(response, expectedResponse);
+      assert(
+        (client.innerApiCalls.getGameServerDeployment as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions, undefined)
+      );
     });
 
     it('has apiEndpoint', () => {
@@ -1198,252 +1345,803 @@ describe('v1beta.GameServerDeploymentsServiceClient', () => {
         });
     });
 
-    describe('Path templates', () => {
+    it('invokes updateGameServerDeploymentRollout with call error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.UpdateGameServerDeploymentRolloutRequest()
+      );
+      request.rollout = {};
+      request.rollout.name = '';
+      const expectedHeaderRequestParams = 'rollout.name=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedError = new Error('expected');
+      client.innerApiCalls.updateGameServerDeploymentRollout = stubLongRunningCall(
+        undefined,
+        expectedError
+      );
+      await assert.rejects(async () => {
+        await client.updateGameServerDeploymentRollout(request);
+      }, expectedError);
+      assert(
+        (client.innerApiCalls.updateGameServerDeploymentRollout as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions, undefined)
+      );
+    });
 
-        describe('gameServerCluster', () => {
-            const fakePath = "/rendered/path/gameServerCluster";
-            const expectedParameters = {
-                project: "projectValue",
-                location: "locationValue",
-                realm: "realmValue",
-                cluster: "clusterValue",
-            };
-            const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient({
-                credentials: {client_email: 'bogus', private_key: 'bogus'},
-                projectId: 'bogus',
-            });
-            client.initialize();
-            client.pathTemplates.gameServerClusterPathTemplate.render =
-                sinon.stub().returns(fakePath);
-            client.pathTemplates.gameServerClusterPathTemplate.match =
-                sinon.stub().returns(expectedParameters);
+    it('invokes updateGameServerDeploymentRollout with LRO error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.UpdateGameServerDeploymentRolloutRequest()
+      );
+      request.rollout = {};
+      request.rollout.name = '';
+      const expectedHeaderRequestParams = 'rollout.name=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedError = new Error('expected');
+      client.innerApiCalls.updateGameServerDeploymentRollout = stubLongRunningCall(
+        undefined,
+        undefined,
+        expectedError
+      );
+      const [operation] = await client.updateGameServerDeploymentRollout(
+        request
+      );
+      await assert.rejects(async () => {
+        await operation.promise();
+      }, expectedError);
+      assert(
+        (client.innerApiCalls.updateGameServerDeploymentRollout as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions, undefined)
+      );
+    });
+  });
 
-            it('gameServerClusterPath', () => {
-                const result = client.gameServerClusterPath("projectValue", "locationValue", "realmValue", "clusterValue");
-                assert.strictEqual(result, fakePath);
-                assert((client.pathTemplates.gameServerClusterPathTemplate.render as SinonStub)
-                    .getCall(-1).calledWith(expectedParameters));
-            });
+  describe('listGameServerDeployments', () => {
+    it('invokes listGameServerDeployments without error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedResponse = [
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+      ];
+      client.innerApiCalls.listGameServerDeployments = stubSimpleCall(
+        expectedResponse
+      );
+      const [response] = await client.listGameServerDeployments(request);
+      assert.deepStrictEqual(response, expectedResponse);
+      assert(
+        (client.innerApiCalls.listGameServerDeployments as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions, undefined)
+      );
+    });
 
-            it('matchProjectFromGameServerClusterName', () => {
-                const result = client.matchProjectFromGameServerClusterName(fakePath);
-                assert.strictEqual(result, "projectValue");
-                assert((client.pathTemplates.gameServerClusterPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+    it('invokes listGameServerDeployments without error using callback', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedResponse = [
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+      ];
+      client.innerApiCalls.listGameServerDeployments = stubSimpleCallWithCallback(
+        expectedResponse
+      );
+      const promise = new Promise((resolve, reject) => {
+        client.listGameServerDeployments(
+          request,
+          (
+            err?: Error | null,
+            result?:
+              | protos.google.cloud.gaming.v1beta.IGameServerDeployment[]
+              | null
+          ) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+      });
+      const response = await promise;
+      assert.deepStrictEqual(response, expectedResponse);
+      assert(
+        (client.innerApiCalls.listGameServerDeployments as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions /*, callback defined above */)
+      );
+    });
 
-            it('matchLocationFromGameServerClusterName', () => {
-                const result = client.matchLocationFromGameServerClusterName(fakePath);
-                assert.strictEqual(result, "locationValue");
-                assert((client.pathTemplates.gameServerClusterPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+    it('invokes listGameServerDeployments with error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedOptions = {
+        otherArgs: {
+          headers: {
+            'x-goog-request-params': expectedHeaderRequestParams,
+          },
+        },
+      };
+      const expectedError = new Error('expected');
+      client.innerApiCalls.listGameServerDeployments = stubSimpleCall(
+        undefined,
+        expectedError
+      );
+      await assert.rejects(async () => {
+        await client.listGameServerDeployments(request);
+      }, expectedError);
+      assert(
+        (client.innerApiCalls.listGameServerDeployments as SinonStub)
+          .getCall(0)
+          .calledWith(request, expectedOptions, undefined)
+      );
+    });
 
-            it('matchRealmFromGameServerClusterName', () => {
-                const result = client.matchRealmFromGameServerClusterName(fakePath);
-                assert.strictEqual(result, "realmValue");
-                assert((client.pathTemplates.gameServerClusterPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchClusterFromGameServerClusterName', () => {
-                const result = client.matchClusterFromGameServerClusterName(fakePath);
-                assert.strictEqual(result, "clusterValue");
-                assert((client.pathTemplates.gameServerClusterPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+    it('invokes listGameServerDeploymentsStream without error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedResponse = [
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+      ];
+      client.descriptors.page.listGameServerDeployments.createStream = stubPageStreamingCall(
+        expectedResponse
+      );
+      const stream = client.listGameServerDeploymentsStream(request);
+      const promise = new Promise((resolve, reject) => {
+        const responses: protos.google.cloud.gaming.v1beta.GameServerDeployment[] = [];
+        stream.on(
+          'data',
+          (
+            response: protos.google.cloud.gaming.v1beta.GameServerDeployment
+          ) => {
+            responses.push(response);
+          }
+        );
+        stream.on('end', () => {
+          resolve(responses);
         });
-
-        describe('gameServerConfig', () => {
-            const fakePath = "/rendered/path/gameServerConfig";
-            const expectedParameters = {
-                project: "projectValue",
-                location: "locationValue",
-                deployment: "deploymentValue",
-                config: "configValue",
-            };
-            const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient({
-                credentials: {client_email: 'bogus', private_key: 'bogus'},
-                projectId: 'bogus',
-            });
-            client.initialize();
-            client.pathTemplates.gameServerConfigPathTemplate.render =
-                sinon.stub().returns(fakePath);
-            client.pathTemplates.gameServerConfigPathTemplate.match =
-                sinon.stub().returns(expectedParameters);
-
-            it('gameServerConfigPath', () => {
-                const result = client.gameServerConfigPath("projectValue", "locationValue", "deploymentValue", "configValue");
-                assert.strictEqual(result, fakePath);
-                assert((client.pathTemplates.gameServerConfigPathTemplate.render as SinonStub)
-                    .getCall(-1).calledWith(expectedParameters));
-            });
-
-            it('matchProjectFromGameServerConfigName', () => {
-                const result = client.matchProjectFromGameServerConfigName(fakePath);
-                assert.strictEqual(result, "projectValue");
-                assert((client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchLocationFromGameServerConfigName', () => {
-                const result = client.matchLocationFromGameServerConfigName(fakePath);
-                assert.strictEqual(result, "locationValue");
-                assert((client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchDeploymentFromGameServerConfigName', () => {
-                const result = client.matchDeploymentFromGameServerConfigName(fakePath);
-                assert.strictEqual(result, "deploymentValue");
-                assert((client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchConfigFromGameServerConfigName', () => {
-                const result = client.matchConfigFromGameServerConfigName(fakePath);
-                assert.strictEqual(result, "configValue");
-                assert((client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+        stream.on('error', (err: Error) => {
+          reject(err);
         });
+      });
+      const responses = await promise;
+      assert.deepStrictEqual(responses, expectedResponse);
+      assert(
+        (client.descriptors.page.listGameServerDeployments
+          .createStream as SinonStub)
+          .getCall(0)
+          .calledWith(client.innerApiCalls.listGameServerDeployments, request)
+      );
+      assert.strictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .createStream as SinonStub).getCall(0).args[2].otherArgs.headers[
+          'x-goog-request-params'
+        ],
+        expectedHeaderRequestParams
+      );
+    });
 
-        describe('gameServerDeployment', () => {
-            const fakePath = "/rendered/path/gameServerDeployment";
-            const expectedParameters = {
-                project: "projectValue",
-                location: "locationValue",
-                deployment: "deploymentValue",
-            };
-            const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient({
-                credentials: {client_email: 'bogus', private_key: 'bogus'},
-                projectId: 'bogus',
-            });
-            client.initialize();
-            client.pathTemplates.gameServerDeploymentPathTemplate.render =
-                sinon.stub().returns(fakePath);
-            client.pathTemplates.gameServerDeploymentPathTemplate.match =
-                sinon.stub().returns(expectedParameters);
-
-            it('gameServerDeploymentPath', () => {
-                const result = client.gameServerDeploymentPath("projectValue", "locationValue", "deploymentValue");
-                assert.strictEqual(result, fakePath);
-                assert((client.pathTemplates.gameServerDeploymentPathTemplate.render as SinonStub)
-                    .getCall(-1).calledWith(expectedParameters));
-            });
-
-            it('matchProjectFromGameServerDeploymentName', () => {
-                const result = client.matchProjectFromGameServerDeploymentName(fakePath);
-                assert.strictEqual(result, "projectValue");
-                assert((client.pathTemplates.gameServerDeploymentPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchLocationFromGameServerDeploymentName', () => {
-                const result = client.matchLocationFromGameServerDeploymentName(fakePath);
-                assert.strictEqual(result, "locationValue");
-                assert((client.pathTemplates.gameServerDeploymentPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchDeploymentFromGameServerDeploymentName', () => {
-                const result = client.matchDeploymentFromGameServerDeploymentName(fakePath);
-                assert.strictEqual(result, "deploymentValue");
-                assert((client.pathTemplates.gameServerDeploymentPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+    it('invokes listGameServerDeploymentsStream with error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedError = new Error('expected');
+      client.descriptors.page.listGameServerDeployments.createStream = stubPageStreamingCall(
+        undefined,
+        expectedError
+      );
+      const stream = client.listGameServerDeploymentsStream(request);
+      const promise = new Promise((resolve, reject) => {
+        const responses: protos.google.cloud.gaming.v1beta.GameServerDeployment[] = [];
+        stream.on(
+          'data',
+          (
+            response: protos.google.cloud.gaming.v1beta.GameServerDeployment
+          ) => {
+            responses.push(response);
+          }
+        );
+        stream.on('end', () => {
+          resolve(responses);
         });
-
-        describe('gameServerDeploymentRollout', () => {
-            const fakePath = "/rendered/path/gameServerDeploymentRollout";
-            const expectedParameters = {
-                project: "projectValue",
-                location: "locationValue",
-                deployment: "deploymentValue",
-            };
-            const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient({
-                credentials: {client_email: 'bogus', private_key: 'bogus'},
-                projectId: 'bogus',
-            });
-            client.initialize();
-            client.pathTemplates.gameServerDeploymentRolloutPathTemplate.render =
-                sinon.stub().returns(fakePath);
-            client.pathTemplates.gameServerDeploymentRolloutPathTemplate.match =
-                sinon.stub().returns(expectedParameters);
-
-            it('gameServerDeploymentRolloutPath', () => {
-                const result = client.gameServerDeploymentRolloutPath("projectValue", "locationValue", "deploymentValue");
-                assert.strictEqual(result, fakePath);
-                assert((client.pathTemplates.gameServerDeploymentRolloutPathTemplate.render as SinonStub)
-                    .getCall(-1).calledWith(expectedParameters));
-            });
-
-            it('matchProjectFromGameServerDeploymentRolloutName', () => {
-                const result = client.matchProjectFromGameServerDeploymentRolloutName(fakePath);
-                assert.strictEqual(result, "projectValue");
-                assert((client.pathTemplates.gameServerDeploymentRolloutPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchLocationFromGameServerDeploymentRolloutName', () => {
-                const result = client.matchLocationFromGameServerDeploymentRolloutName(fakePath);
-                assert.strictEqual(result, "locationValue");
-                assert((client.pathTemplates.gameServerDeploymentRolloutPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-
-            it('matchDeploymentFromGameServerDeploymentRolloutName', () => {
-                const result = client.matchDeploymentFromGameServerDeploymentRolloutName(fakePath);
-                assert.strictEqual(result, "deploymentValue");
-                assert((client.pathTemplates.gameServerDeploymentRolloutPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+        stream.on('error', (err: Error) => {
+          reject(err);
         });
+      });
+      await assert.rejects(async () => {
+        await promise;
+      }, expectedError);
+      assert(
+        (client.descriptors.page.listGameServerDeployments
+          .createStream as SinonStub)
+          .getCall(0)
+          .calledWith(client.innerApiCalls.listGameServerDeployments, request)
+      );
+      assert.strictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .createStream as SinonStub).getCall(0).args[2].otherArgs.headers[
+          'x-goog-request-params'
+        ],
+        expectedHeaderRequestParams
+      );
+    });
 
-        describe('realm', () => {
-            const fakePath = "/rendered/path/realm";
-            const expectedParameters = {
-                project: "projectValue",
-                location: "locationValue",
-                realm: "realmValue",
-            };
-            const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient({
-                credentials: {client_email: 'bogus', private_key: 'bogus'},
-                projectId: 'bogus',
-            });
-            client.initialize();
-            client.pathTemplates.realmPathTemplate.render =
-                sinon.stub().returns(fakePath);
-            client.pathTemplates.realmPathTemplate.match =
-                sinon.stub().returns(expectedParameters);
+    it('uses async iteration with listGameServerDeployments without error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedResponse = [
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+        generateSampleMessage(
+          new protos.google.cloud.gaming.v1beta.GameServerDeployment()
+        ),
+      ];
+      client.descriptors.page.listGameServerDeployments.asyncIterate = stubAsyncIterationCall(
+        expectedResponse
+      );
+      const responses: protos.google.cloud.gaming.v1beta.IGameServerDeployment[] = [];
+      const iterable = client.listGameServerDeploymentsAsync(request);
+      for await (const resource of iterable) {
+        responses.push(resource!);
+      }
+      assert.deepStrictEqual(responses, expectedResponse);
+      assert.deepStrictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .asyncIterate as SinonStub).getCall(0).args[1],
+        request
+      );
+      assert.strictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .asyncIterate as SinonStub).getCall(0).args[2].otherArgs.headers[
+          'x-goog-request-params'
+        ],
+        expectedHeaderRequestParams
+      );
+    });
 
-            it('realmPath', () => {
-                const result = client.realmPath("projectValue", "locationValue", "realmValue");
-                assert.strictEqual(result, fakePath);
-                assert((client.pathTemplates.realmPathTemplate.render as SinonStub)
-                    .getCall(-1).calledWith(expectedParameters));
-            });
+    it('uses async iteration with listGameServerDeployments with error', async () => {
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      const request = generateSampleMessage(
+        new protos.google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest()
+      );
+      request.parent = '';
+      const expectedHeaderRequestParams = 'parent=';
+      const expectedError = new Error('expected');
+      client.descriptors.page.listGameServerDeployments.asyncIterate = stubAsyncIterationCall(
+        undefined,
+        expectedError
+      );
+      const iterable = client.listGameServerDeploymentsAsync(request);
+      await assert.rejects(async () => {
+        const responses: protos.google.cloud.gaming.v1beta.IGameServerDeployment[] = [];
+        for await (const resource of iterable) {
+          responses.push(resource!);
+        }
+      });
+      assert.deepStrictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .asyncIterate as SinonStub).getCall(0).args[1],
+        request
+      );
+      assert.strictEqual(
+        (client.descriptors.page.listGameServerDeployments
+          .asyncIterate as SinonStub).getCall(0).args[2].otherArgs.headers[
+          'x-goog-request-params'
+        ],
+        expectedHeaderRequestParams
+      );
+    });
+  });
 
-            it('matchProjectFromRealmName', () => {
-                const result = client.matchProjectFromRealmName(fakePath);
-                assert.strictEqual(result, "projectValue");
-                assert((client.pathTemplates.realmPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+  describe('Path templates', () => {
+    describe('gameServerCluster', () => {
+      const fakePath = '/rendered/path/gameServerCluster';
+      const expectedParameters = {
+        project: 'projectValue',
+        location: 'locationValue',
+        realm: 'realmValue',
+        cluster: 'clusterValue',
+      };
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      client.pathTemplates.gameServerClusterPathTemplate.render = sinon
+        .stub()
+        .returns(fakePath);
+      client.pathTemplates.gameServerClusterPathTemplate.match = sinon
+        .stub()
+        .returns(expectedParameters);
 
-            it('matchLocationFromRealmName', () => {
-                const result = client.matchLocationFromRealmName(fakePath);
-                assert.strictEqual(result, "locationValue");
-                assert((client.pathTemplates.realmPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
+      it('gameServerClusterPath', () => {
+        const result = client.gameServerClusterPath(
+          'projectValue',
+          'locationValue',
+          'realmValue',
+          'clusterValue'
+        );
+        assert.strictEqual(result, fakePath);
+        assert(
+          (client.pathTemplates.gameServerClusterPathTemplate
+            .render as SinonStub)
+            .getCall(-1)
+            .calledWith(expectedParameters)
+        );
+      });
 
-            it('matchRealmFromRealmName', () => {
-                const result = client.matchRealmFromRealmName(fakePath);
-                assert.strictEqual(result, "realmValue");
-                assert((client.pathTemplates.realmPathTemplate.match as SinonStub)
-                    .getCall(-1).calledWith(fakePath));
-            });
-        });
+      it('matchProjectFromGameServerClusterName', () => {
+        const result = client.matchProjectFromGameServerClusterName(fakePath);
+        assert.strictEqual(result, 'projectValue');
+        assert(
+          (client.pathTemplates.gameServerClusterPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchLocationFromGameServerClusterName', () => {
+        const result = client.matchLocationFromGameServerClusterName(fakePath);
+        assert.strictEqual(result, 'locationValue');
+        assert(
+          (client.pathTemplates.gameServerClusterPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchRealmFromGameServerClusterName', () => {
+        const result = client.matchRealmFromGameServerClusterName(fakePath);
+        assert.strictEqual(result, 'realmValue');
+        assert(
+          (client.pathTemplates.gameServerClusterPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchClusterFromGameServerClusterName', () => {
+        const result = client.matchClusterFromGameServerClusterName(fakePath);
+        assert.strictEqual(result, 'clusterValue');
+        assert(
+          (client.pathTemplates.gameServerClusterPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+    });
+
+    describe('gameServerConfig', () => {
+      const fakePath = '/rendered/path/gameServerConfig';
+      const expectedParameters = {
+        project: 'projectValue',
+        location: 'locationValue',
+        deployment: 'deploymentValue',
+        config: 'configValue',
+      };
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      client.pathTemplates.gameServerConfigPathTemplate.render = sinon
+        .stub()
+        .returns(fakePath);
+      client.pathTemplates.gameServerConfigPathTemplate.match = sinon
+        .stub()
+        .returns(expectedParameters);
+
+      it('gameServerConfigPath', () => {
+        const result = client.gameServerConfigPath(
+          'projectValue',
+          'locationValue',
+          'deploymentValue',
+          'configValue'
+        );
+        assert.strictEqual(result, fakePath);
+        assert(
+          (client.pathTemplates.gameServerConfigPathTemplate
+            .render as SinonStub)
+            .getCall(-1)
+            .calledWith(expectedParameters)
+        );
+      });
+
+      it('matchProjectFromGameServerConfigName', () => {
+        const result = client.matchProjectFromGameServerConfigName(fakePath);
+        assert.strictEqual(result, 'projectValue');
+        assert(
+          (client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchLocationFromGameServerConfigName', () => {
+        const result = client.matchLocationFromGameServerConfigName(fakePath);
+        assert.strictEqual(result, 'locationValue');
+        assert(
+          (client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchDeploymentFromGameServerConfigName', () => {
+        const result = client.matchDeploymentFromGameServerConfigName(fakePath);
+        assert.strictEqual(result, 'deploymentValue');
+        assert(
+          (client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchConfigFromGameServerConfigName', () => {
+        const result = client.matchConfigFromGameServerConfigName(fakePath);
+        assert.strictEqual(result, 'configValue');
+        assert(
+          (client.pathTemplates.gameServerConfigPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+    });
+
+    describe('gameServerDeployment', () => {
+      const fakePath = '/rendered/path/gameServerDeployment';
+      const expectedParameters = {
+        project: 'projectValue',
+        location: 'locationValue',
+        deployment: 'deploymentValue',
+      };
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      client.pathTemplates.gameServerDeploymentPathTemplate.render = sinon
+        .stub()
+        .returns(fakePath);
+      client.pathTemplates.gameServerDeploymentPathTemplate.match = sinon
+        .stub()
+        .returns(expectedParameters);
+
+      it('gameServerDeploymentPath', () => {
+        const result = client.gameServerDeploymentPath(
+          'projectValue',
+          'locationValue',
+          'deploymentValue'
+        );
+        assert.strictEqual(result, fakePath);
+        assert(
+          (client.pathTemplates.gameServerDeploymentPathTemplate
+            .render as SinonStub)
+            .getCall(-1)
+            .calledWith(expectedParameters)
+        );
+      });
+
+      it('matchProjectFromGameServerDeploymentName', () => {
+        const result = client.matchProjectFromGameServerDeploymentName(
+          fakePath
+        );
+        assert.strictEqual(result, 'projectValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchLocationFromGameServerDeploymentName', () => {
+        const result = client.matchLocationFromGameServerDeploymentName(
+          fakePath
+        );
+        assert.strictEqual(result, 'locationValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchDeploymentFromGameServerDeploymentName', () => {
+        const result = client.matchDeploymentFromGameServerDeploymentName(
+          fakePath
+        );
+        assert.strictEqual(result, 'deploymentValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+    });
+
+    describe('gameServerDeploymentRollout', () => {
+      const fakePath = '/rendered/path/gameServerDeploymentRollout';
+      const expectedParameters = {
+        project: 'projectValue',
+        location: 'locationValue',
+        deployment: 'deploymentValue',
+      };
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      client.pathTemplates.gameServerDeploymentRolloutPathTemplate.render = sinon
+        .stub()
+        .returns(fakePath);
+      client.pathTemplates.gameServerDeploymentRolloutPathTemplate.match = sinon
+        .stub()
+        .returns(expectedParameters);
+
+      it('gameServerDeploymentRolloutPath', () => {
+        const result = client.gameServerDeploymentRolloutPath(
+          'projectValue',
+          'locationValue',
+          'deploymentValue'
+        );
+        assert.strictEqual(result, fakePath);
+        assert(
+          (client.pathTemplates.gameServerDeploymentRolloutPathTemplate
+            .render as SinonStub)
+            .getCall(-1)
+            .calledWith(expectedParameters)
+        );
+      });
+
+      it('matchProjectFromGameServerDeploymentRolloutName', () => {
+        const result = client.matchProjectFromGameServerDeploymentRolloutName(
+          fakePath
+        );
+        assert.strictEqual(result, 'projectValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentRolloutPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchLocationFromGameServerDeploymentRolloutName', () => {
+        const result = client.matchLocationFromGameServerDeploymentRolloutName(
+          fakePath
+        );
+        assert.strictEqual(result, 'locationValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentRolloutPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchDeploymentFromGameServerDeploymentRolloutName', () => {
+        const result = client.matchDeploymentFromGameServerDeploymentRolloutName(
+          fakePath
+        );
+        assert.strictEqual(result, 'deploymentValue');
+        assert(
+          (client.pathTemplates.gameServerDeploymentRolloutPathTemplate
+            .match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+    });
+
+    describe('realm', () => {
+      const fakePath = '/rendered/path/realm';
+      const expectedParameters = {
+        project: 'projectValue',
+        location: 'locationValue',
+        realm: 'realmValue',
+      };
+      const client = new gameserverdeploymentsserviceModule.v1beta.GameServerDeploymentsServiceClient(
+        {
+          credentials: {client_email: 'bogus', private_key: 'bogus'},
+          projectId: 'bogus',
+        }
+      );
+      client.initialize();
+      client.pathTemplates.realmPathTemplate.render = sinon
+        .stub()
+        .returns(fakePath);
+      client.pathTemplates.realmPathTemplate.match = sinon
+        .stub()
+        .returns(expectedParameters);
+
+      it('realmPath', () => {
+        const result = client.realmPath(
+          'projectValue',
+          'locationValue',
+          'realmValue'
+        );
+        assert.strictEqual(result, fakePath);
+        assert(
+          (client.pathTemplates.realmPathTemplate.render as SinonStub)
+            .getCall(-1)
+            .calledWith(expectedParameters)
+        );
+      });
+
+      it('matchProjectFromRealmName', () => {
+        const result = client.matchProjectFromRealmName(fakePath);
+        assert.strictEqual(result, 'projectValue');
+        assert(
+          (client.pathTemplates.realmPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchLocationFromRealmName', () => {
+        const result = client.matchLocationFromRealmName(fakePath);
+        assert.strictEqual(result, 'locationValue');
+        assert(
+          (client.pathTemplates.realmPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
+
+      it('matchRealmFromRealmName', () => {
+        const result = client.matchRealmFromRealmName(fakePath);
+        assert.strictEqual(result, 'realmValue');
+        assert(
+          (client.pathTemplates.realmPathTemplate.match as SinonStub)
+            .getCall(-1)
+            .calledWith(fakePath)
+        );
+      });
     });
 });

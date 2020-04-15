@@ -17,11 +17,19 @@
 // ** All changes to this file may be overwritten. **
 
 import * as gax from 'google-gax';
-import {Callback, CallOptions, Descriptors, ClientOptions, LROperation, PaginationCallback, GaxCall} from 'google-gax';
+import {
+  Callback,
+  CallOptions,
+  Descriptors,
+  ClientOptions,
+  LROperation,
+  PaginationCallback,
+  GaxCall,
+} from 'google-gax';
 import * as path from 'path';
 
-import { Transform } from 'stream';
-import { RequestType } from 'google-gax/build/src/apitypes';
+import {Transform} from 'stream';
+import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
 import * as gapicConfig from './game_server_deployments_service_client_config.json';
 
@@ -162,8 +170,11 @@ export class GameServerDeploymentsServiceClient {
     // (e.g. 50 results at a time, with tokens to get subsequent
     // pages). Denote the keys used for pagination and results.
     this.descriptors.page = {
-      listGameServerDeployments:
-          new this._gaxModule.PageDescriptor('pageToken', 'nextPageToken', 'gameServerDeployments')
+      listGameServerDeployments: new this._gaxModule.PageDescriptor(
+        'pageToken',
+        'nextPageToken',
+        'gameServerDeployments'
+      ),
     };
 
     // This API contains "long-running operations", which return a
@@ -349,23 +360,27 @@ export class GameServerDeploymentsServiceClient {
           protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest|null|undefined,
           {}|null|undefined>): void;
   getGameServerDeployment(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IGameServerDeployment,
-          protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Gets details of a single Game Server Deployment.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Gets details of a single Game Server Deployment.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   getGameServerDeployment(
       request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -415,23 +430,27 @@ export class GameServerDeploymentsServiceClient {
           protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest|null|undefined,
           {}|null|undefined>): void;
   getGameServerDeploymentRollout(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
-          protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Gets details a single Game Server Deployment Rollout.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [GameServerDeploymentRollout]{@link google.cloud.gaming.v1beta.GameServerDeploymentRollout}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Gets details a single Game Server Deployment Rollout.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [GameServerDeploymentRollout]{@link google.cloud.gaming.v1beta.GameServerDeploymentRollout}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   getGameServerDeploymentRollout(
       request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -481,26 +500,30 @@ export class GameServerDeploymentsServiceClient {
           protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest|null|undefined,
           {}|null|undefined>): void;
   previewGameServerDeploymentRollout(
-      request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
-          protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Previews the Game Server Deployment Rollout. This API does not mutate the
- * Rollout resource.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [PreviewGameServerDeploymentRolloutResponse]{@link google.cloud.gaming.v1beta.PreviewGameServerDeploymentRolloutResponse}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Previews the Game Server Deployment Rollout. This API does not mutate the
+   * Rollout resource.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [PreviewGameServerDeploymentRolloutResponse]{@link google.cloud.gaming.v1beta.PreviewGameServerDeploymentRolloutResponse}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   previewGameServerDeploymentRollout(
       request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -550,25 +573,29 @@ export class GameServerDeploymentsServiceClient {
           protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest|null|undefined,
           {}|null|undefined>): void;
   fetchDeploymentState(
-      request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
-          protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Retrieves information about the current state of the Game Server
- * Ddeployment. Gathers all the Agones fleets and Agones autoscalers,
- * including fleets running an older version of the Game Server Deployment.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [FetchDeploymentStateResponse]{@link google.cloud.gaming.v1beta.FetchDeploymentStateResponse}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
+      | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Retrieves information about the current state of the Game Server
+   * Ddeployment. Gathers all the Agones fleets and Agones autoscalers,
+   * including fleets running an older version of the Game Server Deployment.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [FetchDeploymentStateResponse]{@link google.cloud.gaming.v1beta.FetchDeploymentStateResponse}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   fetchDeploymentState(
       request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -619,25 +646,30 @@ export class GameServerDeploymentsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   createGameServerDeployment(
-      request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerDeployment, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Creates a new Game Server Deployment in a given project and Location.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Creates a new Game Server Deployment in a given project and Location.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   createGameServerDeployment(
       request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -687,23 +719,28 @@ export class GameServerDeploymentsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   deleteGameServerDeployment(
-      request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerDeployment, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Deletes a single Game Server Deployment.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Deletes a single Game Server Deployment.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   deleteGameServerDeployment(
       request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -753,24 +790,29 @@ export class GameServerDeploymentsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   updateGameServerDeployment(
-      request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerDeployment, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Patches a Game Server Deployment.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Patches a Game Server Deployment.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   updateGameServerDeployment(
       request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -820,24 +862,29 @@ export class GameServerDeploymentsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   updateGameServerDeploymentRollout(
-      request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerDeployment, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Patches a single Game Server Deployment Rollout.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerDeployment,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Patches a single Game Server Deployment Rollout.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   updateGameServerDeploymentRollout(
       request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -1003,28 +1050,143 @@ export class GameServerDeploymentsServiceClient {
       callSettings
     );
   }
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment[],
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+    ]
+  >;
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options: gax.CallOptions,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): void;
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): void;
+  /**
+   * Lists Game Server Deployments in a given project and Location.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is Array of [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment}.
+   *   The client library support auto-pagination by default: it will call the API as many
+   *   times as needed and will merge results from all the pages into this array.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListGameServerDeploymentsRequest]{@link google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListGameServerDeploymentsResponse]{@link google.cloud.gaming.v1beta.ListGameServerDeploymentsResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | PaginationCallback<
+          protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+          | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+          | null
+          | undefined,
+          protos.google.cloud.gaming.v1beta.IGameServerDeployment
+        >,
+    callback?: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment[],
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+    ]
+  > | void {
+    request = request || {};
+    let options: gax.CallOptions;
+    if (typeof optionsOrCallback === 'function' && callback === undefined) {
+      callback = optionsOrCallback;
+      options = {};
+    } else {
+      options = optionsOrCallback as gax.CallOptions;
+    }
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
+    });
+    this.initialize();
+    return this.innerApiCalls.listGameServerDeployments(
+      request,
+      options,
+      callback
+    );
+  }
 
-/**
- * Equivalent to {@link listGameServerDeployments}, but returns an iterable object.
- *
- * for-await-of syntax is used with the iterable to recursively get response element on-demand.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Object}
- *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
- */
-  listGameServerDeploymentsAsync(
-      request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-      options?: gax.CallOptions):
-    AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment>{
+  /**
+   * Equivalent to {@link listGameServerDeployments}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listGameServerDeployments} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Stream}
+   *   An object stream which emits an object representing [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment} on 'data' event.
+   */
+  listGameServerDeploymentsStream(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): Transform {
     request = request || {};
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1032,14 +1194,53 @@ export class GameServerDeploymentsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      parent: request.parent || '',
+    });
+    const callSettings = new gax.CallSettings(options);
+    this.initialize();
+    return this.descriptors.page.listGameServerDeployments.createStream(
+      this.innerApiCalls.listGameServerDeployments as gax.GaxCall,
+      request,
+      callSettings
+    );
+  }
+
+  /**
+   * Equivalent to {@link listGameServerDeployments}, but returns an iterable object.
+   *
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Object}
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
+   */
+  listGameServerDeploymentsAsync(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment> {
+    request = request || {};
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
     });
     options = options || {};
     const callSettings = new gax.CallSettings(options);
     this.initialize();
     return this.descriptors.page.listGameServerDeployments.asyncIterate(
       this.innerApiCalls['listGameServerDeployments'] as GaxCall,
-      request as unknown as RequestType,
+      (request as unknown) as RequestType,
       callSettings
     ) as AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment>;
   }

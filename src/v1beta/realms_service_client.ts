@@ -17,11 +17,19 @@
 // ** All changes to this file may be overwritten. **
 
 import * as gax from 'google-gax';
-import {Callback, CallOptions, Descriptors, ClientOptions, LROperation, PaginationCallback, GaxCall} from 'google-gax';
+import {
+  Callback,
+  CallOptions,
+  Descriptors,
+  ClientOptions,
+  LROperation,
+  PaginationCallback,
+  GaxCall,
+} from 'google-gax';
 import * as path from 'path';
 
-import { Transform } from 'stream';
-import { RequestType } from 'google-gax/build/src/apitypes';
+import {Transform} from 'stream';
+import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
 import * as gapicConfig from './realms_service_client_config.json';
 
@@ -162,8 +170,11 @@ export class RealmsServiceClient {
     // (e.g. 50 results at a time, with tokens to get subsequent
     // pages). Denote the keys used for pagination and results.
     this.descriptors.page = {
-      listRealms:
-          new this._gaxModule.PageDescriptor('pageToken', 'nextPageToken', 'realms')
+      listRealms: new this._gaxModule.PageDescriptor(
+        'pageToken',
+        'nextPageToken',
+        'realms'
+      ),
     };
 
     // This API contains "long-running operations", which return a
@@ -341,23 +352,25 @@ export class RealmsServiceClient {
           protos.google.cloud.gaming.v1beta.IGetRealmRequest|null|undefined,
           {}|null|undefined>): void;
   getRealm(
-      request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IRealm,
-          protos.google.cloud.gaming.v1beta.IGetRealmRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Gets details of a single Realm.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Realm]{@link google.cloud.gaming.v1beta.Realm}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IRealm,
+      protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Gets details of a single Realm.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Realm]{@link google.cloud.gaming.v1beta.Realm}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   getRealm(
       request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -407,25 +420,29 @@ export class RealmsServiceClient {
           protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest|null|undefined,
           {}|null|undefined>): void;
   previewRealmUpdate(
-      request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
-          protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Previews patches to a single Realm.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [PreviewRealmUpdateResponse]{@link google.cloud.gaming.v1beta.PreviewRealmUpdateResponse}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
+      | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Previews patches to a single Realm.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [PreviewRealmUpdateResponse]{@link google.cloud.gaming.v1beta.PreviewRealmUpdateResponse}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   previewRealmUpdate(
       request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -476,25 +493,30 @@ export class RealmsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   createRealm(
-      request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IRealm, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Creates a new Realm in a given project and Location.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Creates a new Realm in a given project and Location.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   createRealm(
       request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -544,23 +566,28 @@ export class RealmsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   deleteRealm(
-      request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IRealm, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Deletes a single Realm.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Deletes a single Realm.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   deleteRealm(
       request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -610,24 +637,29 @@ export class RealmsServiceClient {
           protos.google.longrunning.IOperation|null|undefined,
           {}|null|undefined>): void;
   updateRealm(
-      request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IRealm, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Patches a single Realm.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IRealm,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Patches a single Realm.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   updateRealm(
       request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
       optionsOrCallback?: gax.CallOptions|Callback<
@@ -663,76 +695,89 @@ export class RealmsServiceClient {
     return this.innerApiCalls.updateRealm(request, options, callback);
   }
   listRealms(
-      request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      options?: gax.CallOptions):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IRealm[],
-        protos.google.cloud.gaming.v1beta.IListRealmsRequest|null,
-        protos.google.cloud.gaming.v1beta.IListRealmsResponse
-      ]>;
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IRealm[],
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse
+    ]
+  >;
   listRealms(
-      request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      options: gax.CallOptions,
-      callback: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-          protos.google.cloud.gaming.v1beta.IListRealmsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IRealm>): void;
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    options: gax.CallOptions,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse | null | undefined,
+      protos.google.cloud.gaming.v1beta.IRealm
+    >
+  ): void;
   listRealms(
-      request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      callback: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-          protos.google.cloud.gaming.v1beta.IListRealmsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IRealm>): void;
-/**
- * Lists Realms in a given project and Location.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is Array of [Realm]{@link google.cloud.gaming.v1beta.Realm}.
- *   The client library support auto-pagination by default: it will call the API as many
- *   times as needed and will merge results from all the pages into this array.
- *
- *   When autoPaginate: false is specified through options, the array has three elements.
- *   The first element is Array of [Realm]{@link google.cloud.gaming.v1beta.Realm} that corresponds to
- *   the one page received from the API server.
- *   If the second element is not null it contains the request object of type [ListRealmsRequest]{@link google.cloud.gaming.v1beta.ListRealmsRequest}
- *   that can be used to obtain the next page of the results.
- *   If it is null, the next page does not exist.
- *   The third element contains the raw response received from the API server. Its type is
- *   [ListRealmsResponse]{@link google.cloud.gaming.v1beta.ListRealmsResponse}.
- *
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse | null | undefined,
+      protos.google.cloud.gaming.v1beta.IRealm
+    >
+  ): void;
+  /**
+   * Lists Realms in a given project and Location.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is Array of [Realm]{@link google.cloud.gaming.v1beta.Realm}.
+   *   The client library support auto-pagination by default: it will call the API as many
+   *   times as needed and will merge results from all the pages into this array.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [Realm]{@link google.cloud.gaming.v1beta.Realm} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListRealmsRequest]{@link google.cloud.gaming.v1beta.ListRealmsRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListRealmsResponse]{@link google.cloud.gaming.v1beta.ListRealmsResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   listRealms(
-      request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      optionsOrCallback?: gax.CallOptions|PaginationCallback<
+    request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | PaginationCallback<
           protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-          protos.google.cloud.gaming.v1beta.IListRealmsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IRealm>,
-      callback?: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-          protos.google.cloud.gaming.v1beta.IListRealmsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IRealm>):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IRealm[],
-        protos.google.cloud.gaming.v1beta.IListRealmsRequest|null,
-        protos.google.cloud.gaming.v1beta.IListRealmsResponse
-      ]>|void {
+          | protos.google.cloud.gaming.v1beta.IListRealmsResponse
+          | null
+          | undefined,
+          protos.google.cloud.gaming.v1beta.IRealm
+        >,
+    callback?: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse | null | undefined,
+      protos.google.cloud.gaming.v1beta.IRealm
+    >
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IRealm[],
+      protos.google.cloud.gaming.v1beta.IListRealmsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListRealmsResponse
+    ]
+  > | void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    }
-    else {
+    } else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -741,41 +786,41 @@ export class RealmsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      parent: request.parent || '',
     });
     this.initialize();
     return this.innerApiCalls.listRealms(request, options, callback);
   }
 
-/**
- * Equivalent to {@link listRealms}, but returns a NodeJS Stream object.
- *
- * This fetches the paged responses for {@link listRealms} continuously
- * and invokes the callback registered for 'data' event for each element in the
- * responses.
- *
- * The returned object has 'end' method when no more elements are required.
- *
- * autoPaginate option will be ignored.
- *
- * @see {@link https://nodejs.org/api/stream.html}
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Stream}
- *   An object stream which emits an object representing [Realm]{@link google.cloud.gaming.v1beta.Realm} on 'data' event.
- */
+  /**
+   * Equivalent to {@link listRealms}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listRealms} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Stream}
+   *   An object stream which emits an object representing [Realm]{@link google.cloud.gaming.v1beta.Realm} on 'data' event.
+   */
   listRealmsStream(
-      request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      options?: gax.CallOptions):
-    Transform{
+    request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    options?: gax.CallOptions
+  ): Transform {
     request = request || {};
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -783,7 +828,7 @@ export class RealmsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      parent: request.parent || '',
     });
     const callSettings = new gax.CallSettings(options);
     this.initialize();
@@ -794,27 +839,27 @@ export class RealmsServiceClient {
     );
   }
 
-/**
- * Equivalent to {@link listRealms}, but returns an iterable object.
- *
- * for-await-of syntax is used with the iterable to recursively get response element on-demand.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Object}
- *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
- */
+  /**
+   * Equivalent to {@link listRealms}, but returns an iterable object.
+   *
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Object}
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
+   */
   listRealmsAsync(
-      request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-      options?: gax.CallOptions):
-    AsyncIterable<protos.google.cloud.gaming.v1beta.IRealm>{
+    request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
+    options?: gax.CallOptions
+  ): AsyncIterable<protos.google.cloud.gaming.v1beta.IRealm> {
     request = request || {};
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -822,14 +867,14 @@ export class RealmsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      parent: request.parent || '',
     });
     options = options || {};
     const callSettings = new gax.CallSettings(options);
     this.initialize();
     return this.descriptors.page.listRealms.asyncIterate(
       this.innerApiCalls['listRealms'] as GaxCall,
-      request as unknown as RequestType,
+      (request as unknown) as RequestType,
       callSettings
     ) as AsyncIterable<protos.google.cloud.gaming.v1beta.IRealm>;
   }

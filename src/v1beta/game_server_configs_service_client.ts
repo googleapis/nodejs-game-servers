@@ -17,11 +17,19 @@
 // ** All changes to this file may be overwritten. **
 
 import * as gax from 'google-gax';
-import {Callback, CallOptions, Descriptors, ClientOptions, LROperation, PaginationCallback, GaxCall} from 'google-gax';
+import {
+  Callback,
+  CallOptions,
+  Descriptors,
+  ClientOptions,
+  LROperation,
+  PaginationCallback,
+  GaxCall,
+} from 'google-gax';
 import * as path from 'path';
 
-import { Transform } from 'stream';
-import { RequestType } from 'google-gax/build/src/apitypes';
+import {Transform} from 'stream';
+import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
 import * as gapicConfig from './game_server_configs_service_client_config.json';
 
@@ -161,8 +169,11 @@ export class GameServerConfigsServiceClient {
     // (e.g. 50 results at a time, with tokens to get subsequent
     // pages). Denote the keys used for pagination and results.
     this.descriptors.page = {
-      listGameServerConfigs:
-          new this._gaxModule.PageDescriptor('pageToken', 'nextPageToken', 'gameServerConfigs')
+      listGameServerConfigs: new this._gaxModule.PageDescriptor(
+        'pageToken',
+        'nextPageToken',
+        'gameServerConfigs'
+      ),
     };
 
     // This API contains "long-running operations", which return a
@@ -318,122 +329,73 @@ export class GameServerConfigsServiceClient {
   // -- Service calls --
   // -------------------
   getGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-      options?: gax.CallOptions):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IGameServerConfig,
-        protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined, {}|undefined
-      ]>;
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerConfig,
+      protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest | undefined,
+      {} | undefined
+    ]
+  >;
   getGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-      options: gax.CallOptions,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IGameServerConfig,
-          protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|null|undefined,
-          {}|null|undefined>): void;
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+    options: gax.CallOptions,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerConfig,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
   getGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-      callback: Callback<
-          protos.google.cloud.gaming.v1beta.IGameServerConfig,
-          protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Gets details of a single Game Server Config.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+    callback: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerConfig,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Gets details of a single Game Server Config.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
   getGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
-      optionsOrCallback?: gax.CallOptions|Callback<
+    request: protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | Callback<
           protos.google.cloud.gaming.v1beta.IGameServerConfig,
-          protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|null|undefined,
-          {}|null|undefined>,
-      callback?: Callback<
-          protos.google.cloud.gaming.v1beta.IGameServerConfig,
-          protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|null|undefined,
-          {}|null|undefined>):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IGameServerConfig,
-        protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest|undefined, {}|undefined
-      ]>|void {
-    request = request || {};
-    let options: gax.CallOptions;
-    if (typeof optionsOrCallback === 'function' && callback === undefined) {
-      callback = optionsOrCallback;
-      options = {};
-    }
-    else {
-      options = optionsOrCallback as gax.CallOptions;
-    }
-    options = options || {};
-    options.otherArgs = options.otherArgs || {};
-    options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      'name': request.name || '',
-    });
-    this.initialize();
-    return this.innerApiCalls.getGameServerConfig(request, options, callback);
-  }
-
-  createGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-      options?: gax.CallOptions):
-      Promise<[
-        LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-        protos.google.longrunning.IOperation|undefined, {}|undefined
-      ]>;
-  createGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-      options: gax.CallOptions,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-  createGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Creates a new Game Server Config in a given project, Location, and Game
- * Server Deployment. Game Server Configs are immutable, and are not applied
- * until referenced in the Game Server Deployment Rollout resource.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
-  createGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
-      optionsOrCallback?: gax.CallOptions|Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>,
-      callback?: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>):
-      Promise<[
-        LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-        protos.google.longrunning.IOperation|undefined, {}|undefined
-      ]>|void {
+          | protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
+          | null
+          | undefined,
+          {} | null | undefined
+        >,
+    callback?: Callback<
+      protos.google.cloud.gaming.v1beta.IGameServerConfig,
+      | protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest
+      | null
+      | undefined,
+      {} | null | undefined
+    >
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerConfig,
+      protos.google.cloud.gaming.v1beta.IGetGameServerConfigRequest | undefined,
+      {} | undefined
+    ]
+  > | void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
@@ -454,53 +416,89 @@ export class GameServerConfigsServiceClient {
     this.initialize();
     return this.innerApiCalls.createGameServerConfig(request, options, callback);
   }
-  deleteGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-      options?: gax.CallOptions):
-      Promise<[
-        LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-        protos.google.longrunning.IOperation|undefined, {}|undefined
-      ]>;
-  deleteGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-      options: gax.CallOptions,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-  deleteGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-      callback: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>): void;
-/**
- * Deletes a single Game Server Config. The deletion will fail if the Game
- * Server Config is referenced in a Game Server Deployment Rollout.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
-  deleteGameServerConfig(
-      request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
-      optionsOrCallback?: gax.CallOptions|Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>,
-      callback?: Callback<
-          LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-          protos.google.longrunning.IOperation|null|undefined,
-          {}|null|undefined>):
-      Promise<[
-        LROperation<protos.google.cloud.gaming.v1beta.IGameServerConfig, protos.google.cloud.gaming.v1beta.IOperationMetadata>,
-        protos.google.longrunning.IOperation|undefined, {}|undefined
-      ]>|void {
+
+  createGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | undefined,
+      {} | undefined
+    ]
+  >;
+  createGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+    options: gax.CallOptions,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  createGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Creates a new Game Server Config in a given project, Location, and Game
+   * Server Deployment. Game Server Configs are immutable, and are not applied
+   * until referenced in the Game Server Deployment Rollout resource.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
+  createGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.ICreateGameServerConfigRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | Callback<
+          LROperation<
+            protos.google.cloud.gaming.v1beta.IGameServerConfig,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
+          >,
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
+        >,
+    callback?: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): Promise<
+    [
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | undefined,
+      {} | undefined
+    ]
+  > | void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
@@ -521,71 +519,85 @@ export class GameServerConfigsServiceClient {
     this.initialize();
     return this.innerApiCalls.deleteGameServerConfig(request, options, callback);
   }
-  listGameServerConfigs(
-      request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      options?: gax.CallOptions):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IGameServerConfig[],
-        protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|null,
-        protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
-      ]>;
-  listGameServerConfigs(
-      request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      options: gax.CallOptions,
-      callback: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IGameServerConfig>): void;
-  listGameServerConfigs(
-      request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      callback: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IGameServerConfig>): void;
-/**
- * Lists Game Server Configs in a given project, Location, and Game Server
- * Deployment.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Promise} - The promise which resolves to an array.
- *   The first element of the array is Array of [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
- *   The client library support auto-pagination by default: it will call the API as many
- *   times as needed and will merge results from all the pages into this array.
- *
- *   When autoPaginate: false is specified through options, the array has three elements.
- *   The first element is Array of [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig} that corresponds to
- *   the one page received from the API server.
- *   If the second element is not null it contains the request object of type [ListGameServerConfigsRequest]{@link google.cloud.gaming.v1beta.ListGameServerConfigsRequest}
- *   that can be used to obtain the next page of the results.
- *   If it is null, the next page does not exist.
- *   The third element contains the raw response received from the API server. Its type is
- *   [ListGameServerConfigsResponse]{@link google.cloud.gaming.v1beta.ListGameServerConfigsResponse}.
- *
- *   The promise has a method named "cancel" which cancels the ongoing API call.
- */
-  listGameServerConfigs(
-      request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      optionsOrCallback?: gax.CallOptions|PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IGameServerConfig>,
-      callback?: PaginationCallback<
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-          protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse|null|undefined,
-          protos.google.cloud.gaming.v1beta.IGameServerConfig>):
-      Promise<[
-        protos.google.cloud.gaming.v1beta.IGameServerConfig[],
-        protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest|null,
-        protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
-      ]>|void {
+  deleteGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | undefined,
+      {} | undefined
+    ]
+  >;
+  deleteGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+    options: gax.CallOptions,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  deleteGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+    callback: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): void;
+  /**
+   * Deletes a single Game Server Config. The deletion will fail if the Game
+   * Server Config is referenced in a Game Server Deployment Rollout.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is an object representing [Operation]{@link google.longrunning.Operation}.
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
+  deleteGameServerConfig(
+    request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | Callback<
+          LROperation<
+            protos.google.cloud.gaming.v1beta.IGameServerConfig,
+            protos.google.cloud.gaming.v1beta.IOperationMetadata
+          >,
+          protos.google.longrunning.IOperation | null | undefined,
+          {} | null | undefined
+        >,
+    callback?: Callback<
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | null | undefined,
+      {} | null | undefined
+    >
+  ): Promise<
+    [
+      LROperation<
+        protos.google.cloud.gaming.v1beta.IGameServerConfig,
+        protos.google.cloud.gaming.v1beta.IOperationMetadata
+      >,
+      protos.google.longrunning.IOperation | undefined,
+      {} | undefined
+    ]
+  > | void {
     request = request || {};
     let options: gax.CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
@@ -653,28 +665,140 @@ export class GameServerConfigsServiceClient {
       callSettings
     );
   }
+  listGameServerConfigs(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerConfig[],
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+    ]
+  >;
+  listGameServerConfigs(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    options: gax.CallOptions,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerConfig
+    >
+  ): void;
+  listGameServerConfigs(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerConfig
+    >
+  ): void;
+  /**
+   * Lists Game Server Configs in a given project, Location, and Game Server
+   * Deployment.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is Array of [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig}.
+   *   The client library support auto-pagination by default: it will call the API as many
+   *   times as needed and will merge results from all the pages into this array.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListGameServerConfigsRequest]{@link google.cloud.gaming.v1beta.ListGameServerConfigsRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListGameServerConfigsResponse]{@link google.cloud.gaming.v1beta.ListGameServerConfigsResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
+  listGameServerConfigs(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | PaginationCallback<
+          protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+          | protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+          | null
+          | undefined,
+          protos.google.cloud.gaming.v1beta.IGameServerConfig
+        >,
+    callback?: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerConfig
+    >
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerConfig[],
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerConfigsResponse
+    ]
+  > | void {
+    request = request || {};
+    let options: gax.CallOptions;
+    if (typeof optionsOrCallback === 'function' && callback === undefined) {
+      callback = optionsOrCallback;
+      options = {};
+    } else {
+      options = optionsOrCallback as gax.CallOptions;
+    }
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
+    });
+    this.initialize();
+    return this.innerApiCalls.listGameServerConfigs(request, options, callback);
+  }
 
-/**
- * Equivalent to {@link listGameServerConfigs}, but returns an iterable object.
- *
- * for-await-of syntax is used with the iterable to recursively get response element on-demand.
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Object}
- *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
- */
-  listGameServerConfigsAsync(
-      request?: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      options?: gax.CallOptions):
-    AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerConfig>{
+  /**
+   * Equivalent to {@link listGameServerConfigs}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listGameServerConfigs} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Stream}
+   *   An object stream which emits an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig} on 'data' event.
+   */
+  listGameServerConfigsStream(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    options?: gax.CallOptions
+  ): Transform {
     request = request || {};
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -682,14 +806,53 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      parent: request.parent || '',
+    });
+    const callSettings = new gax.CallSettings(options);
+    this.initialize();
+    return this.descriptors.page.listGameServerConfigs.createStream(
+      this.innerApiCalls.listGameServerConfigs as gax.GaxCall,
+      request,
+      callSettings
+    );
+  }
+
+  /**
+   * Equivalent to {@link listGameServerConfigs}, but returns an iterable object.
+   *
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Object}
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
+   */
+  listGameServerConfigsAsync(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
+    options?: gax.CallOptions
+  ): AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerConfig> {
+    request = request || {};
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
     });
     options = options || {};
     const callSettings = new gax.CallSettings(options);
     this.initialize();
     return this.descriptors.page.listGameServerConfigs.asyncIterate(
       this.innerApiCalls['listGameServerConfigs'] as GaxCall,
-      request as unknown as RequestType,
+      (request as unknown) as RequestType,
       callSettings
     ) as AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerConfig>;
   }
