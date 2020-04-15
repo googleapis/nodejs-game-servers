@@ -23,9 +23,13 @@ import {
   Descriptors,
   ClientOptions,
   LROperation,
+  PaginationCallback,
+  GaxCall,
 } from 'google-gax';
 import * as path from 'path';
 
+import {Transform} from 'stream';
+import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
 import * as gapicConfig from './game_server_deployments_service_client_config.json';
 
@@ -171,6 +175,17 @@ export class GameServerDeploymentsServiceClient {
       ),
       realmPathTemplate: new this._gaxModule.PathTemplate(
         'projects/{project}/locations/{location}/realms/{realm}'
+      ),
+    };
+
+    // Some of the methods on this service return "paged" results,
+    // (e.g. 50 results at a time, with tokens to get subsequent
+    // pages). Denote the keys used for pagination and results.
+    this.descriptors.page = {
+      listGameServerDeployments: new this._gaxModule.PageDescriptor(
+        'pageToken',
+        'nextPageToken',
+        'gameServerDeployments'
       ),
     };
 
@@ -389,102 +404,6 @@ export class GameServerDeploymentsServiceClient {
   // -------------------
   // -- Service calls --
   // -------------------
-  listGameServerDeployments(
-    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options?: gax.CallOptions
-  ): Promise<
-    [
-      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      (
-        | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  >;
-  listGameServerDeployments(
-    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options: gax.CallOptions,
-    callback: Callback<
-      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-      | null
-      | undefined,
-      {} | null | undefined
-    >
-  ): void;
-  listGameServerDeployments(
-    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    callback: Callback<
-      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-      | null
-      | undefined,
-      {} | null | undefined
-    >
-  ): void;
-  /**
-   * Lists Game Server Deployments in a given project and Location.
-   *
-   * @param {Object} request
-   *   The request object that will be sent.
-   * @param {object} [options]
-   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
-   * @returns {Promise} - The promise which resolves to an array.
-   *   The first element of the array is an object representing [ListGameServerDeploymentsResponse]{@link google.cloud.gaming.v1beta.ListGameServerDeploymentsResponse}.
-   *   The promise has a method named "cancel" which cancels the ongoing API call.
-   */
-  listGameServerDeployments(
-    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    optionsOrCallback?:
-      | gax.CallOptions
-      | Callback<
-          protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-          | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-          | null
-          | undefined,
-          {} | null | undefined
-        >,
-    callback?: Callback<
-      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-      | null
-      | undefined,
-      {} | null | undefined
-    >
-  ): Promise<
-    [
-      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse,
-      (
-        | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest
-        | undefined
-      ),
-      {} | undefined
-    ]
-  > | void {
-    request = request || {};
-    let options: gax.CallOptions;
-    if (typeof optionsOrCallback === 'function' && callback === undefined) {
-      callback = optionsOrCallback;
-      options = {};
-    } else {
-      options = optionsOrCallback as gax.CallOptions;
-    }
-    options = options || {};
-    options.otherArgs = options.otherArgs || {};
-    options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
-    });
-    this.initialize();
-    return this.innerApiCalls.listGameServerDeployments(
-      request,
-      options,
-      callback
-    );
-  }
   getGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
     options?: gax.CallOptions
@@ -524,6 +443,7 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -620,6 +540,7 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -717,6 +638,9 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -815,6 +739,7 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -910,6 +835,9 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -1010,6 +938,7 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -1110,6 +1039,8 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -1210,6 +1141,8 @@ export class GameServerDeploymentsServiceClient {
    *
    * @param {Object} request
    *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
    * @param {object} [options]
    *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
    * @returns {Promise} - The promise which resolves to an array.
@@ -1268,6 +1201,200 @@ export class GameServerDeploymentsServiceClient {
       options,
       callback
     );
+  }
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment[],
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+    ]
+  >;
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options: gax.CallOptions,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): void;
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    callback: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): void;
+  /**
+   * Lists Game Server Deployments in a given project and Location.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Promise} - The promise which resolves to an array.
+   *   The first element of the array is Array of [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment}.
+   *   The client library support auto-pagination by default: it will call the API as many
+   *   times as needed and will merge results from all the pages into this array.
+   *
+   *   When autoPaginate: false is specified through options, the array has three elements.
+   *   The first element is Array of [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment} that corresponds to
+   *   the one page received from the API server.
+   *   If the second element is not null it contains the request object of type [ListGameServerDeploymentsRequest]{@link google.cloud.gaming.v1beta.ListGameServerDeploymentsRequest}
+   *   that can be used to obtain the next page of the results.
+   *   If it is null, the next page does not exist.
+   *   The third element contains the raw response received from the API server. Its type is
+   *   [ListGameServerDeploymentsResponse]{@link google.cloud.gaming.v1beta.ListGameServerDeploymentsResponse}.
+   *
+   *   The promise has a method named "cancel" which cancels the ongoing API call.
+   */
+  listGameServerDeployments(
+    request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    optionsOrCallback?:
+      | gax.CallOptions
+      | PaginationCallback<
+          protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+          | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+          | null
+          | undefined,
+          protos.google.cloud.gaming.v1beta.IGameServerDeployment
+        >,
+    callback?: PaginationCallback<
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+      | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+      | null
+      | undefined,
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment
+    >
+  ): Promise<
+    [
+      protos.google.cloud.gaming.v1beta.IGameServerDeployment[],
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest | null,
+      protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
+    ]
+  > | void {
+    request = request || {};
+    let options: gax.CallOptions;
+    if (typeof optionsOrCallback === 'function' && callback === undefined) {
+      callback = optionsOrCallback;
+      options = {};
+    } else {
+      options = optionsOrCallback as gax.CallOptions;
+    }
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
+    });
+    this.initialize();
+    return this.innerApiCalls.listGameServerDeployments(
+      request,
+      options,
+      callback
+    );
+  }
+
+  /**
+   * Equivalent to {@link listGameServerDeployments}, but returns a NodeJS Stream object.
+   *
+   * This fetches the paged responses for {@link listGameServerDeployments} continuously
+   * and invokes the callback registered for 'data' event for each element in the
+   * responses.
+   *
+   * The returned object has 'end' method when no more elements are required.
+   *
+   * autoPaginate option will be ignored.
+   *
+   * @see {@link https://nodejs.org/api/stream.html}
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Stream}
+   *   An object stream which emits an object representing [GameServerDeployment]{@link google.cloud.gaming.v1beta.GameServerDeployment} on 'data' event.
+   */
+  listGameServerDeploymentsStream(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): Transform {
+    request = request || {};
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
+    });
+    const callSettings = new gax.CallSettings(options);
+    this.initialize();
+    return this.descriptors.page.listGameServerDeployments.createStream(
+      this.innerApiCalls.listGameServerDeployments as gax.GaxCall,
+      request,
+      callSettings
+    );
+  }
+
+  /**
+   * Equivalent to {@link listGameServerDeployments}, but returns an iterable object.
+   *
+   * for-await-of syntax is used with the iterable to recursively get response element on-demand.
+   *
+   * @param {Object} request
+   *   The request object that will be sent.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {} request.
+   * @param {object} [options]
+   *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
+   * @returns {Object}
+   *   An iterable Object that conforms to @link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols.
+   */
+  listGameServerDeploymentsAsync(
+    request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
+    options?: gax.CallOptions
+  ): AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment> {
+    request = request || {};
+    options = options || {};
+    options.otherArgs = options.otherArgs || {};
+    options.otherArgs.headers = options.otherArgs.headers || {};
+    options.otherArgs.headers[
+      'x-goog-request-params'
+    ] = gax.routingHeader.fromParams({
+      parent: request.parent || '',
+    });
+    options = options || {};
+    const callSettings = new gax.CallSettings(options);
+    this.initialize();
+    return this.descriptors.page.listGameServerDeployments.asyncIterate(
+      this.innerApiCalls['listGameServerDeployments'] as GaxCall,
+      (request as unknown) as RequestType,
+      callSettings
+    ) as AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment>;
   }
   // --------------------
   // -- Path templates --
