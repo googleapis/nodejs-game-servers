@@ -16,4 +16,7 @@
 // ** https://github.com/googleapis/gapic-generator-typescript **
 // ** All changes to this file may be overwritten. **
 
-export {GameServerClustersServiceClient} from './game_server_clusters_service_client';export {GameServerConfigsServiceClient} from './game_server_configs_service_client';export {GameServerDeploymentsServiceClient} from './game_server_deployments_service_client';export {RealmsServiceClient} from './realms_service_client';
+export {GameServerClustersServiceClient} from './game_server_clusters_service_client';
+export {GameServerConfigsServiceClient} from './game_server_configs_service_client';
+export {GameServerDeploymentsServiceClient} from './game_server_deployments_service_client';
+export {RealmsServiceClient} from './realms_service_client';

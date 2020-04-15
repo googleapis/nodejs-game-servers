@@ -48,7 +48,12 @@ export class GameServerConfigsServiceClient {
   private _protos: {};
   private _defaults: {[method: string]: gax.CallSettings};
   auth: gax.GoogleAuth;
-  descriptors: Descriptors = {page: {}, stream: {}, longrunning: {}, batching: {}};
+  descriptors: Descriptors = {
+    page: {},
+    stream: {},
+    longrunning: {},
+    batching: {},
+  };
   innerApiCalls: {[name: string]: Function};
   pathTemplates: {[name: string]: gax.PathTemplate};
   operationsClient: gax.OperationsClient;
@@ -82,11 +87,14 @@ export class GameServerConfigsServiceClient {
 
   constructor(opts?: ClientOptions) {
     // Ensure that options include the service address and port.
-    const staticMembers = this.constructor as typeof GameServerConfigsServiceClient;
-    const servicePath = opts && opts.servicePath ?
-        opts.servicePath :
-        ((opts && opts.apiEndpoint) ? opts.apiEndpoint :
-                                      staticMembers.servicePath);
+    const staticMembers = this
+      .constructor as typeof GameServerConfigsServiceClient;
+    const servicePath =
+      opts && opts.servicePath
+        ? opts.servicePath
+        : opts && opts.apiEndpoint
+        ? opts.apiEndpoint
+        : staticMembers.servicePath;
     const port = opts && opts.port ? opts.port : staticMembers.port;
 
     if (!opts) {
@@ -96,8 +104,8 @@ export class GameServerConfigsServiceClient {
     opts.port = opts.port || port;
     opts.clientConfig = opts.clientConfig || {};
 
-    const isBrowser = (typeof window !== 'undefined');
-    if (isBrowser){
+    const isBrowser = typeof window !== 'undefined';
+    if (isBrowser) {
       opts.fallback = true;
     }
     // If we are in browser, we are already using fallback because of the
@@ -107,20 +115,18 @@ export class GameServerConfigsServiceClient {
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
-    opts.scopes = (this.constructor as typeof GameServerConfigsServiceClient).scopes;
+    opts.scopes = (this
+      .constructor as typeof GameServerConfigsServiceClient).scopes;
     this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
 
     // Save options to use in initialize() method.
     this._opts = opts;
 
     // Save the auth object to the client, for use by other methods.
-    this.auth = (this._gaxGrpc.auth as gax.GoogleAuth);
+    this.auth = this._gaxGrpc.auth as gax.GoogleAuth;
 
     // Determine the client header string.
-    const clientHeader = [
-      `gax/${this._gaxModule.version}`,
-      `gapic/${version}`,
-    ];
+    const clientHeader = [`gax/${this._gaxModule.version}`, `gapic/${version}`];
     if (typeof process !== 'undefined' && 'versions' in process) {
       clientHeader.push(`gl-node/${process.versions.node}`);
     } else {
@@ -136,12 +142,18 @@ export class GameServerConfigsServiceClient {
     // For Node.js, pass the path to JSON proto file.
     // For browsers, pass the JSON content.
 
-    const nodejsProtoPath = path.join(__dirname, '..', '..', 'protos', 'protos.json');
+    const nodejsProtoPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      'protos',
+      'protos.json'
+    );
     this._protos = this._gaxGrpc.loadProto(
-      opts.fallback ?
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        require("../../protos/protos.json") :
-        nodejsProtoPath
+      opts.fallback
+        ? // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        : nodejsProtoPath
     );
 
     // This API contains "path templates"; forward-slash-separated
@@ -179,40 +191,60 @@ export class GameServerConfigsServiceClient {
     // This API contains "long-running operations", which return a
     // an Operation object that allows for tracking of the operation,
     // rather than holding a request open.
-    const protoFilesRoot = opts.fallback ?
-      this._gaxModule.protobuf.Root.fromJSON(
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        require("../../protos/protos.json")) :
-      this._gaxModule.protobuf.loadSync(nodejsProtoPath);
+    const protoFilesRoot = opts.fallback
+      ? this._gaxModule.protobuf.Root.fromJSON(
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          require('../../protos/protos.json')
+        )
+      : this._gaxModule.protobuf.loadSync(nodejsProtoPath);
 
-    this.operationsClient = this._gaxModule.lro({
-      auth: this.auth,
-      grpc: 'grpc' in this._gaxGrpc ? this._gaxGrpc.grpc : undefined
-    }).operationsClient(opts);
+    this.operationsClient = this._gaxModule
+      .lro({
+        auth: this.auth,
+        grpc: 'grpc' in this._gaxGrpc ? this._gaxGrpc.grpc : undefined,
+      })
+      .operationsClient(opts);
     const createGameServerConfigResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerConfig') as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerConfig'
+    ) as gax.protobuf.Type;
     const createGameServerConfigMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata'
+    ) as gax.protobuf.Type;
     const deleteGameServerConfigResponse = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.GameServerConfig') as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.GameServerConfig'
+    ) as gax.protobuf.Type;
     const deleteGameServerConfigMetadata = protoFilesRoot.lookup(
-      '.google.cloud.gaming.v1beta.OperationMetadata') as gax.protobuf.Type;
+      '.google.cloud.gaming.v1beta.OperationMetadata'
+    ) as gax.protobuf.Type;
 
     this.descriptors.longrunning = {
       createGameServerConfig: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        createGameServerConfigResponse.decode.bind(createGameServerConfigResponse),
-        createGameServerConfigMetadata.decode.bind(createGameServerConfigMetadata)),
+        createGameServerConfigResponse.decode.bind(
+          createGameServerConfigResponse
+        ),
+        createGameServerConfigMetadata.decode.bind(
+          createGameServerConfigMetadata
+        )
+      ),
       deleteGameServerConfig: new this._gaxModule.LongrunningDescriptor(
         this.operationsClient,
-        deleteGameServerConfigResponse.decode.bind(deleteGameServerConfigResponse),
-        deleteGameServerConfigMetadata.decode.bind(deleteGameServerConfigMetadata))
+        deleteGameServerConfigResponse.decode.bind(
+          deleteGameServerConfigResponse
+        ),
+        deleteGameServerConfigMetadata.decode.bind(
+          deleteGameServerConfigMetadata
+        )
+      ),
     };
 
     // Put together the default options sent with requests.
     this._defaults = this._gaxGrpc.constructSettings(
-        'google.cloud.gaming.v1beta.GameServerConfigsService', gapicConfig as gax.ClientConfig,
-        opts.clientConfig || {}, {'x-goog-api-client': clientHeader.join(' ')});
+      'google.cloud.gaming.v1beta.GameServerConfigsService',
+      gapicConfig as gax.ClientConfig,
+      opts.clientConfig || {},
+      {'x-goog-api-client': clientHeader.join(' ')}
+    );
 
     // Set up a dictionary of "inner API calls"; the core implementation
     // of calling the API is handled in `google-gax`, with this code
@@ -240,16 +272,24 @@ export class GameServerConfigsServiceClient {
     // Put together the "service stub" for
     // google.cloud.gaming.v1beta.GameServerConfigsService.
     this.gameServerConfigsServiceStub = this._gaxGrpc.createStub(
-        this._opts.fallback ?
-          (this._protos as protobuf.Root).lookupService('google.cloud.gaming.v1beta.GameServerConfigsService') :
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (this._protos as any).google.cloud.gaming.v1beta.GameServerConfigsService,
-        this._opts) as Promise<{[method: string]: Function}>;
+      this._opts.fallback
+        ? (this._protos as protobuf.Root).lookupService(
+            'google.cloud.gaming.v1beta.GameServerConfigsService'
+          )
+        : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (this._protos as any).google.cloud.gaming.v1beta
+            .GameServerConfigsService,
+      this._opts
+    ) as Promise<{[method: string]: Function}>;
 
     // Iterate over each of the methods that the service provides
     // and create an API call method for each.
-    const gameServerConfigsServiceStubMethods =
-        ['listGameServerConfigs', 'getGameServerConfig', 'createGameServerConfig', 'deleteGameServerConfig'];
+    const gameServerConfigsServiceStubMethods = [
+      'listGameServerConfigs',
+      'getGameServerConfig',
+      'createGameServerConfig',
+      'deleteGameServerConfig',
+    ];
     for (const methodName of gameServerConfigsServiceStubMethods) {
       const callPromise = this.gameServerConfigsServiceStub.then(
         stub => (...args: Array<{}>) => {
@@ -259,16 +299,17 @@ export class GameServerConfigsServiceClient {
           const func = stub[methodName];
           return func.apply(stub, args);
         },
-        (err: Error|null|undefined) => () => {
+        (err: Error | null | undefined) => () => {
           throw err;
-        });
+        }
+      );
 
       const apiCall = this._gaxModule.createApiCall(
         callPromise,
         this._defaults[methodName],
         this.descriptors.page[methodName] ||
-            this.descriptors.stream[methodName] ||
-            this.descriptors.longrunning[methodName]
+          this.descriptors.stream[methodName] ||
+          this.descriptors.longrunning[methodName]
       );
 
       this.innerApiCalls[methodName] = apiCall;
@@ -304,9 +345,7 @@ export class GameServerConfigsServiceClient {
    * in this service.
    */
   static get scopes() {
-    return [
-      'https://www.googleapis.com/auth/cloud-platform'
-    ];
+    return ['https://www.googleapis.com/auth/cloud-platform'];
   }
 
   getProjectId(): Promise<string>;
@@ -316,8 +355,9 @@ export class GameServerConfigsServiceClient {
    * @param {function(Error, string)} callback - the callback to
    *   be called with the current project Id.
    */
-  getProjectId(callback?: Callback<string, undefined, undefined>):
-      Promise<string>|void {
+  getProjectId(
+    callback?: Callback<string, undefined, undefined>
+  ): Promise<string> | void {
     if (callback) {
       this.auth.getProjectId(callback);
       return;
@@ -401,8 +441,7 @@ export class GameServerConfigsServiceClient {
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    }
-    else {
+    } else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -411,10 +450,10 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      name: request.name || '',
     });
     this.initialize();
-    return this.innerApiCalls.createGameServerConfig(request, options, callback);
+    return this.innerApiCalls.getGameServerConfig(request, options, callback);
   }
 
   createGameServerConfig(
@@ -504,8 +543,7 @@ export class GameServerConfigsServiceClient {
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    }
-    else {
+    } else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -514,10 +552,14 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'name': request.name || '',
+      parent: request.parent || '',
     });
     this.initialize();
-    return this.innerApiCalls.deleteGameServerConfig(request, options, callback);
+    return this.innerApiCalls.createGameServerConfig(
+      request,
+      options,
+      callback
+    );
   }
   deleteGameServerConfig(
     request: protos.google.cloud.gaming.v1beta.IDeleteGameServerConfigRequest,
@@ -603,8 +645,7 @@ export class GameServerConfigsServiceClient {
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
-    }
-    else {
+    } else {
       options = optionsOrCallback as gax.CallOptions;
     }
     options = options || {};
@@ -613,56 +654,13 @@ export class GameServerConfigsServiceClient {
     options.otherArgs.headers[
       'x-goog-request-params'
     ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
+      name: request.name || '',
     });
     this.initialize();
-    return this.innerApiCalls.listGameServerConfigs(request, options, callback);
-  }
-
-/**
- * Equivalent to {@link listGameServerConfigs}, but returns a NodeJS Stream object.
- *
- * This fetches the paged responses for {@link listGameServerConfigs} continuously
- * and invokes the callback registered for 'data' event for each element in the
- * responses.
- *
- * The returned object has 'end' method when no more elements are required.
- *
- * autoPaginate option will be ignored.
- *
- * @see {@link https://nodejs.org/api/stream.html}
- *
- * @param {Object} request
- *   The request object that will be sent.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {} request.
- * @param {object} [options]
- *   Call options. See {@link https://googleapis.dev/nodejs/google-gax/latest/interfaces/CallOptions.html|CallOptions} for more details.
- * @returns {Stream}
- *   An object stream which emits an object representing [GameServerConfig]{@link google.cloud.gaming.v1beta.GameServerConfig} on 'data' event.
- */
-  listGameServerConfigsStream(
-      request?: protos.google.cloud.gaming.v1beta.IListGameServerConfigsRequest,
-      options?: gax.CallOptions):
-    Transform{
-    request = request || {};
-    options = options || {};
-    options.otherArgs = options.otherArgs || {};
-    options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      'parent': request.parent || '',
-    });
-    const callSettings = new gax.CallSettings(options);
-    this.initialize();
-    return this.descriptors.page.listGameServerConfigs.createStream(
-      this.innerApiCalls.listGameServerConfigs as gax.GaxCall,
+    return this.innerApiCalls.deleteGameServerConfig(
       request,
-      callSettings
+      options,
+      callback
     );
   }
   listGameServerConfigs(
@@ -869,7 +867,12 @@ export class GameServerConfigsServiceClient {
    * @param {string} cluster
    * @returns {string} Resource name string.
    */
-  gameServerClusterPath(project:string,location:string,realm:string,cluster:string) {
+  gameServerClusterPath(
+    project: string,
+    location: string,
+    realm: string,
+    cluster: string
+  ) {
     return this.pathTemplates.gameServerClusterPathTemplate.render({
       project: project,
       location: location,
@@ -886,7 +889,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerClusterName(gameServerClusterName: string) {
-    return this.pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).project;
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
+      gameServerClusterName
+    ).project;
   }
 
   /**
@@ -897,7 +902,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerClusterName(gameServerClusterName: string) {
-    return this.pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).location;
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
+      gameServerClusterName
+    ).location;
   }
 
   /**
@@ -908,7 +915,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the realm.
    */
   matchRealmFromGameServerClusterName(gameServerClusterName: string) {
-    return this.pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).realm;
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
+      gameServerClusterName
+    ).realm;
   }
 
   /**
@@ -919,7 +928,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the cluster.
    */
   matchClusterFromGameServerClusterName(gameServerClusterName: string) {
-    return this.pathTemplates.gameServerClusterPathTemplate.match(gameServerClusterName).cluster;
+    return this.pathTemplates.gameServerClusterPathTemplate.match(
+      gameServerClusterName
+    ).cluster;
   }
 
   /**
@@ -931,7 +942,12 @@ export class GameServerConfigsServiceClient {
    * @param {string} config
    * @returns {string} Resource name string.
    */
-  gameServerConfigPath(project:string,location:string,deployment:string,config:string) {
+  gameServerConfigPath(
+    project: string,
+    location: string,
+    deployment: string,
+    config: string
+  ) {
     return this.pathTemplates.gameServerConfigPathTemplate.render({
       project: project,
       location: location,
@@ -948,7 +964,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerConfigName(gameServerConfigName: string) {
-    return this.pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).project;
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
+      gameServerConfigName
+    ).project;
   }
 
   /**
@@ -959,7 +977,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerConfigName(gameServerConfigName: string) {
-    return this.pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).location;
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
+      gameServerConfigName
+    ).location;
   }
 
   /**
@@ -970,7 +990,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the deployment.
    */
   matchDeploymentFromGameServerConfigName(gameServerConfigName: string) {
-    return this.pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).deployment;
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
+      gameServerConfigName
+    ).deployment;
   }
 
   /**
@@ -981,7 +1003,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the config.
    */
   matchConfigFromGameServerConfigName(gameServerConfigName: string) {
-    return this.pathTemplates.gameServerConfigPathTemplate.match(gameServerConfigName).config;
+    return this.pathTemplates.gameServerConfigPathTemplate.match(
+      gameServerConfigName
+    ).config;
   }
 
   /**
@@ -992,7 +1016,11 @@ export class GameServerConfigsServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentPath(project:string,location:string,deployment:string) {
+  gameServerDeploymentPath(
+    project: string,
+    location: string,
+    deployment: string
+  ) {
     return this.pathTemplates.gameServerDeploymentPathTemplate.render({
       project: project,
       location: location,
@@ -1008,7 +1036,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the project.
    */
   matchProjectFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this.pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).project;
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
+      gameServerDeploymentName
+    ).project;
   }
 
   /**
@@ -1019,7 +1049,9 @@ export class GameServerConfigsServiceClient {
    * @returns {string} A string representing the location.
    */
   matchLocationFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this.pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).location;
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
+      gameServerDeploymentName
+    ).location;
   }
 
   /**
@@ -1029,8 +1061,12 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeployment resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentName(gameServerDeploymentName: string) {
-    return this.pathTemplates.gameServerDeploymentPathTemplate.match(gameServerDeploymentName).deployment;
+  matchDeploymentFromGameServerDeploymentName(
+    gameServerDeploymentName: string
+  ) {
+    return this.pathTemplates.gameServerDeploymentPathTemplate.match(
+      gameServerDeploymentName
+    ).deployment;
   }
 
   /**
@@ -1041,7 +1077,11 @@ export class GameServerConfigsServiceClient {
    * @param {string} deployment
    * @returns {string} Resource name string.
    */
-  gameServerDeploymentRolloutPath(project:string,location:string,deployment:string) {
+  gameServerDeploymentRolloutPath(
+    project: string,
+    location: string,
+    deployment: string
+  ) {
     return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.render({
       project: project,
       location: location,
@@ -1056,8 +1096,12 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the project.
    */
-  matchProjectFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
-    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).project;
+  matchProjectFromGameServerDeploymentRolloutName(
+    gameServerDeploymentRolloutName: string
+  ) {
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+      gameServerDeploymentRolloutName
+    ).project;
   }
 
   /**
@@ -1067,8 +1111,12 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the location.
    */
-  matchLocationFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
-    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).location;
+  matchLocationFromGameServerDeploymentRolloutName(
+    gameServerDeploymentRolloutName: string
+  ) {
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+      gameServerDeploymentRolloutName
+    ).location;
   }
 
   /**
@@ -1078,8 +1126,12 @@ export class GameServerConfigsServiceClient {
    *   A fully-qualified path representing GameServerDeploymentRollout resource.
    * @returns {string} A string representing the deployment.
    */
-  matchDeploymentFromGameServerDeploymentRolloutName(gameServerDeploymentRolloutName: string) {
-    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(gameServerDeploymentRolloutName).deployment;
+  matchDeploymentFromGameServerDeploymentRolloutName(
+    gameServerDeploymentRolloutName: string
+  ) {
+    return this.pathTemplates.gameServerDeploymentRolloutPathTemplate.match(
+      gameServerDeploymentRolloutName
+    ).deployment;
   }
 
   /**
@@ -1090,7 +1142,7 @@ export class GameServerConfigsServiceClient {
    * @param {string} realm
    * @returns {string} Resource name string.
    */
-  realmPath(project:string,location:string,realm:string) {
+  realmPath(project: string, location: string, realm: string) {
     return this.pathTemplates.realmPathTemplate.render({
       project: project,
       location: location,
