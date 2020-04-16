@@ -4,7 +4,7 @@
       "git": {
         "name": ".",
         "remote": "https://github.com/googleapis/nodejs-game-servers.git",
-        "sha": "c75bb2de6ef48c26d5d90892a906b45dcf91755c"
+        "sha": "8a91fb5b9980530ec35ccecd9b77d53b6d1ecd4b"
       }
     },
     {
@@ -19,7 +19,7 @@
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "6f32150677c9784f3c3a7e1949472bd29c9d72c5"
+        "sha": "52638600f387deb98efb5f9c85fec39e82aa9052"
       }
     }
   ],

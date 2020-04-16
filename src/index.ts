@@ -19,22 +19,9 @@
 import * as v1beta from './v1beta';
 const GameServerClustersServiceClient = v1beta.GameServerClustersServiceClient;
 const GameServerConfigsServiceClient = v1beta.GameServerConfigsServiceClient;
-const GameServerDeploymentsServiceClient =
-  v1beta.GameServerDeploymentsServiceClient;
+const GameServerDeploymentsServiceClient = v1beta.GameServerDeploymentsServiceClient;
 const RealmsServiceClient = v1beta.RealmsServiceClient;
-export {
-  v1beta,
-  GameServerClustersServiceClient,
-  GameServerConfigsServiceClient,
-  GameServerDeploymentsServiceClient,
-  RealmsServiceClient,
-};
-export default {
-  v1beta,
-  GameServerClustersServiceClient,
-  GameServerConfigsServiceClient,
-  GameServerDeploymentsServiceClient,
-  RealmsServiceClient,
-};
+export {v1beta, GameServerClustersServiceClient, GameServerConfigsServiceClient, GameServerDeploymentsServiceClient, RealmsServiceClient};
+export default {v1beta, GameServerClustersServiceClient, GameServerConfigsServiceClient, GameServerDeploymentsServiceClient, RealmsServiceClient};
 import * as protos from '../protos/protos';
-export {protos};
+export {protos}
