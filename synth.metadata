@@ -1,19 +1,25 @@
 {
-  "updateTime": "2020-04-03T11:41:38.050756Z",
   "sources": [
+    {
+      "git": {
+        "name": ".",
+        "remote": "https://github.com/googleapis/nodejs-game-servers.git",
+        "sha": "c75bb2de6ef48c26d5d90892a906b45dcf91755c"
+      }
+    },
     {
       "git": {
         "name": "googleapis-private",
         "remote": "https://github.com/googleapis/googleapis-private.git",
-        "sha": "e6378caa596533251006a9eb318f3f9e71984f2b",
-        "internalRef": "301441701"
+        "sha": "ddac0ff9513bd89b53aa6895c65a7c3272626583",
+        "internalRef": "304945322"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "99820243d348191bc9c634f2b48ddf65096285ed"
+        "sha": "6f32150677c9784f3c3a7e1949472bd29c9d72c5"
       }
     }
   ],
