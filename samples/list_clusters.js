@@ -46,7 +46,7 @@ function main(
     const results = await client.listGameServerClusters(request);
     const [clusters] = results;
 
-    for (const cluster of clusters.gameServerClusters) {
+    for (const cluster of clusters) {
       console.log('Game Server Cluster:');
       console.log(`\tCluster name: ${cluster.name}`);
       console.log(`\tCluster description: ${cluster.description}`);
