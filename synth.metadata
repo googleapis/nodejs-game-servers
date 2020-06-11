@@ -3,23 +3,15 @@
     {
       "git": {
         "name": ".",
-        "remote": "https://github.com/googleapis/nodejs-game-servers.git",
-        "sha": "23c7ac0da5d79c8d3f0069f519e848221c420407"
-      }
-    },
-    {
-      "git": {
-        "name": "googleapis-private",
-        "remote": "https://github.com/googleapis/googleapis-private.git",
-        "sha": "dfbc67c8c1f91957abe96da943d90fe8101addf1",
-        "internalRef": "309845930"
+        "remote": "git@github.com:googleapis/nodejs-game-servers.git",
+        "sha": "7f48470f582e2589e5f9ddf4475f199593cae7ed"
       }
     },
     {
       "git": {
         "name": "synthtool",
         "remote": "https://github.com/googleapis/synthtool.git",
-        "sha": "be74d3e532faa47eb59f1a0eaebde0860d1d8ab4"
+        "sha": "a0ee80e0492a03b9b2bfefb5cca7eaf17bf10438"
       }
     }
   ],

@@ -103,16 +103,20 @@ export class GameServerDeploymentsServiceClient {
     }
     opts.servicePath = opts.servicePath || servicePath;
     opts.port = opts.port || port;
+
+    // users can override the config from client side, like retry codes name.
+    // The detailed structure of the clientConfig can be found here: https://github.com/googleapis/gax-nodejs/blob/master/src/gax.ts#L546
+    // The way to override client config for Showcase API:
+    //
+    // const customConfig = {"interfaces": {"google.showcase.v1beta1.Echo": {"methods": {"Echo": {"retry_codes_name": "idempotent", "retry_params_name": "default"}}}}}
+    // const showcaseClient = new showcaseClient({ projectId, customConfig });
     opts.clientConfig = opts.clientConfig || {};
 
-    const isBrowser = typeof window !== 'undefined';
-    if (isBrowser) {
-      opts.fallback = true;
-    }
-    // If we are in browser, we are already using fallback because of the
-    // "browser" field in package.json.
-    // But if we were explicitly requested to use fallback, let's do it now.
-    this._gaxModule = !isBrowser && opts.fallback ? gax.fallback : gax;
+    // If we're running in browser, it's OK to omit `fallback` since
+    // google-gax has `browser` field in its `package.json`.
+    // For Electron (which does not respect `browser` field),
+    // pass `{fallback: true}` to the GameServerDeploymentsServiceClient constructor.
+    this._gaxModule = opts.fallback ? gax.fallback : gax;
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
@@ -1280,6 +1284,11 @@ export class GameServerDeploymentsServiceClient {
   ): void;
   /**
    * Patches a single Game Server Deployment Rollout.
+   * The method will not return an error if the update does not affect any
+   * existing realms. For example - if the default_game_server_config is changed
+   * but all existing realms use the override, that is valid. Similarly, if a
+   * non existing realm is explicitly called out in game_server_config_overrides
+   * field, that will also not result in an error.
    *
    * @param {Object} request
    *   The request object that will be sent.
