@@ -3,8 +3,16 @@
     {
       "git": {
         "name": ".",
-        "remote": "git@github.com:googleapis/nodejs-game-servers.git",
-        "sha": "5e24f3dc67ec1b42c81fa3151b3a13321d673f9f"
+        "remote": "https://github.com/googleapis/nodejs-game-servers.git",
+        "sha": "e9466329399c62c0f6f49a713f68ecf8ef96213b"
+      }
+    },
+    {
+      "git": {
+        "name": "googleapis",
+        "remote": "https://github.com/googleapis/googleapis.git",
+        "sha": "4f4aa3a03e470f1390758b9d89eb1aa88837a5be",
+        "internalRef": "320300472"
       }
     },
     {
