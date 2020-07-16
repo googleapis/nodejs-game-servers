@@ -21,7 +21,7 @@
  * @param {string} gameClusterId unique identifier for the new Game Cluster
  * @param {string} gkeClusterName The full resource name of the GKE cluster to use
  */
-function main(
+async function main(
   projectId = 'YOUR_PROJECT_ID',
   location = 'LOCATION_ID',
   realmId = 'REALM_ID',
@@ -29,14 +29,6 @@ function main(
   gkeClusterName = 'GKE_CLUSTER_NAME'
 ) {
   // [START cloud_game_servers_create_cluster]
-  /**
-   * TODO(developer): Uncomment these variables before running the sample.
-   */
-  // const projectId = 'Your Google Cloud Project ID';
-  // const location = 'A Compute Engine region, e.g. "us-central1"';
-  // const realmId = 'The ID of the realm to locate this cluster in';
-  // const gameClusterId = 'A unique ID for this Game Server Cluster';
-  // const gkeClusterName= 'The full resource name of the GKE cluster to use';
   const {
     GameServerClustersServiceClient,
   } = require('@google-cloud/game-servers');
@@ -44,9 +36,17 @@ function main(
   const client = new GameServerClustersServiceClient();
 
   async function createGameServerCluster() {
+    /**
+     * TODO(developer): Uncomment these variables before running the sample.
+     */
+    // const projectId = 'Your Google Cloud Project ID';
+    // const location = 'A Compute Engine region, e.g. "us-central1"';
+    // const realmId = 'The ID of the realm to locate this cluster in';
+    // const gameClusterId = 'A unique ID for this Game Server Cluster';
+    // const gkeClusterName= 'The full resource name of the GKE cluster to use';
     const request = {
       // Provide full resource name of a Game Server Realm
-      parent: `projects/${projectId}/locations/${location}/realms/${realmId}`,
+      parent: client.realmPath(projectId, location, realmId),
       gameServerClusterId: gameClusterId,
       gameServerCluster: {
         description: 'My Game Server Cluster',
@@ -70,10 +70,17 @@ function main(
     console.log(
       `\tGKE cluster: ${result.connectionInfo.gkeClusterReference.cluster}`
     );
-    // [END cloud_game_servers_create_cluster]
   }
 
   createGameServerCluster();
+  // [END cloud_game_servers_create_cluster]
 }
 
-main(...process.argv.slice(2));
+main(...process.argv.slice(2)).catch(err => {
+  console.error(err.message);
+  process.exitCode = 1;
+});
+process.on('unhandledRejection', err => {
+  console.error(err.message);
+  process.exitCode = 1;
+});
