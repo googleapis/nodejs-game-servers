@@ -14,41 +14,53 @@
 'use strict';
 
 /**
- * Delete a Game Servers Deployment.
+ * Rollout update to add default config.
  * @param {string} projectId string project identifier
  * @param {string} deploymentId unique identifier for the new Game Server Deployment
+ * @param {string} configId unique identifier for the new Game Server Config
  */
 async function main(
   projectId = 'YOUR_PROJECT_ID',
-  deploymentId = 'DEPLOYMENT_ID'
+  deploymentId = 'DEPLOYMENT_ID',
+  configId = 'CONFIG_ID'
 ) {
-  // [START cloud_game_servers_deployment_delete]
+  // [START cloud_game_servers_deployment_rollout_default]
   const {
     GameServerDeploymentsServiceClient,
   } = require('@google-cloud/game-servers');
 
   const client = new GameServerDeploymentsServiceClient();
 
-  async function deleteGameServerDeployment() {
+  async function rolloutDefaultGameServerDeployment() {
     /**
      * TODO(developer): Uncomment these variables before running the sample.
      */
     // const projectId = 'Your Google Cloud Project ID';
     // const deploymentId = 'A unique ID for the Game Server Deployment';
+    // const configId = 'A unique ID for the Game Server Config';
     const request = {
-      // The full resource name
-      name: client.gameServerDeploymentPath(projectId, 'global', deploymentId),
+      rollout: {
+        name: client.gameServerDeploymentPath(
+          projectId,
+          'global',
+          deploymentId
+        ),
+        defaultGameServerConfig: configId,
+      },
+      updateMask: {
+        paths: ['default_game_server_config'],
+      },
     };
 
-    const [operation] = await client.deleteGameServerDeployment(request);
-    await operation.promise();
+    const [operation] = await client.updateGameServerDeploymentRollout(request);
+    const [deployment] = await operation.promise();
 
-    console.log(`Deployment with name ${request.name} deleted.`);
+    console.log(`Deployment updated: ${deployment.name}`);
   }
 
-  deleteGameServerDeployment();
+  rolloutDefaultGameServerDeployment();
 
-  // [END cloud_game_servers_deployment_delete]
+  // [END cloud_game_servers_deployment_rollout_default]
 }
 
 main(...process.argv.slice(2)).catch(err => {

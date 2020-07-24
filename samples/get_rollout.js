@@ -14,7 +14,7 @@
 'use strict';
 
 /**
- * Delete a Game Servers Deployment.
+ * Get a Game Servers Rollout.
  * @param {string} projectId string project identifier
  * @param {string} deploymentId unique identifier for the new Game Server Deployment
  */
@@ -22,14 +22,14 @@ async function main(
   projectId = 'YOUR_PROJECT_ID',
   deploymentId = 'DEPLOYMENT_ID'
 ) {
-  // [START cloud_game_servers_deployment_delete]
+  // [START cloud_game_servers_rollout_get]
   const {
     GameServerDeploymentsServiceClient,
   } = require('@google-cloud/game-servers');
 
   const client = new GameServerDeploymentsServiceClient();
 
-  async function deleteGameServerDeployment() {
+  async function getGameServerDeploymentRollout() {
     /**
      * TODO(developer): Uncomment these variables before running the sample.
      */
@@ -40,15 +40,24 @@ async function main(
       name: client.gameServerDeploymentPath(projectId, 'global', deploymentId),
     };
 
-    const [operation] = await client.deleteGameServerDeployment(request);
-    await operation.promise();
+    const [rollout] = await client.getGameServerDeploymentRollout(request);
+    console.log(`Rollout name: ${rollout.name}`);
+    console.log(`Rollout default: ${rollout.defaultGameServerConfig}`);
+    for (const override of rollout.gameServerConfigOverrides) {
+      console.log(`Rollout config overrides: ${override.configVersion}`);
+      console.log(
+        `Rollout realm overrides: ${JSON.stringify(override.realmsSelector)}`
+      );
+    }
 
-    console.log(`Deployment with name ${request.name} deleted.`);
+    const updateTime = rollout.updateTime;
+    const updateDate = new Date(updateTime.seconds * 1000);
+    console.log(`Rollout updated on: ${updateDate.toLocaleDateString()}\n`);
   }
 
-  deleteGameServerDeployment();
+  getGameServerDeploymentRollout();
 
-  // [END cloud_game_servers_deployment_delete]
+  // [END cloud_game_servers_rollout_get]
 }
 
 main(...process.argv.slice(2)).catch(err => {

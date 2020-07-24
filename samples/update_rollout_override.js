@@ -14,41 +14,66 @@
 'use strict';
 
 /**
- * Delete a Game Servers Deployment.
+ * Rollout update to add override config.
  * @param {string} projectId string project identifier
  * @param {string} deploymentId unique identifier for the new Game Server Deployment
+ * @param {string} configId unique identifier for the new Game Server Config
+ * @param {string} realmId the unique ID of the realm
+ * @param {string} realmLocation Compute Engine region for realm location.
  */
 async function main(
   projectId = 'YOUR_PROJECT_ID',
-  deploymentId = 'DEPLOYMENT_ID'
+  deploymentId = 'DEPLOYMENT_ID',
+  configId = 'CONFIG_ID',
+  realmId = 'REALM_ID',
+  realmLocation = 'REALM_LOCATION'
 ) {
-  // [START cloud_game_servers_deployment_delete]
+  // [START cloud_game_servers_deployment_rollout_override]
   const {
     GameServerDeploymentsServiceClient,
   } = require('@google-cloud/game-servers');
 
   const client = new GameServerDeploymentsServiceClient();
 
-  async function deleteGameServerDeployment() {
+  async function rolloutGameServerDeploymentOverride() {
     /**
      * TODO(developer): Uncomment these variables before running the sample.
      */
     // const projectId = 'Your Google Cloud Project ID';
     // const deploymentId = 'A unique ID for the Game Server Deployment';
+    // const configId = 'A unique ID for the Game Server Config';
+    // const realmId = 'A unique ID for the realm'
+    // const realmLocation = 'compute engine region for realm location'
     const request = {
-      // The full resource name
-      name: client.gameServerDeploymentPath(projectId, 'global', deploymentId),
+      rollout: {
+        name: client.gameServerDeploymentPath(
+          projectId,
+          'global',
+          deploymentId
+        ),
+        gameServerConfigOverrides: [
+          {
+            realmsSelector: {
+              realms: [client.realmPath(projectId, realmLocation, realmId)],
+            },
+            configVersion: configId,
+          },
+        ],
+      },
+      updateMask: {
+        paths: ['game_server_config_overrides'],
+      },
     };
 
-    const [operation] = await client.deleteGameServerDeployment(request);
-    await operation.promise();
+    const [operation] = await client.updateGameServerDeploymentRollout(request);
+    const [deployment] = await operation.promise();
 
-    console.log(`Deployment with name ${request.name} deleted.`);
+    console.log(`Deployment updated: ${deployment.name}`);
   }
 
-  deleteGameServerDeployment();
+  rolloutGameServerDeploymentOverride();
 
-  // [END cloud_game_servers_deployment_delete]
+  // [END cloud_game_servers_deployment_rollout_override]
 }
 
 main(...process.argv.slice(2)).catch(err => {
