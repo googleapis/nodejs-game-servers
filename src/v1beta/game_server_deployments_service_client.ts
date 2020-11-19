@@ -31,6 +31,11 @@ import * as path from 'path';
 import {Transform} from 'stream';
 import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
+/**
+ * Client JSON configuration object, loaded from
+ * `src/v1beta/game_server_deployments_service_client_config.json`.
+ * This file defines retry strategy and timeouts for all API methods in this library.
+ */
 import * as gapicConfig from './game_server_deployments_service_client_config.json';
 import {operationsProtos} from 'google-gax';
 const version = require('../../../package.json').version;
@@ -86,9 +91,9 @@ export class GameServerDeploymentsServiceClient {
    *     your project ID will be detected automatically.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
-   * @param {gax.ClientConfig} [options.clientConfig] - client configuration override.
-   *     Follows the structure of `game_server_deployments_service_client_config.json`.
-   * @param {boolean} fallback - Use HTTP fallback mode.
+   * @param {gax.ClientConfig} [options.clientConfig] - Client configuration override.
+   *     Follows the structure of {@link gapicConfig}.
+   * @param {boolean} [options.fallback] - Use HTTP fallback mode.
    *     In fallback mode, a special browser-compatible transport implementation is used
    *     instead of gRPC transport. In browser context (if the `window` object is defined)
    *     the fallback mode is enabled automatically; set `options.fallback` to `false`
@@ -102,6 +107,7 @@ export class GameServerDeploymentsServiceClient {
       opts?.servicePath || opts?.apiEndpoint || staticMembers.servicePath;
     const port = opts?.port || staticMembers.port;
     const clientConfig = opts?.clientConfig ?? {};
+    // eslint-disable-next-line no-undef
     const fallback =
       opts?.fallback ??
       (typeof window !== 'undefined' && typeof window.fetch !== 'undefined');
@@ -414,7 +420,7 @@ export class GameServerDeploymentsServiceClient {
   // -------------------
   getGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -427,7 +433,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   getGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IGameServerDeployment,
       | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
@@ -468,7 +474,7 @@ export class GameServerDeploymentsServiceClient {
   getGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IGameServerDeployment,
           | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRequest
@@ -494,12 +500,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -518,7 +524,7 @@ export class GameServerDeploymentsServiceClient {
   }
   getGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
@@ -531,7 +537,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   getGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
       | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
@@ -572,7 +578,7 @@ export class GameServerDeploymentsServiceClient {
   getGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IGameServerDeploymentRollout,
           | protos.google.cloud.gaming.v1beta.IGetGameServerDeploymentRolloutRequest
@@ -598,12 +604,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -622,7 +628,7 @@ export class GameServerDeploymentsServiceClient {
   }
   previewGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
@@ -635,7 +641,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   previewGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
       | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
@@ -686,7 +692,7 @@ export class GameServerDeploymentsServiceClient {
   previewGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutResponse,
           | protos.google.cloud.gaming.v1beta.IPreviewGameServerDeploymentRolloutRequest
@@ -712,12 +718,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -736,7 +742,7 @@ export class GameServerDeploymentsServiceClient {
   }
   fetchDeploymentState(
     request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
@@ -749,7 +755,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   fetchDeploymentState(
     request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
       | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
@@ -792,7 +798,7 @@ export class GameServerDeploymentsServiceClient {
   fetchDeploymentState(
     request: protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IFetchDeploymentStateResponse,
           | protos.google.cloud.gaming.v1beta.IFetchDeploymentStateRequest
@@ -818,12 +824,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -839,7 +845,7 @@ export class GameServerDeploymentsServiceClient {
 
   createGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -852,7 +858,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   createGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -901,7 +907,7 @@ export class GameServerDeploymentsServiceClient {
   createGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.ICreateGameServerDeploymentRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -929,12 +935,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -990,7 +996,7 @@ export class GameServerDeploymentsServiceClient {
   }
   deleteGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -1003,7 +1009,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   deleteGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.protobuf.IEmpty,
@@ -1049,7 +1055,7 @@ export class GameServerDeploymentsServiceClient {
   deleteGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IDeleteGameServerDeploymentRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.protobuf.IEmpty,
@@ -1077,12 +1083,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1138,7 +1144,7 @@ export class GameServerDeploymentsServiceClient {
   }
   updateGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -1151,7 +1157,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   updateGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -1203,7 +1209,7 @@ export class GameServerDeploymentsServiceClient {
   updateGameServerDeployment(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -1231,12 +1237,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1292,7 +1298,7 @@ export class GameServerDeploymentsServiceClient {
   }
   updateGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -1305,7 +1311,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   updateGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -1362,7 +1368,7 @@ export class GameServerDeploymentsServiceClient {
   updateGameServerDeploymentRollout(
     request: protos.google.cloud.gaming.v1beta.IUpdateGameServerDeploymentRolloutRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.cloud.gaming.v1beta.IGameServerDeployment,
@@ -1390,12 +1396,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1451,7 +1457,7 @@ export class GameServerDeploymentsServiceClient {
   }
   listGameServerDeployments(
     request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IGameServerDeployment[],
@@ -1461,7 +1467,7 @@ export class GameServerDeploymentsServiceClient {
   >;
   listGameServerDeployments(
     request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: PaginationCallback<
       protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
       | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
@@ -1518,7 +1524,7 @@ export class GameServerDeploymentsServiceClient {
   listGameServerDeployments(
     request: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | PaginationCallback<
           protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
           | protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsResponse
@@ -1541,12 +1547,12 @@ export class GameServerDeploymentsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1599,7 +1605,7 @@ export class GameServerDeploymentsServiceClient {
    */
   listGameServerDeploymentsStream(
     request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Transform {
     request = request || {};
     options = options || {};
@@ -1660,7 +1666,7 @@ export class GameServerDeploymentsServiceClient {
    */
   listGameServerDeploymentsAsync(
     request?: protos.google.cloud.gaming.v1beta.IListGameServerDeploymentsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): AsyncIterable<protos.google.cloud.gaming.v1beta.IGameServerDeployment> {
     request = request || {};
     options = options || {};

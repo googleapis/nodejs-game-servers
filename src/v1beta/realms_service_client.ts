@@ -31,6 +31,11 @@ import * as path from 'path';
 import {Transform} from 'stream';
 import {RequestType} from 'google-gax/build/src/apitypes';
 import * as protos from '../../protos/protos';
+/**
+ * Client JSON configuration object, loaded from
+ * `src/v1beta/realms_service_client_config.json`.
+ * This file defines retry strategy and timeouts for all API methods in this library.
+ */
 import * as gapicConfig from './realms_service_client_config.json';
 import {operationsProtos} from 'google-gax';
 const version = require('../../../package.json').version;
@@ -86,9 +91,9 @@ export class RealmsServiceClient {
    *     your project ID will be detected automatically.
    * @param {string} [options.apiEndpoint] - The domain name of the
    *     API remote host.
-   * @param {gax.ClientConfig} [options.clientConfig] - client configuration override.
-   *     Follows the structure of `realms_service_client_config.json`.
-   * @param {boolean} fallback - Use HTTP fallback mode.
+   * @param {gax.ClientConfig} [options.clientConfig] - Client configuration override.
+   *     Follows the structure of {@link gapicConfig}.
+   * @param {boolean} [options.fallback] - Use HTTP fallback mode.
    *     In fallback mode, a special browser-compatible transport implementation is used
    *     instead of gRPC transport. In browser context (if the `window` object is defined)
    *     the fallback mode is enabled automatically; set `options.fallback` to `false`
@@ -101,6 +106,7 @@ export class RealmsServiceClient {
       opts?.servicePath || opts?.apiEndpoint || staticMembers.servicePath;
     const port = opts?.port || staticMembers.port;
     const clientConfig = opts?.clientConfig ?? {};
+    // eslint-disable-next-line no-undef
     const fallback =
       opts?.fallback ??
       (typeof window !== 'undefined' && typeof window.fetch !== 'undefined');
@@ -382,7 +388,7 @@ export class RealmsServiceClient {
   // -------------------
   getRealm(
     request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IRealm,
@@ -392,7 +398,7 @@ export class RealmsServiceClient {
   >;
   getRealm(
     request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IRealm,
       protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
@@ -428,7 +434,7 @@ export class RealmsServiceClient {
   getRealm(
     request: protos.google.cloud.gaming.v1beta.IGetRealmRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IRealm,
           protos.google.cloud.gaming.v1beta.IGetRealmRequest | null | undefined,
@@ -447,12 +453,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -467,7 +473,7 @@ export class RealmsServiceClient {
   }
   previewRealmUpdate(
     request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
@@ -477,7 +483,7 @@ export class RealmsServiceClient {
   >;
   previewRealmUpdate(
     request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
       | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
@@ -526,7 +532,7 @@ export class RealmsServiceClient {
   previewRealmUpdate(
     request: protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateResponse,
           | protos.google.cloud.gaming.v1beta.IPreviewRealmUpdateRequest
@@ -549,12 +555,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -570,7 +576,7 @@ export class RealmsServiceClient {
 
   createRealm(
     request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -583,7 +589,7 @@ export class RealmsServiceClient {
   >;
   createRealm(
     request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.cloud.gaming.v1beta.IRealm,
@@ -632,7 +638,7 @@ export class RealmsServiceClient {
   createRealm(
     request: protos.google.cloud.gaming.v1beta.ICreateRealmRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.cloud.gaming.v1beta.IRealm,
@@ -660,12 +666,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -717,7 +723,7 @@ export class RealmsServiceClient {
   }
   deleteRealm(
     request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -730,7 +736,7 @@ export class RealmsServiceClient {
   >;
   deleteRealm(
     request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.protobuf.IEmpty,
@@ -775,7 +781,7 @@ export class RealmsServiceClient {
   deleteRealm(
     request: protos.google.cloud.gaming.v1beta.IDeleteRealmRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.protobuf.IEmpty,
@@ -803,12 +809,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -860,7 +866,7 @@ export class RealmsServiceClient {
   }
   updateRealm(
     request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       LROperation<
@@ -873,7 +879,7 @@ export class RealmsServiceClient {
   >;
   updateRealm(
     request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: Callback<
       LROperation<
         protos.google.cloud.gaming.v1beta.IRealm,
@@ -925,7 +931,7 @@ export class RealmsServiceClient {
   updateRealm(
     request: protos.google.cloud.gaming.v1beta.IUpdateRealmRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | Callback<
           LROperation<
             protos.google.cloud.gaming.v1beta.IRealm,
@@ -953,12 +959,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1010,7 +1016,7 @@ export class RealmsServiceClient {
   }
   listRealms(
     request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Promise<
     [
       protos.google.cloud.gaming.v1beta.IRealm[],
@@ -1020,7 +1026,7 @@ export class RealmsServiceClient {
   >;
   listRealms(
     request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-    options: gax.CallOptions,
+    options: CallOptions,
     callback: PaginationCallback<
       protos.google.cloud.gaming.v1beta.IListRealmsRequest,
       protos.google.cloud.gaming.v1beta.IListRealmsResponse | null | undefined,
@@ -1073,7 +1079,7 @@ export class RealmsServiceClient {
   listRealms(
     request: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
     optionsOrCallback?:
-      | gax.CallOptions
+      | CallOptions
       | PaginationCallback<
           protos.google.cloud.gaming.v1beta.IListRealmsRequest,
           | protos.google.cloud.gaming.v1beta.IListRealmsResponse
@@ -1094,12 +1100,12 @@ export class RealmsServiceClient {
     ]
   > | void {
     request = request || {};
-    let options: gax.CallOptions;
+    let options: CallOptions;
     if (typeof optionsOrCallback === 'function' && callback === undefined) {
       callback = optionsOrCallback;
       options = {};
     } else {
-      options = optionsOrCallback as gax.CallOptions;
+      options = optionsOrCallback as CallOptions;
     }
     options = options || {};
     options.otherArgs = options.otherArgs || {};
@@ -1148,7 +1154,7 @@ export class RealmsServiceClient {
    */
   listRealmsStream(
     request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): Transform {
     request = request || {};
     options = options || {};
@@ -1209,7 +1215,7 @@ export class RealmsServiceClient {
    */
   listRealmsAsync(
     request?: protos.google.cloud.gaming.v1beta.IListRealmsRequest,
-    options?: gax.CallOptions
+    options?: CallOptions
   ): AsyncIterable<protos.google.cloud.gaming.v1beta.IRealm> {
     request = request || {};
     options = options || {};
