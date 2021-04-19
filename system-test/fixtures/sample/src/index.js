@@ -17,7 +17,7 @@
 // ** All changes to this file may be overwritten. **
 
 /* eslint-disable node/no-missing-require, no-unused-vars */
-const gaming = require('@google-cloud/game-servers');
+const gaming = require('gaming');
 
 function main() {
   const gameServerClustersServiceClient = new gaming.GameServerClustersServiceClient();
