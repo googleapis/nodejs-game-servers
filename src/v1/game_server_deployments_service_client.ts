@@ -120,8 +120,9 @@ export class GameServerDeploymentsServiceClient {
 
     // Create a `gaxGrpc` object, with any grpc-specific options
     // sent to the client.
-    opts.scopes = (this
-      .constructor as typeof GameServerDeploymentsServiceClient).scopes;
+    opts.scopes = (
+      this.constructor as typeof GameServerDeploymentsServiceClient
+    ).scopes;
     this._gaxGrpc = new this._gaxModule.GrpcClient(opts);
 
     // Save options to use in initialize() method.
@@ -262,15 +263,16 @@ export class GameServerDeploymentsServiceClient {
           updateGameServerDeploymentMetadata
         )
       ),
-      updateGameServerDeploymentRollout: new this._gaxModule.LongrunningDescriptor(
-        this.operationsClient,
-        updateGameServerDeploymentRolloutResponse.decode.bind(
-          updateGameServerDeploymentRolloutResponse
+      updateGameServerDeploymentRollout:
+        new this._gaxModule.LongrunningDescriptor(
+          this.operationsClient,
+          updateGameServerDeploymentRolloutResponse.decode.bind(
+            updateGameServerDeploymentRolloutResponse
+          ),
+          updateGameServerDeploymentRolloutMetadata.decode.bind(
+            updateGameServerDeploymentRolloutMetadata
+          )
         ),
-        updateGameServerDeploymentRolloutMetadata.decode.bind(
-          updateGameServerDeploymentRolloutMetadata
-        )
-      ),
     };
 
     // Put together the default options sent with requests.
@@ -332,13 +334,14 @@ export class GameServerDeploymentsServiceClient {
     ];
     for (const methodName of gameServerDeploymentsServiceStubMethods) {
       const callPromise = this.gameServerDeploymentsServiceStub.then(
-        stub => (...args: Array<{}>) => {
-          if (this._terminated) {
-            return Promise.reject('The client has already been closed.');
-          }
-          const func = stub[methodName];
-          return func.apply(stub, args);
-        },
+        stub =>
+          (...args: Array<{}>) => {
+            if (this._terminated) {
+              return Promise.reject('The client has already been closed.');
+            }
+            const func = stub[methodName];
+            return func.apply(stub, args);
+          },
         (err: Error | null | undefined) => () => {
           throw err;
         }
@@ -490,11 +493,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      name: request.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        name: request.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.getGameServerDeployment(
       request,
@@ -590,11 +592,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      name: request.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        name: request.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.getGameServerDeploymentRollout(
       request,
@@ -700,11 +701,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      'rollout.name': request.rollout!.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        'rollout.name': request.rollout!.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.previewGameServerDeploymentRollout(
       request,
@@ -796,11 +796,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      name: request.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        name: request.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.fetchDeploymentState(request, options, callback);
   }
@@ -900,11 +899,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        parent: request.parent || '',
+      });
     this.initialize();
     return this.innerApiCalls.createGameServerDeployment(
       request,
@@ -1040,11 +1038,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      name: request.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        name: request.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.deleteGameServerDeployment(
       request,
@@ -1186,11 +1183,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      'game_server_deployment.name': request.gameServerDeployment!.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        'game_server_deployment.name': request.gameServerDeployment!.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.updateGameServerDeployment(
       request,
@@ -1337,11 +1333,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      'rollout.name': request.rollout!.name || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        'rollout.name': request.rollout!.name || '',
+      });
     this.initialize();
     return this.innerApiCalls.updateGameServerDeploymentRollout(
       request,
@@ -1492,11 +1487,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        parent: request.parent || '',
+      });
     this.initialize();
     return this.innerApiCalls.listGameServerDeployments(
       request,
@@ -1550,11 +1544,10 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        parent: request.parent || '',
+      });
     const callSettings = new gax.CallSettings(options);
     this.initialize();
     return this.descriptors.page.listGameServerDeployments.createStream(
@@ -1601,17 +1594,16 @@ export class GameServerDeploymentsServiceClient {
     options = options || {};
     options.otherArgs = options.otherArgs || {};
     options.otherArgs.headers = options.otherArgs.headers || {};
-    options.otherArgs.headers[
-      'x-goog-request-params'
-    ] = gax.routingHeader.fromParams({
-      parent: request.parent || '',
-    });
+    options.otherArgs.headers['x-goog-request-params'] =
+      gax.routingHeader.fromParams({
+        parent: request.parent || '',
+      });
     options = options || {};
     const callSettings = new gax.CallSettings(options);
     this.initialize();
     return this.descriptors.page.listGameServerDeployments.asyncIterate(
       this.innerApiCalls['listGameServerDeployments'] as GaxCall,
-      (request as unknown) as RequestType,
+      request as unknown as RequestType,
       callSettings
     ) as AsyncIterable<protos.google.cloud.gaming.v1.IGameServerDeployment>;
   }
