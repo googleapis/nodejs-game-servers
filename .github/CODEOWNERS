@@ -7,3 +7,6 @@
 
 # The yoshi-nodejs team is the default owner for nodejs repositories.
 *     @googleapis/yoshi-nodejs
+
+# Add the github automation team to check auto-approve.yml changes
+.github/auto-approve.yml                 @googleapis/github-automation
