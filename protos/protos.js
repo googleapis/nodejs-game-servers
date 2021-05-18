@@ -12729,11 +12729,11 @@
     
                         /**
                          * GameServerConfigOverride configVersion.
-                         * @member {string|null|undefined} configVersion
+                         * @member {string} configVersion
                          * @memberof google.cloud.gaming.v1.GameServerConfigOverride
                          * @instance
                          */
-                        GameServerConfigOverride.prototype.configVersion = null;
+                        GameServerConfigOverride.prototype.configVersion = "";
     
                         // OneOf field names bound to virtual getters and setters
                         var $oneOfFields;
@@ -29218,11 +29218,11 @@
     
                         /**
                          * GameServerConfigOverride configVersion.
-                         * @member {string|null|undefined} configVersion
+                         * @member {string} configVersion
                          * @memberof google.cloud.gaming.v1beta.GameServerConfigOverride
                          * @instance
                          */
-                        GameServerConfigOverride.prototype.configVersion = null;
+                        GameServerConfigOverride.prototype.configVersion = "";
     
                         // OneOf field names bound to virtual getters and setters
                         var $oneOfFields;
@@ -33349,43 +33349,43 @@
     
                 /**
                  * HttpRule get.
-                 * @member {string|null|undefined} get
+                 * @member {string} get
                  * @memberof google.api.HttpRule
                  * @instance
                  */
-                HttpRule.prototype.get = null;
+                HttpRule.prototype.get = "";
     
                 /**
                  * HttpRule put.
-                 * @member {string|null|undefined} put
+                 * @member {string} put
                  * @memberof google.api.HttpRule
                  * @instance
                  */
-                HttpRule.prototype.put = null;
+                HttpRule.prototype.put = "";
     
                 /**
                  * HttpRule post.
-                 * @member {string|null|undefined} post
+                 * @member {string} post
                  * @memberof google.api.HttpRule
                  * @instance
                  */
-                HttpRule.prototype.post = null;
+                HttpRule.prototype.post = "";
     
                 /**
                  * HttpRule delete.
-                 * @member {string|null|undefined} delete
+                 * @member {string} delete
                  * @memberof google.api.HttpRule
                  * @instance
                  */
-                HttpRule.prototype["delete"] = null;
+                HttpRule.prototype["delete"] = "";
     
                 /**
                  * HttpRule patch.
-                 * @member {string|null|undefined} patch
+                 * @member {string} patch
                  * @memberof google.api.HttpRule
                  * @instance
                  */
-                HttpRule.prototype.patch = null;
+                HttpRule.prototype.patch = "";
     
                 /**
                  * HttpRule custom.
