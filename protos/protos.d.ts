@@ -5406,7 +5406,7 @@ export namespace google {
                     public realmsSelector?: (google.cloud.gaming.v1.IRealmSelector|null);
 
                     /** GameServerConfigOverride configVersion. */
-                    public configVersion?: (string|null);
+                    public configVersion: string;
 
                     /** GameServerConfigOverride selector. */
                     public selector?: "realmsSelector";
@@ -12474,7 +12474,7 @@ export namespace google {
                     public realmsSelector?: (google.cloud.gaming.v1beta.IRealmSelector|null);
 
                     /** GameServerConfigOverride configVersion. */
-                    public configVersion?: (string|null);
+                    public configVersion: string;
 
                     /** GameServerConfigOverride selector. */
                     public selector?: "realmsSelector";
@@ -14318,19 +14318,19 @@ export namespace google {
             public selector: string;
 
             /** HttpRule get. */
-            public get?: (string|null);
+            public get: string;
 
             /** HttpRule put. */
-            public put?: (string|null);
+            public put: string;
 
             /** HttpRule post. */
-            public post?: (string|null);
+            public post: string;
 
             /** HttpRule delete. */
-            public delete?: (string|null);
+            public delete: string;
 
             /** HttpRule patch. */
-            public patch?: (string|null);
+            public patch: string;
 
             /** HttpRule custom. */
             public custom?: (google.api.ICustomHttpPattern|null);
