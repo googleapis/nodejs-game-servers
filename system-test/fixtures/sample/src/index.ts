@@ -21,7 +21,7 @@ import {
   GameServerConfigsServiceClient,
   GameServerDeploymentsServiceClient,
   RealmsServiceClient,
-} from 'gaming';
+} from '@google-cloud/game-servers';
 
 // check that the client class type name can be used
 function doStuffWithGameServerClustersServiceClient(
