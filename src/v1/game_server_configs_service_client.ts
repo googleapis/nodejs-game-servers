@@ -428,6 +428,10 @@ export class GameServerConfigsServiceClient {
    *   for more details and examples.
    * @example
    * const [response] = await client.getGameServerConfig(request);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.get_game_server_config.js</caption>
+   * region_tag:gaming_get_game_server_config_sample
+   *
    */
   getGameServerConfig(
     request?: protos.google.cloud.gaming.v1.IGetGameServerConfigRequest,
@@ -535,6 +539,10 @@ export class GameServerConfigsServiceClient {
    * @example
    * const [operation] = await client.createGameServerConfig(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.create_game_server_config.js</caption>
+   * region_tag:gaming_create_game_server_config_sample
+   *
    */
   createGameServerConfig(
     request?: protos.google.cloud.gaming.v1.ICreateGameServerConfigRequest,
@@ -602,6 +610,10 @@ export class GameServerConfigsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.create_game_server_config.js</caption>
+   * region_tag:gaming_create_game_server_config_sample
+   *
    */
   async checkCreateGameServerConfigProgress(
     name: string
@@ -682,6 +694,10 @@ export class GameServerConfigsServiceClient {
    * @example
    * const [operation] = await client.deleteGameServerConfig(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.delete_game_server_config.js</caption>
+   * region_tag:gaming_delete_game_server_config_sample
+   *
    */
   deleteGameServerConfig(
     request?: protos.google.cloud.gaming.v1.IDeleteGameServerConfigRequest,
@@ -749,6 +765,10 @@ export class GameServerConfigsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.delete_game_server_config.js</caption>
+   * region_tag:gaming_delete_game_server_config_sample
+   *
    */
   async checkDeleteGameServerConfigProgress(
     name: string
@@ -837,6 +857,10 @@ export class GameServerConfigsServiceClient {
    *   Please see the
    *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
    *   for more details and examples.
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.list_game_server_configs.js</caption>
+   * region_tag:gaming_list_game_server_configs_sample
+   *
    */
   listGameServerConfigs(
     request?: protos.google.cloud.gaming.v1.IListGameServerConfigsRequest,
@@ -913,6 +937,10 @@ export class GameServerConfigsServiceClient {
    *   Please see the
    *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
    *   for more details and examples.
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.list_game_server_configs.js</caption>
+   * region_tag:gaming_list_game_server_configs_sample
+   *
    */
   listGameServerConfigsStream(
     request?: protos.google.cloud.gaming.v1.IListGameServerConfigsRequest,
@@ -926,7 +954,8 @@ export class GameServerConfigsServiceClient {
       gax.routingHeader.fromParams({
         parent: request.parent || '',
       });
-    const callSettings = new gax.CallSettings(options);
+    const defaultCallSettings = this._defaults['listGameServerConfigs'];
+    const callSettings = defaultCallSettings.merge(options);
     this.initialize();
     return this.descriptors.page.listGameServerConfigs.createStream(
       this.innerApiCalls.listGameServerConfigs as gax.GaxCall,
@@ -972,6 +1001,10 @@ export class GameServerConfigsServiceClient {
    * for await (const response of iterable) {
    *   // process response
    * }
+   *
+   * @example <caption>include:samples/generated/v1/game_server_configs_service.list_game_server_configs.js</caption>
+   * region_tag:gaming_list_game_server_configs_sample
+   *
    */
   listGameServerConfigsAsync(
     request?: protos.google.cloud.gaming.v1.IListGameServerConfigsRequest,
@@ -986,7 +1019,8 @@ export class GameServerConfigsServiceClient {
         parent: request.parent || '',
       });
     options = options || {};
-    const callSettings = new gax.CallSettings(options);
+    const defaultCallSettings = this._defaults['listGameServerConfigs'];
+    const callSettings = defaultCallSettings.merge(options);
     this.initialize();
     return this.descriptors.page.listGameServerConfigs.asyncIterate(
       this.innerApiCalls['listGameServerConfigs'] as GaxCall,

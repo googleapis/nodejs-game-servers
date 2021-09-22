@@ -466,6 +466,10 @@ export class GameServerDeploymentsServiceClient {
    *   for more details and examples.
    * @example
    * const [response] = await client.getGameServerDeployment(request);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.get_game_server_deployment.js</caption>
+   * region_tag:gaming_get_game_server_deployment_sample
+   *
    */
   getGameServerDeployment(
     request?: protos.google.cloud.gaming.v1.IGetGameServerDeploymentRequest,
@@ -565,6 +569,10 @@ export class GameServerDeploymentsServiceClient {
    *   for more details and examples.
    * @example
    * const [response] = await client.getGameServerDeploymentRollout(request);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.get_game_server_deployment_rollout.js</caption>
+   * region_tag:gaming_get_game_server_deployment_rollout_sample
+   *
    */
   getGameServerDeploymentRollout(
     request?: protos.google.cloud.gaming.v1.IGetGameServerDeploymentRolloutRequest,
@@ -675,6 +683,10 @@ export class GameServerDeploymentsServiceClient {
    *   for more details and examples.
    * @example
    * const [response] = await client.previewGameServerDeploymentRollout(request);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.preview_game_server_deployment_rollout.js</caption>
+   * region_tag:gaming_preview_game_server_deployment_rollout_sample
+   *
    */
   previewGameServerDeploymentRollout(
     request?: protos.google.cloud.gaming.v1.IPreviewGameServerDeploymentRolloutRequest,
@@ -776,6 +788,10 @@ export class GameServerDeploymentsServiceClient {
    *   for more details and examples.
    * @example
    * const [response] = await client.fetchDeploymentState(request);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.fetch_deployment_state.js</caption>
+   * region_tag:gaming_fetch_deployment_state_sample
+   *
    */
   fetchDeploymentState(
     request?: protos.google.cloud.gaming.v1.IFetchDeploymentStateRequest,
@@ -881,6 +897,10 @@ export class GameServerDeploymentsServiceClient {
    * @example
    * const [operation] = await client.createGameServerDeployment(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.create_game_server_deployment.js</caption>
+   * region_tag:gaming_create_game_server_deployment_sample
+   *
    */
   createGameServerDeployment(
     request?: protos.google.cloud.gaming.v1.ICreateGameServerDeploymentRequest,
@@ -948,6 +968,10 @@ export class GameServerDeploymentsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.create_game_server_deployment.js</caption>
+   * region_tag:gaming_create_game_server_deployment_sample
+   *
    */
   async checkCreateGameServerDeploymentProgress(
     name: string
@@ -1027,6 +1051,10 @@ export class GameServerDeploymentsServiceClient {
    * @example
    * const [operation] = await client.deleteGameServerDeployment(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.delete_game_server_deployment.js</caption>
+   * region_tag:gaming_delete_game_server_deployment_sample
+   *
    */
   deleteGameServerDeployment(
     request?: protos.google.cloud.gaming.v1.IDeleteGameServerDeploymentRequest,
@@ -1094,6 +1122,10 @@ export class GameServerDeploymentsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.delete_game_server_deployment.js</caption>
+   * region_tag:gaming_delete_game_server_deployment_sample
+   *
    */
   async checkDeleteGameServerDeploymentProgress(
     name: string
@@ -1177,6 +1209,10 @@ export class GameServerDeploymentsServiceClient {
    * @example
    * const [operation] = await client.updateGameServerDeployment(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.update_game_server_deployment.js</caption>
+   * region_tag:gaming_update_game_server_deployment_sample
+   *
    */
   updateGameServerDeployment(
     request?: protos.google.cloud.gaming.v1.IUpdateGameServerDeploymentRequest,
@@ -1244,6 +1280,10 @@ export class GameServerDeploymentsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.update_game_server_deployment.js</caption>
+   * region_tag:gaming_update_game_server_deployment_sample
+   *
    */
   async checkUpdateGameServerDeploymentProgress(
     name: string
@@ -1332,6 +1372,10 @@ export class GameServerDeploymentsServiceClient {
    * @example
    * const [operation] = await client.updateGameServerDeploymentRollout(request);
    * const [response] = await operation.promise();
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.update_game_server_deployment_rollout.js</caption>
+   * region_tag:gaming_update_game_server_deployment_rollout_sample
+   *
    */
   updateGameServerDeploymentRollout(
     request?: protos.google.cloud.gaming.v1.IUpdateGameServerDeploymentRolloutRequest,
@@ -1399,6 +1443,10 @@ export class GameServerDeploymentsServiceClient {
    * console.log(decodedOperation.result);
    * console.log(decodedOperation.done);
    * console.log(decodedOperation.metadata);
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.update_game_server_deployment_rollout.js</caption>
+   * region_tag:gaming_update_game_server_deployment_rollout_sample
+   *
    */
   async checkUpdateGameServerDeploymentRolloutProgress(
     name: string
@@ -1487,6 +1535,10 @@ export class GameServerDeploymentsServiceClient {
    *   Please see the
    *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
    *   for more details and examples.
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.list_game_server_deployments.js</caption>
+   * region_tag:gaming_list_game_server_deployments_sample
+   *
    */
   listGameServerDeployments(
     request?: protos.google.cloud.gaming.v1.IListGameServerDeploymentsRequest,
@@ -1568,6 +1620,10 @@ export class GameServerDeploymentsServiceClient {
    *   Please see the
    *   [documentation](https://github.com/googleapis/gax-nodejs/blob/master/client-libraries.md#auto-pagination)
    *   for more details and examples.
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.list_game_server_deployments.js</caption>
+   * region_tag:gaming_list_game_server_deployments_sample
+   *
    */
   listGameServerDeploymentsStream(
     request?: protos.google.cloud.gaming.v1.IListGameServerDeploymentsRequest,
@@ -1581,7 +1637,8 @@ export class GameServerDeploymentsServiceClient {
       gax.routingHeader.fromParams({
         parent: request.parent || '',
       });
-    const callSettings = new gax.CallSettings(options);
+    const defaultCallSettings = this._defaults['listGameServerDeployments'];
+    const callSettings = defaultCallSettings.merge(options);
     this.initialize();
     return this.descriptors.page.listGameServerDeployments.createStream(
       this.innerApiCalls.listGameServerDeployments as gax.GaxCall,
@@ -1628,6 +1685,10 @@ export class GameServerDeploymentsServiceClient {
    * for await (const response of iterable) {
    *   // process response
    * }
+   *
+   * @example <caption>include:samples/generated/v1/game_server_deployments_service.list_game_server_deployments.js</caption>
+   * region_tag:gaming_list_game_server_deployments_sample
+   *
    */
   listGameServerDeploymentsAsync(
     request?: protos.google.cloud.gaming.v1.IListGameServerDeploymentsRequest,
@@ -1642,7 +1703,8 @@ export class GameServerDeploymentsServiceClient {
         parent: request.parent || '',
       });
     options = options || {};
-    const callSettings = new gax.CallSettings(options);
+    const defaultCallSettings = this._defaults['listGameServerDeployments'];
+    const callSettings = defaultCallSettings.merge(options);
     this.initialize();
     return this.descriptors.page.listGameServerDeployments.asyncIterate(
       this.innerApiCalls['listGameServerDeployments'] as GaxCall,
