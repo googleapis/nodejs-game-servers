@@ -35,13 +35,13 @@ const GKE_CLUSTER_NAME =
 describe('Game Servers Update Cluster Test', () => {
   const realmsClient = new RealmsServiceClient();
   const gameClustersClient = new GameServerClustersServiceClient();
-  let realmId, gameClusterId;
+  let realmId, gameClusterId, projectId;
 
   before(async () => {
     await cleanup();
 
     // Create a realm
-    const projectId = await realmsClient.getProjectId();
+    projectId = await realmsClient.getProjectId();
     realmId = `update-realm-${uuid.v4()}`;
     gameClusterId = `test-${uuid.v4()}`;
 
@@ -80,8 +80,6 @@ describe('Game Servers Update Cluster Test', () => {
   });
 
   it('should update a Game Server cluster in a realm', async () => {
-    const projectId = await realmsClient.getProjectId();
-
     const update_output = execSync(
       `node update_cluster.js ${projectId} ${LOCATION} ${realmId} ${gameClusterId}`
     );
@@ -97,8 +95,6 @@ describe('Game Servers Update Cluster Test', () => {
   });
 
   after(async () => {
-    const projectId = await realmsClient.getProjectId();
-
     // Delete the Game Server cluster
     const deleteClusterRequest = {
       // Provide full resource name of a Game Server Realm

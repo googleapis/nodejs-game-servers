@@ -28,10 +28,10 @@ const LOCATION = 'us-central1';
 
 describe('Game Servers Update Realms Test', () => {
   const client = new RealmsServiceClient();
-  let realmId;
+  let realmId, projectId;
 
   before(async () => {
-    const projectId = await client.getProjectId();
+    projectId = await client.getProjectId();
 
     // Clean up any stray realms
     await cleanup();
@@ -49,8 +49,6 @@ describe('Game Servers Update Realms Test', () => {
   });
 
   it('should update a realm', async () => {
-    const projectId = await client.getProjectId();
-
     const update_output = execSync(
       `node update_realm.js ${projectId} ${LOCATION} ${realmId}`
     );
@@ -63,7 +61,6 @@ describe('Game Servers Update Realms Test', () => {
   });
 
   after(async () => {
-    const projectId = await client.getProjectId();
     const request = {
       name: `projects/${projectId}/locations/${LOCATION}/realms/${realmId}`,
     };
