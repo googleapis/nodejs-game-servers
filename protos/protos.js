@@ -7951,7 +7951,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|listGameServerClusters}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#listGameServerClusters}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef ListGameServerClustersCallback
                          * @type {function}
@@ -7984,7 +7984,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|getGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#getGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef GetGameServerClusterCallback
                          * @type {function}
@@ -8017,7 +8017,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|createGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#createGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef CreateGameServerClusterCallback
                          * @type {function}
@@ -8050,7 +8050,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewCreateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewCreateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef PreviewCreateGameServerClusterCallback
                          * @type {function}
@@ -8083,7 +8083,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|deleteGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#deleteGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef DeleteGameServerClusterCallback
                          * @type {function}
@@ -8116,7 +8116,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewDeleteGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewDeleteGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef PreviewDeleteGameServerClusterCallback
                          * @type {function}
@@ -8149,7 +8149,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|updateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#updateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef UpdateGameServerClusterCallback
                          * @type {function}
@@ -8182,7 +8182,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewUpdateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewUpdateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1.GameServerClustersService
                          * @typedef PreviewUpdateGameServerClusterCallback
                          * @type {function}
@@ -10325,7 +10325,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|listGameServerConfigs}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#listGameServerConfigs}.
                          * @memberof google.cloud.gaming.v1.GameServerConfigsService
                          * @typedef ListGameServerConfigsCallback
                          * @type {function}
@@ -10358,7 +10358,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|getGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#getGameServerConfig}.
                          * @memberof google.cloud.gaming.v1.GameServerConfigsService
                          * @typedef GetGameServerConfigCallback
                          * @type {function}
@@ -10391,7 +10391,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|createGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#createGameServerConfig}.
                          * @memberof google.cloud.gaming.v1.GameServerConfigsService
                          * @typedef CreateGameServerConfigCallback
                          * @type {function}
@@ -10424,7 +10424,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|deleteGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#deleteGameServerConfig}.
                          * @memberof google.cloud.gaming.v1.GameServerConfigsService
                          * @typedef DeleteGameServerConfigCallback
                          * @type {function}
@@ -14364,7 +14364,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|listGameServerDeployments}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#listGameServerDeployments}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef ListGameServerDeploymentsCallback
                          * @type {function}
@@ -14397,7 +14397,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|getGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#getGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef GetGameServerDeploymentCallback
                          * @type {function}
@@ -14430,7 +14430,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|createGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#createGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef CreateGameServerDeploymentCallback
                          * @type {function}
@@ -14463,7 +14463,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|deleteGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#deleteGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef DeleteGameServerDeploymentCallback
                          * @type {function}
@@ -14496,7 +14496,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|updateGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#updateGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef UpdateGameServerDeploymentCallback
                          * @type {function}
@@ -14529,7 +14529,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|getGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#getGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef GetGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -14562,7 +14562,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|updateGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#updateGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef UpdateGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -14595,7 +14595,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|previewGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#previewGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef PreviewGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -14628,7 +14628,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|fetchDeploymentState}.
+                         * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#fetchDeploymentState}.
                          * @memberof google.cloud.gaming.v1.GameServerDeploymentsService
                          * @typedef FetchDeploymentStateCallback
                          * @type {function}
@@ -16901,7 +16901,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|listRealms}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#listRealms}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef ListRealmsCallback
                          * @type {function}
@@ -16934,7 +16934,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|getRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#getRealm}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef GetRealmCallback
                          * @type {function}
@@ -16967,7 +16967,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|createRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#createRealm}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef CreateRealmCallback
                          * @type {function}
@@ -17000,7 +17000,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|deleteRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#deleteRealm}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef DeleteRealmCallback
                          * @type {function}
@@ -17033,7 +17033,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|updateRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#updateRealm}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef UpdateRealmCallback
                          * @type {function}
@@ -17066,7 +17066,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService|previewRealmUpdate}.
+                         * Callback as used by {@link google.cloud.gaming.v1.RealmsService#previewRealmUpdate}.
                          * @memberof google.cloud.gaming.v1.RealmsService
                          * @typedef PreviewRealmUpdateCallback
                          * @type {function}
@@ -24440,7 +24440,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|listGameServerClusters}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#listGameServerClusters}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef ListGameServerClustersCallback
                          * @type {function}
@@ -24473,7 +24473,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|getGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#getGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef GetGameServerClusterCallback
                          * @type {function}
@@ -24506,7 +24506,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|createGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#createGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef CreateGameServerClusterCallback
                          * @type {function}
@@ -24539,7 +24539,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewCreateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewCreateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef PreviewCreateGameServerClusterCallback
                          * @type {function}
@@ -24572,7 +24572,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|deleteGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#deleteGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef DeleteGameServerClusterCallback
                          * @type {function}
@@ -24605,7 +24605,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewDeleteGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewDeleteGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef PreviewDeleteGameServerClusterCallback
                          * @type {function}
@@ -24638,7 +24638,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|updateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#updateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef UpdateGameServerClusterCallback
                          * @type {function}
@@ -24671,7 +24671,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewUpdateGameServerCluster}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewUpdateGameServerCluster}.
                          * @memberof google.cloud.gaming.v1beta.GameServerClustersService
                          * @typedef PreviewUpdateGameServerClusterCallback
                          * @type {function}
@@ -26814,7 +26814,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|listGameServerConfigs}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#listGameServerConfigs}.
                          * @memberof google.cloud.gaming.v1beta.GameServerConfigsService
                          * @typedef ListGameServerConfigsCallback
                          * @type {function}
@@ -26847,7 +26847,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|getGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#getGameServerConfig}.
                          * @memberof google.cloud.gaming.v1beta.GameServerConfigsService
                          * @typedef GetGameServerConfigCallback
                          * @type {function}
@@ -26880,7 +26880,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|createGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#createGameServerConfig}.
                          * @memberof google.cloud.gaming.v1beta.GameServerConfigsService
                          * @typedef CreateGameServerConfigCallback
                          * @type {function}
@@ -26913,7 +26913,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|deleteGameServerConfig}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#deleteGameServerConfig}.
                          * @memberof google.cloud.gaming.v1beta.GameServerConfigsService
                          * @typedef DeleteGameServerConfigCallback
                          * @type {function}
@@ -30853,7 +30853,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|listGameServerDeployments}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#listGameServerDeployments}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef ListGameServerDeploymentsCallback
                          * @type {function}
@@ -30886,7 +30886,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|getGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#getGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef GetGameServerDeploymentCallback
                          * @type {function}
@@ -30919,7 +30919,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|createGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#createGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef CreateGameServerDeploymentCallback
                          * @type {function}
@@ -30952,7 +30952,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|deleteGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#deleteGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef DeleteGameServerDeploymentCallback
                          * @type {function}
@@ -30985,7 +30985,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|updateGameServerDeployment}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#updateGameServerDeployment}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef UpdateGameServerDeploymentCallback
                          * @type {function}
@@ -31018,7 +31018,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|getGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#getGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef GetGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -31051,7 +31051,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|updateGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#updateGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef UpdateGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -31084,7 +31084,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|previewGameServerDeploymentRollout}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#previewGameServerDeploymentRollout}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef PreviewGameServerDeploymentRolloutCallback
                          * @type {function}
@@ -31117,7 +31117,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|fetchDeploymentState}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#fetchDeploymentState}.
                          * @memberof google.cloud.gaming.v1beta.GameServerDeploymentsService
                          * @typedef FetchDeploymentStateCallback
                          * @type {function}
@@ -33390,7 +33390,7 @@
                         };
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|listRealms}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#listRealms}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef ListRealmsCallback
                          * @type {function}
@@ -33423,7 +33423,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|getRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#getRealm}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef GetRealmCallback
                          * @type {function}
@@ -33456,7 +33456,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|createRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#createRealm}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef CreateRealmCallback
                          * @type {function}
@@ -33489,7 +33489,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|deleteRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#deleteRealm}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef DeleteRealmCallback
                          * @type {function}
@@ -33522,7 +33522,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|updateRealm}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#updateRealm}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef UpdateRealmCallback
                          * @type {function}
@@ -33555,7 +33555,7 @@
                          */
     
                         /**
-                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|previewRealmUpdate}.
+                         * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#previewRealmUpdate}.
                          * @memberof google.cloud.gaming.v1beta.RealmsService
                          * @typedef PreviewRealmUpdateCallback
                          * @type {function}
@@ -40402,7 +40402,6 @@
                  * @property {boolean|null} [packed] FieldOptions packed
                  * @property {google.protobuf.FieldOptions.JSType|null} [jstype] FieldOptions jstype
                  * @property {boolean|null} [lazy] FieldOptions lazy
-                 * @property {boolean|null} [unverifiedLazy] FieldOptions unverifiedLazy
                  * @property {boolean|null} [deprecated] FieldOptions deprecated
                  * @property {boolean|null} [weak] FieldOptions weak
                  * @property {Array.<google.protobuf.IUninterpretedOption>|null} [uninterpretedOption] FieldOptions uninterpretedOption
@@ -40458,14 +40457,6 @@
                  * @instance
                  */
                 FieldOptions.prototype.lazy = false;
-    
-                /**
-                 * FieldOptions unverifiedLazy.
-                 * @member {boolean} unverifiedLazy
-                 * @memberof google.protobuf.FieldOptions
-                 * @instance
-                 */
-                FieldOptions.prototype.unverifiedLazy = false;
     
                 /**
                  * FieldOptions deprecated.
@@ -40543,8 +40534,6 @@
                         writer.uint32(/* id 6, wireType 0 =*/48).int32(message.jstype);
                     if (message.weak != null && Object.hasOwnProperty.call(message, "weak"))
                         writer.uint32(/* id 10, wireType 0 =*/80).bool(message.weak);
-                    if (message.unverifiedLazy != null && Object.hasOwnProperty.call(message, "unverifiedLazy"))
-                        writer.uint32(/* id 15, wireType 0 =*/120).bool(message.unverifiedLazy);
                     if (message.uninterpretedOption != null && message.uninterpretedOption.length)
                         for (var i = 0; i < message.uninterpretedOption.length; ++i)
                             $root.google.protobuf.UninterpretedOption.encode(message.uninterpretedOption[i], writer.uint32(/* id 999, wireType 2 =*/7994).fork()).ldelim();
@@ -40601,9 +40590,6 @@
                             break;
                         case 5:
                             message.lazy = reader.bool();
-                            break;
-                        case 15:
-                            message.unverifiedLazy = reader.bool();
                             break;
                         case 3:
                             message.deprecated = reader.bool();
@@ -40688,9 +40674,6 @@
                     if (message.lazy != null && message.hasOwnProperty("lazy"))
                         if (typeof message.lazy !== "boolean")
                             return "lazy: boolean expected";
-                    if (message.unverifiedLazy != null && message.hasOwnProperty("unverifiedLazy"))
-                        if (typeof message.unverifiedLazy !== "boolean")
-                            return "unverifiedLazy: boolean expected";
                     if (message.deprecated != null && message.hasOwnProperty("deprecated"))
                         if (typeof message.deprecated !== "boolean")
                             return "deprecated: boolean expected";
@@ -40776,8 +40759,6 @@
                     }
                     if (object.lazy != null)
                         message.lazy = Boolean(object.lazy);
-                    if (object.unverifiedLazy != null)
-                        message.unverifiedLazy = Boolean(object.unverifiedLazy);
                     if (object.deprecated != null)
                         message.deprecated = Boolean(object.deprecated);
                     if (object.weak != null)
@@ -40865,7 +40846,6 @@
                         object.lazy = false;
                         object.jstype = options.enums === String ? "JS_NORMAL" : 0;
                         object.weak = false;
-                        object.unverifiedLazy = false;
                         object[".google.api.resourceReference"] = null;
                     }
                     if (message.ctype != null && message.hasOwnProperty("ctype"))
@@ -40880,8 +40860,6 @@
                         object.jstype = options.enums === String ? $root.google.protobuf.FieldOptions.JSType[message.jstype] : message.jstype;
                     if (message.weak != null && message.hasOwnProperty("weak"))
                         object.weak = message.weak;
-                    if (message.unverifiedLazy != null && message.hasOwnProperty("unverifiedLazy"))
-                        object.unverifiedLazy = message.unverifiedLazy;
                     if (message.uninterpretedOption && message.uninterpretedOption.length) {
                         object.uninterpretedOption = [];
                         for (var j = 0; j < message.uninterpretedOption.length; ++j)
@@ -44994,7 +44972,7 @@
                 };
     
                 /**
-                 * Callback as used by {@link google.longrunning.Operations|listOperations}.
+                 * Callback as used by {@link google.longrunning.Operations#listOperations}.
                  * @memberof google.longrunning.Operations
                  * @typedef ListOperationsCallback
                  * @type {function}
@@ -45027,7 +45005,7 @@
                  */
     
                 /**
-                 * Callback as used by {@link google.longrunning.Operations|getOperation}.
+                 * Callback as used by {@link google.longrunning.Operations#getOperation}.
                  * @memberof google.longrunning.Operations
                  * @typedef GetOperationCallback
                  * @type {function}
@@ -45060,7 +45038,7 @@
                  */
     
                 /**
-                 * Callback as used by {@link google.longrunning.Operations|deleteOperation}.
+                 * Callback as used by {@link google.longrunning.Operations#deleteOperation}.
                  * @memberof google.longrunning.Operations
                  * @typedef DeleteOperationCallback
                  * @type {function}
@@ -45093,7 +45071,7 @@
                  */
     
                 /**
-                 * Callback as used by {@link google.longrunning.Operations|cancelOperation}.
+                 * Callback as used by {@link google.longrunning.Operations#cancelOperation}.
                  * @memberof google.longrunning.Operations
                  * @typedef CancelOperationCallback
                  * @type {function}
@@ -45126,7 +45104,7 @@
                  */
     
                 /**
-                 * Callback as used by {@link google.longrunning.Operations|waitOperation}.
+                 * Callback as used by {@link google.longrunning.Operations#waitOperation}.
                  * @memberof google.longrunning.Operations
                  * @typedef WaitOperationCallback
                  * @type {function}

@@ -3378,56 +3378,56 @@ export namespace google {
                 namespace GameServerClustersService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|listGameServerClusters}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#listGameServerClusters}.
                      * @param error Error, if any
                      * @param [response] ListGameServerClustersResponse
                      */
                     type ListGameServerClustersCallback = (error: (Error|null), response?: google.cloud.gaming.v1.ListGameServerClustersResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|getGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#getGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] GameServerCluster
                      */
                     type GetGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1.GameServerCluster) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|createGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#createGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewCreateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewCreateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewCreateGameServerClusterResponse
                      */
                     type PreviewCreateGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1.PreviewCreateGameServerClusterResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|deleteGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#deleteGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewDeleteGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewDeleteGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewDeleteGameServerClusterResponse
                      */
                     type PreviewDeleteGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1.PreviewDeleteGameServerClusterResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|updateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#updateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService|previewUpdateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerClustersService#previewUpdateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewUpdateGameServerClusterResponse
                      */
@@ -4342,28 +4342,28 @@ export namespace google {
                 namespace GameServerConfigsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|listGameServerConfigs}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#listGameServerConfigs}.
                      * @param error Error, if any
                      * @param [response] ListGameServerConfigsResponse
                      */
                     type ListGameServerConfigsCallback = (error: (Error|null), response?: google.cloud.gaming.v1.ListGameServerConfigsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|getGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#getGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] GameServerConfig
                      */
                     type GetGameServerConfigCallback = (error: (Error|null), response?: google.cloud.gaming.v1.GameServerConfig) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|createGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#createGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerConfigCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService|deleteGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerConfigsService#deleteGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
@@ -6131,63 +6131,63 @@ export namespace google {
                 namespace GameServerDeploymentsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|listGameServerDeployments}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#listGameServerDeployments}.
                      * @param error Error, if any
                      * @param [response] ListGameServerDeploymentsResponse
                      */
                     type ListGameServerDeploymentsCallback = (error: (Error|null), response?: google.cloud.gaming.v1.ListGameServerDeploymentsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|getGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#getGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] GameServerDeployment
                      */
                     type GetGameServerDeploymentCallback = (error: (Error|null), response?: google.cloud.gaming.v1.GameServerDeployment) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|createGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#createGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|deleteGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#deleteGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|updateGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#updateGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|getGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#getGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] GameServerDeploymentRollout
                      */
                     type GetGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.cloud.gaming.v1.GameServerDeploymentRollout) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|updateGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#updateGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|previewGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#previewGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] PreviewGameServerDeploymentRolloutResponse
                      */
                     type PreviewGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.cloud.gaming.v1.PreviewGameServerDeploymentRolloutResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService|fetchDeploymentState}.
+                     * Callback as used by {@link google.cloud.gaming.v1.GameServerDeploymentsService#fetchDeploymentState}.
                      * @param error Error, if any
                      * @param [response] FetchDeploymentStateResponse
                      */
@@ -7220,42 +7220,42 @@ export namespace google {
                 namespace RealmsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|listRealms}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#listRealms}.
                      * @param error Error, if any
                      * @param [response] ListRealmsResponse
                      */
                     type ListRealmsCallback = (error: (Error|null), response?: google.cloud.gaming.v1.ListRealmsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|getRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#getRealm}.
                      * @param error Error, if any
                      * @param [response] Realm
                      */
                     type GetRealmCallback = (error: (Error|null), response?: google.cloud.gaming.v1.Realm) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|createRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#createRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|deleteRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#deleteRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|updateRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#updateRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService|previewRealmUpdate}.
+                     * Callback as used by {@link google.cloud.gaming.v1.RealmsService#previewRealmUpdate}.
                      * @param error Error, if any
                      * @param [response] PreviewRealmUpdateResponse
                      */
@@ -10446,56 +10446,56 @@ export namespace google {
                 namespace GameServerClustersService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|listGameServerClusters}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#listGameServerClusters}.
                      * @param error Error, if any
                      * @param [response] ListGameServerClustersResponse
                      */
                     type ListGameServerClustersCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.ListGameServerClustersResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|getGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#getGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] GameServerCluster
                      */
                     type GetGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.GameServerCluster) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|createGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#createGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewCreateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewCreateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewCreateGameServerClusterResponse
                      */
                     type PreviewCreateGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.PreviewCreateGameServerClusterResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|deleteGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#deleteGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewDeleteGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewDeleteGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewDeleteGameServerClusterResponse
                      */
                     type PreviewDeleteGameServerClusterCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.PreviewDeleteGameServerClusterResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|updateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#updateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerClusterCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService|previewUpdateGameServerCluster}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerClustersService#previewUpdateGameServerCluster}.
                      * @param error Error, if any
                      * @param [response] PreviewUpdateGameServerClusterResponse
                      */
@@ -11410,28 +11410,28 @@ export namespace google {
                 namespace GameServerConfigsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|listGameServerConfigs}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#listGameServerConfigs}.
                      * @param error Error, if any
                      * @param [response] ListGameServerConfigsResponse
                      */
                     type ListGameServerConfigsCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.ListGameServerConfigsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|getGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#getGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] GameServerConfig
                      */
                     type GetGameServerConfigCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.GameServerConfig) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|createGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#createGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerConfigCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService|deleteGameServerConfig}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerConfigsService#deleteGameServerConfig}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
@@ -13199,63 +13199,63 @@ export namespace google {
                 namespace GameServerDeploymentsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|listGameServerDeployments}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#listGameServerDeployments}.
                      * @param error Error, if any
                      * @param [response] ListGameServerDeploymentsResponse
                      */
                     type ListGameServerDeploymentsCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.ListGameServerDeploymentsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|getGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#getGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] GameServerDeployment
                      */
                     type GetGameServerDeploymentCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.GameServerDeployment) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|createGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#createGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|deleteGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#deleteGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|updateGameServerDeployment}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#updateGameServerDeployment}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerDeploymentCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|getGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#getGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] GameServerDeploymentRollout
                      */
                     type GetGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.GameServerDeploymentRollout) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|updateGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#updateGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|previewGameServerDeploymentRollout}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#previewGameServerDeploymentRollout}.
                      * @param error Error, if any
                      * @param [response] PreviewGameServerDeploymentRolloutResponse
                      */
                     type PreviewGameServerDeploymentRolloutCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.PreviewGameServerDeploymentRolloutResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService|fetchDeploymentState}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.GameServerDeploymentsService#fetchDeploymentState}.
                      * @param error Error, if any
                      * @param [response] FetchDeploymentStateResponse
                      */
@@ -14288,42 +14288,42 @@ export namespace google {
                 namespace RealmsService {
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|listRealms}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#listRealms}.
                      * @param error Error, if any
                      * @param [response] ListRealmsResponse
                      */
                     type ListRealmsCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.ListRealmsResponse) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|getRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#getRealm}.
                      * @param error Error, if any
                      * @param [response] Realm
                      */
                     type GetRealmCallback = (error: (Error|null), response?: google.cloud.gaming.v1beta.Realm) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|createRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#createRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type CreateRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|deleteRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#deleteRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type DeleteRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|updateRealm}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#updateRealm}.
                      * @param error Error, if any
                      * @param [response] Operation
                      */
                     type UpdateRealmCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
                     /**
-                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService|previewRealmUpdate}.
+                     * Callback as used by {@link google.cloud.gaming.v1beta.RealmsService#previewRealmUpdate}.
                      * @param error Error, if any
                      * @param [response] PreviewRealmUpdateResponse
                      */
@@ -16780,9 +16780,6 @@ export namespace google {
             /** FieldOptions lazy */
             lazy?: (boolean|null);
 
-            /** FieldOptions unverifiedLazy */
-            unverifiedLazy?: (boolean|null);
-
             /** FieldOptions deprecated */
             deprecated?: (boolean|null);
 
@@ -16819,9 +16816,6 @@ export namespace google {
 
             /** FieldOptions lazy. */
             public lazy: boolean;
-
-            /** FieldOptions unverifiedLazy. */
-            public unverifiedLazy: boolean;
 
             /** FieldOptions deprecated. */
             public deprecated: boolean;
@@ -18624,35 +18618,35 @@ export namespace google {
         namespace Operations {
 
             /**
-             * Callback as used by {@link google.longrunning.Operations|listOperations}.
+             * Callback as used by {@link google.longrunning.Operations#listOperations}.
              * @param error Error, if any
              * @param [response] ListOperationsResponse
              */
             type ListOperationsCallback = (error: (Error|null), response?: google.longrunning.ListOperationsResponse) => void;
 
             /**
-             * Callback as used by {@link google.longrunning.Operations|getOperation}.
+             * Callback as used by {@link google.longrunning.Operations#getOperation}.
              * @param error Error, if any
              * @param [response] Operation
              */
             type GetOperationCallback = (error: (Error|null), response?: google.longrunning.Operation) => void;
 
             /**
-             * Callback as used by {@link google.longrunning.Operations|deleteOperation}.
+             * Callback as used by {@link google.longrunning.Operations#deleteOperation}.
              * @param error Error, if any
              * @param [response] Empty
              */
             type DeleteOperationCallback = (error: (Error|null), response?: google.protobuf.Empty) => void;
 
             /**
-             * Callback as used by {@link google.longrunning.Operations|cancelOperation}.
+             * Callback as used by {@link google.longrunning.Operations#cancelOperation}.
              * @param error Error, if any
              * @param [response] Empty
              */
             type CancelOperationCallback = (error: (Error|null), response?: google.protobuf.Empty) => void;
 
             /**
-             * Callback as used by {@link google.longrunning.Operations|waitOperation}.
+             * Callback as used by {@link google.longrunning.Operations#waitOperation}.
              * @param error Error, if any
              * @param [response] Operation
              */
