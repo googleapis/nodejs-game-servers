@@ -167,11 +167,10 @@ describe('Game Server Rollout Test', () => {
         request
       );
     } catch (err) {
-      if (!(err.message.includes(/The service is currently unavailable/))) {
+      if (!err.message.includes(/The service is currently unavailable/)) {
         assert.strictEqual(rollout.gameServerConfigOverrides.length, 0);
-    }
-  }
-    
+      }
+
   });
 
   after(async () => {
